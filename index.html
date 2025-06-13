@@ -3127,6 +3127,234 @@
                 }
             });
         });
+        // Add this to your existing JavaScript code
+
+// Export functionality for reports
+document.querySelectorAll('#reports .btn-secondary').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const tabId = this.closest('.tab-content').id;
+        exportReport(tabId);
+    });
+});
+
+function exportReport(tabId) {
+    let csvContent = "";
+    let headers = [];
+    let data = [];
+    
+    switch(tabId) {
+        case 'inventory-report':
+            headers = ["Product", "Category", "Current Stock", "Unit Price (UGX)", "Total Value (UGX)", "Status"];
+            data = products.map(product => {
+                const category = categories.find(c => c.id === product.categoryId);
+                const totalValue = product.stock * product.purchasePrice;
+                const status = product.stock === 0 ? 'Out of Stock' : 
+                               product.stock <= product.reorderLevel ? 'Low Stock' : 'In Stock';
+                
+                return [
+                    product.name,
+                    category ? category.name : 'N/A',
+                    `${product.stock} ${product.unit}`,
+                    product.purchasePrice.toLocaleString(),
+                    totalValue.toLocaleString(),
+                    status
+                ];
+            });
+            break;
+            
+        case 'sales-report':
+            headers = ["Date", "Invoice No.", "Customer", "Items", "Total (UGX)", "Status"];
+            data = sales.map(sale => {
+                const itemsCount = sale.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return [
+                    new Date(sale.date).toLocaleDateString(),
+                    sale.invoiceNumber,
+                    sale.customer || 'Walk-in Customer',
+                    itemsCount,
+                    totalAmount.toLocaleString(),
+                    'Completed'
+                ];
+            });
+            break;
+            
+        case 'purchase-report':
+            headers = ["Date", "Reference", "Supplier", "Items", "Total (UGX)", "Status"];
+            data = purchases.map(purchase => {
+                const supplier = suppliers.find(s => s.id === purchase.supplierId);
+                const itemsCount = purchase.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = purchase.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return [
+                    new Date(purchase.date).toLocaleDateString(),
+                    purchase.referenceNumber,
+                    supplier ? supplier.name : 'N/A',
+                    itemsCount,
+                    totalAmount.toLocaleString(),
+                    'Completed'
+                ];
+            });
+            break;
+            
+        case 'profit-loss':
+            headers = ["Period", "Revenue (UGX)", "Cost of Goods Sold (UGX)", "Gross Profit (UGX)", "Expenses (UGX)", "Net Profit (UGX)"];
+            // Sample data - in a real app you would calculate these values
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            data = months.map((month, index) => {
+                const revenue = Math.floor(Math.random() * 10000000) + 5000000;
+                const cogs = Math.floor(revenue * 0.6);
+                const grossProfit = revenue - cogs;
+                const expenses = Math.floor(revenue * 0.2);
+                const netProfit = grossProfit - expenses;
+                
+                return [
+                    month,
+                    revenue.toLocaleString(),
+                    cogs.toLocaleString(),
+                    grossProfit.toLocaleString(),
+                    expenses.toLocaleString(),
+                    netProfit.toLocaleString()
+                ];
+            });
+            break;
+    }
+    
+    // Combine headers and data
+    csvContent = [headers, ...data].map(row => 
+        row.map(field => `"${field}"`).join(',')
+    ).join('\n');
+    
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${tabId.replace('-', '_')}_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showToast('Report exported successfully');
+}
+
+// Add this to your existing loadReports function
+function loadReports() {
+    loadInventoryReport();
+    
+    // Initialize charts for sales and profit/loss reports
+    initSalesChart();
+    initProfitLossChart();
+}
+
+function initSalesChart() {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    if (window.salesChart) {
+        window.salesChart.destroy();
+    }
+    
+    // Sample sales data for chart
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const salesData = months.map(() => Math.floor(Math.random() * 10000000) + 5000000);
+    
+    window.salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Sales (UGX)',
+                data: salesData,
+                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                borderColor: 'rgba(37, 99, 235, 1)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function(value) {
+                            return 'UGX ' + value.toLocaleString();
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'UGX ' + context.raw.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function initProfitLossChart() {
+    const ctx = document.getElementById('profitLossChart').getContext('2d');
+    if (window.profitLossChart) {
+        window.profitLossChart.destroy();
+    }
+    
+    // Sample data for chart
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const revenueData = months.map(() => Math.floor(Math.random() * 10000000) + 5000000);
+    const profitData = revenueData.map(rev => Math.floor(rev * 0.3));
+    
+    window.profitLossChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [
+                {
+                    label: 'Revenue',
+                    data: revenueData,
+                    backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Profit',
+                    data: profitData,
+                    backgroundColor: 'rgba(37, 99, 235, 0.6)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function(value) {
+                            return 'UGX ' + value.toLocaleString();
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'UGX ' + context.raw.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
     </script>
     
 </body>
