@@ -347,6 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let data = [];
         let fileName = '';
         let headers = [];
+        let reportTitle = '';
         
         switch(reportType) {
             case 'inventory-report':
@@ -363,13 +364,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Product Name': product.name,
                         'Category': category ? category.name : 'N/A',
                         'Current Stock': `${product.stock} ${product.unit}`,
-                        'Unit Price (UGX)': product.purchasePrice,
-                        'Total Value (UGX)': totalValue,
+                        'Unit Price (UGX)': product.purchasePrice.toLocaleString(),
+                        'Total Value (UGX)': totalValue.toLocaleString(),
                         'Status': status
                     };
                 });
                 
                 fileName = 'inventory_report';
+                reportTitle = 'Inventory Report';
                 headers = ['Product Name', 'Category', 'Current Stock', 'Unit Price (UGX)', 'Total Value (UGX)', 'Status'];
                 break;
                 
@@ -389,13 +391,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             'Invoice No.': sale.invoiceNumber,
                             'Customer': sale.customer || 'Walk-in Customer',
                             'Items': itemsCount,
-                            'Total (UGX)': totalAmount,
+                            'Total (UGX)': totalAmount.toLocaleString(),
                             'Status': 'Completed'
                         };
                     });
                 }
                 
                 fileName = 'sales_report';
+                reportTitle = 'Sales Report';
                 headers = ['Date', 'Invoice No.', 'Customer', 'Items', 'Total (UGX)', 'Status'];
                 break;
                 
@@ -417,29 +420,31 @@ document.addEventListener('DOMContentLoaded', function() {
                             'Reference': purchase.referenceNumber,
                             'Supplier': supplier ? supplier.name : 'N/A',
                             'Items': itemsCount,
-                            'Total (UGX)': totalAmount,
+                            'Total (UGX)': totalAmount.toLocaleString(),
                             'Status': 'Completed'
                         };
                     });
                 }
                 
                 fileName = 'purchase_report';
+                reportTitle = 'Purchase Report';
                 headers = ['Date', 'Reference', 'Supplier', 'Items', 'Total (UGX)', 'Status'];
                 break;
                 
             case 'profit-loss':
                 data = generateProfitLossDataForExport();
                 fileName = 'profit_loss_report';
+                reportTitle = 'Profit & Loss Report';
                 headers = ['Period', 'Revenue (UGX)', 'Cost of Goods Sold (UGX)', 'Gross Profit (UGX)', 'Expenses (UGX)', 'Net Profit (UGX)'];
                 break;
         }
         
         // Show export options modal
-        showExportOptionsModal(data, headers, fileName);
+        showExportOptionsModal(data, headers, fileName, reportTitle);
     }
 
     // Show export options modal
-    function showExportOptionsModal(data, headers, fileName) {
+    function showExportOptionsModal(data, headers, fileName, reportTitle) {
         // Create modal HTML
         const modalHTML = `
             <div class="modal active" id="exportModal">
@@ -453,8 +458,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <label class="form-label">Export Format</label>
                             <select class="form-control" id="exportFormat">
                                 <option value="csv">CSV</option>
-                                <option value="excel">Excel</option>
-                                <option value="pdf">PDF</option>
+                                <option value="pdf" selected>PDF</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -476,7 +480,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.appendChild(modalContainer);
         
         // Set up event listeners
-        document.getElementById('exportData').addEventListener('click', function() {
+        document.getElementById('exportData').addEventListener('click', async function() {
             const format = document.getElementById('exportFormat').value;
             const fileName = document.getElementById('exportFileName').value;
             
@@ -484,11 +488,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 case 'csv':
                     exportToCSV(data, headers, fileName);
                     break;
-                case 'excel':
-                    exportToExcel(data, headers, fileName);
-                    break;
                 case 'pdf':
-                    exportToPDF(data, headers, fileName);
+                    await exportToPDF(data, headers, fileName, reportTitle);
                     break;
             }
             
@@ -530,109 +531,134 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.removeChild(link);
     }
 
-    // Export to Excel
-    function exportToExcel(data, headers, fileName) {
-        // Create Excel workbook XML
-        let xml = `
-            <?xml version="1.0"?>
-            <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
-                xmlns:o="urn:schemas-microsoft-com:office:office"
-                xmlns:x="urn:schemas-microsoft-com:office:excel"
-                xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
-                xmlns:html="http://www.w3.org/TR/REC-html40">
-                <Worksheet ss:Name="${fileName}">
-                    <Table>
-                        <Row>
-                            ${headers.map(header => `<Cell><Data ss:Type="String">${header}</Data></Cell>`).join('')}
-                        </Row>
-        `;
-        
-        // Add data rows
-        data.forEach(item => {
-            xml += '<Row>';
-            headers.forEach(header => {
-                const value = item[header];
-                const type = typeof value === 'number' ? 'Number' : 'String';
-                xml += `<Cell><Data ss:Type="${type}">${value}</Data></Cell>`;
+    // Export to PDF using PDF-lib
+    async function exportToPDF(data, headers, fileName, reportTitle) {
+        try {
+            // Dynamically import pdf-lib
+            const { PDFDocument, rgb, StandardFonts } = await import('https://cdn.jsdelivr.net/npm/pdf-lib@^1.17.1/dist/pdf-lib.min.js');
+            
+            // Create a new PDF document
+            const pdfDoc = await PDFDocument.create();
+            const page = pdfDoc.addPage([600, 800]);
+            const { width, height } = page.getSize();
+            
+            // Set up fonts
+            const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+            const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+            
+            // Add title
+            const title = reportTitle;
+            const titleFontSize = 20;
+            const titleWidth = font.widthOfTextAtSize(title, titleFontSize);
+            page.drawText(title, {
+                x: (width - titleWidth) / 2,
+                y: height - 50,
+                size: titleFontSize,
+                font: boldFont,
+                color: rgb(0, 0, 0.5),
             });
-            xml += '</Row>';
-        });
-        
-        xml += `
-                    </Table>
-                </Worksheet>
-            </Workbook>
-        `;
-        
-        // Create download link
-        const blob = new Blob([xml], { type: 'application/vnd.ms-excel' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.setAttribute('href', url);
-        link.setAttribute('download', `${fileName}.xls`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    // Export to PDF
-    function exportToPDF(data, headers, fileName) {
-        // For a real implementation, you would use a library like jsPDF or pdfmake
-        // This is a simplified version that just opens a print dialog
-        
-        // Create a printable version of the data
-        let html = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>${fileName}</title>
-                <style>
-                    body { font-family: Arial, sans-serif; }
-                    h1 { color: #2563eb; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th { background-color: #2563eb; color: white; text-align: left; padding: 8px; }
-                    td { border: 1px solid #ddd; padding: 8px; }
-                    tr:nth-child(even) { background-color: #f2f2f2; }
-                </style>
-            </head>
-            <body>
-                <h1>${fileName.replace(/_/g, ' ').toUpperCase()}</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            ${headers.map(header => `<th>${header}</th>`).join('')}
-                        </tr>
-                    </thead>
-                    <tbody>
-        `;
-        
-        // Add data rows
-        data.forEach(item => {
-            html += '<tr>';
-            headers.forEach(header => {
-                html += `<td>${item[header]}</td>`;
+            
+            // Add company info
+            const companyName = "StockMaster UG Inventory System";
+            const dateText = `Generated on: ${new Date().toLocaleDateString()}`;
+            page.drawText(companyName, {
+                x: 50,
+                y: height - 80,
+                size: 12,
+                font: font,
+                color: rgb(0, 0, 0),
             });
-            html += '</tr>';
-        });
-        
-        html += `
-                    </tbody>
-                </table>
-                <p>Generated on ${new Date().toLocaleString()}</p>
-            </body>
-            </html>
-        `;
-        
-        // Open print dialog
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(html);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => {
-            printWindow.print();
-            printWindow.close();
-        }, 500);
+            page.drawText(dateText, {
+                x: 50,
+                y: height - 100,
+                size: 10,
+                font: font,
+                color: rgb(0.5, 0.5, 0.5),
+            });
+            
+            // Calculate column widths
+            const colCount = headers.length;
+            const colWidth = (width - 100) / colCount;
+            const startX = 50;
+            let currentY = height - 140;
+            
+            // Draw table headers
+            page.setFont(boldFont);
+            headers.forEach((header, i) => {
+                page.drawText(header, {
+                    x: startX + (i * colWidth),
+                    y: currentY,
+                    size: 10,
+                    color: rgb(0, 0, 0),
+                });
+            });
+            
+            // Draw horizontal line under headers
+            page.drawLine({
+                start: { x: startX, y: currentY - 10 },
+                end: { x: width - 50, y: currentY - 10 },
+                thickness: 1,
+                color: rgb(0, 0, 0),
+            });
+            
+            // Set up for data rows
+            currentY -= 20;
+            page.setFont(font);
+            const fontSize = 9;
+            const rowHeight = 15;
+            
+            // Add data rows
+            for (const row of data) {
+                // Check if we need a new page
+                if (currentY < 50) {
+                    const newPage = pdfDoc.addPage([600, 800]);
+                    page = newPage;
+                    currentY = height - 50;
+                    
+                    // Add header to new page
+                    page.drawText(`Continuation of ${title}`, {
+                        x: 50,
+                        y: currentY,
+                        size: 14,
+                        font: boldFont,
+                        color: rgb(0, 0, 0.5),
+                    });
+                    currentY -= 30;
+                }
+                
+                // Draw each cell in the row
+                headers.forEach((header, i) => {
+                    const cellValue = row[header] || '';
+                    page.drawText(cellValue.toString(), {
+                        x: startX + (i * colWidth),
+                        y: currentY,
+                        size: fontSize,
+                        color: rgb(0, 0, 0),
+                    });
+                });
+                
+                currentY -= rowHeight;
+            }
+            
+            // Save the PDF
+            const pdfBytes = await pdfDoc.save();
+            
+            // Create download link
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${fileName}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Revoke the object URL to free memory
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert('Failed to generate PDF. Please try again.');
+        }
     }
 
     // Helper functions to generate sample data
@@ -732,7 +758,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Invoice No.': `INV-${Math.floor(Math.random() * 1000)}`,
                 'Customer': `Customer ${Math.floor(Math.random() * 100)}`,
                 'Items': Math.floor(Math.random() * 10) + 1,
-                'Total (UGX)': Math.floor(Math.random() * 1000000) + 500000,
+                'Total (UGX)': (Math.floor(Math.random() * 1000000) + 500000).toLocaleString(),
                 'Status': 'Paid'
             },
             {
@@ -740,7 +766,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Invoice No.': `INV-${Math.floor(Math.random() * 1000)}`,
                 'Customer': `Customer ${Math.floor(Math.random() * 100)}`,
                 'Items': Math.floor(Math.random() * 10) + 1,
-                'Total (UGX)': Math.floor(Math.random() * 1000000) + 500000,
+                'Total (UGX)': (Math.floor(Math.random() * 1000000) + 500000).toLocaleString(),
                 'Status': 'Paid'
             },
             {
@@ -748,7 +774,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Invoice No.': `INV-${Math.floor(Math.random() * 1000)}`,
                 'Customer': `Customer ${Math.floor(Math.random() * 100)}`,
                 'Items': Math.floor(Math.random() * 10) + 1,
-                'Total (UGX)': Math.floor(Math.random() * 1000000) + 500000,
+                'Total (UGX)': (Math.floor(Math.random() * 1000000) + 500000).toLocaleString(),
                 'Status': 'Pending'
             }
         ];
@@ -761,7 +787,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Reference': `PUR-${Math.floor(Math.random() * 1000)}`,
                 'Supplier': `Supplier ${Math.floor(Math.random() * 10)}`,
                 'Items': Math.floor(Math.random() * 10) + 1,
-                'Total (UGX)': Math.floor(Math.random() * 1000000) + 500000,
+                'Total (UGX)': (Math.floor(Math.random() * 1000000) + 500000).toLocaleString(),
                 'Status': 'Completed'
             },
             {
@@ -769,7 +795,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Reference': `PUR-${Math.floor(Math.random() * 1000)}`,
                 'Supplier': `Supplier ${Math.floor(Math.random() * 10)}`,
                 'Items': Math.floor(Math.random() * 10) + 1,
-                'Total (UGX)': Math.floor(Math.random() * 1000000) + 500000,
+                'Total (UGX)': (Math.floor(Math.random() * 1000000) + 500000).toLocaleString(),
                 'Status': 'Completed'
             },
             {
@@ -777,7 +803,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Reference': `PUR-${Math.floor(Math.random() * 1000)}`,
                 'Supplier': `Supplier ${Math.floor(Math.random() * 10)}`,
                 'Items': Math.floor(Math.random() * 10) + 1,
-                'Total (UGX)': Math.floor(Math.random() * 1000000) + 500000,
+                'Total (UGX)': (Math.floor(Math.random() * 1000000) + 500000).toLocaleString(),
                 'Status': 'Pending'
             }
         ];
@@ -795,11 +821,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             return {
                 'Period': `${month} 2023`,
-                'Revenue (UGX)': revenue,
-                'Cost of Goods Sold (UGX)': cogs,
-                'Gross Profit (UGX)': grossProfit,
-                'Expenses (UGX)': expenses,
-                'Net Profit (UGX)': netProfit
+                'Revenue (UGX)': revenue.toLocaleString(),
+                'Cost of Goods Sold (UGX)': cogs.toLocaleString(),
+                'Gross Profit (UGX)': grossProfit.toLocaleString(),
+                'Expenses (UGX)': expenses.toLocaleString(),
+                'Net Profit (UGX)': netProfit.toLocaleString()
             };
         });
     }
