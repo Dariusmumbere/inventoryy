@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockMaster UG | SME Inventory System</title>
-    <script>inventory.js</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -735,6 +736,9 @@
                             <button class="btn btn-primary" id="printDashboard">
                                 <i class="fas fa-print"></i> Print
                             </button>
+                            <button class="btn btn-secondary" id="exportDashboard">
+                                <i class="fas fa-file-pdf"></i> Export PDF
+                            </button>
                         </div>
                     </div>
 
@@ -743,28 +747,28 @@
                             <h3 class="stat-title">Total Products</h3>
                             <p class="stat-value" id="totalProducts">0</p>
                             <p class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> 12% from last month
+                                <i class="fas fa-arrow-up"></i> <span id="productChange">0%</span> from last month
                             </p>
                         </div>
                         <div class="stat-card low-stock">
                             <h3 class="stat-title">Low Stock Items</h3>
                             <p class="stat-value" id="lowStockItems">0</p>
                             <p class="stat-change negative">
-                                <i class="fas fa-arrow-down"></i> 5% from last month
+                                <i class="fas fa-arrow-down"></i> <span id="lowStockChange">0%</span> from last month
                             </p>
                         </div>
                         <div class="stat-card out-of-stock">
                             <h3 class="stat-title">Out of Stock</h3>
                             <p class="stat-value" id="outOfStockItems">0</p>
                             <p class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> 8% from last month
+                                <i class="fas fa-arrow-up"></i> <span id="outOfStockChange">0%</span> from last month
                             </p>
                         </div>
                         <div class="stat-card total-value">
                             <h3 class="stat-title">Inventory Value</h3>
                             <p class="stat-value" id="inventoryValue">UGX 0</p>
                             <p class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> 15% from last month
+                                <i class="fas fa-arrow-up"></i> <span id="inventoryValueChange">0%</span> from last month
                             </p>
                         </div>
                     </div>
@@ -772,7 +776,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h2 class="card-title">Recent Activities</h2>
-                            <button class="btn btn-secondary">
+                            <button class="btn btn-secondary" id="refreshActivities">
                                 <i class="fas fa-sync-alt"></i> Refresh
                             </button>
                         </div>
@@ -797,7 +801,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h2 class="card-title">Low Stock Items</h2>
-                                <button class="btn btn-secondary">
+                                <button class="btn btn-secondary" id="viewAllLowStock">
                                     <i class="fas fa-eye"></i> View All
                                 </button>
                             </div>
@@ -821,7 +825,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h2 class="card-title">Recent Sales</h2>
-                                <button class="btn btn-secondary">
+                                <button class="btn btn-secondary" id="viewAllSales">
                                     <i class="fas fa-eye"></i> View All
                                 </button>
                             </div>
@@ -851,6 +855,9 @@
                         <div>
                             <button class="btn btn-primary" id="addProductBtn">
                                 <i class="fas fa-plus"></i> Add Product
+                            </button>
+                            <button class="btn btn-secondary" id="exportProducts">
+                                <i class="fas fa-file-pdf"></i> Export
                             </button>
                         </div>
                     </div>
@@ -892,6 +899,9 @@
                             <button class="btn btn-primary" id="addCategoryBtn">
                                 <i class="fas fa-plus"></i> Add Category
                             </button>
+                            <button class="btn btn-secondary" id="exportCategories">
+                                <i class="fas fa-file-pdf"></i> Export
+                            </button>
                         </div>
                     </div>
 
@@ -929,6 +939,9 @@
                         <div>
                             <button class="btn btn-primary" id="addSupplierBtn">
                                 <i class="fas fa-plus"></i> Add Supplier
+                            </button>
+                            <button class="btn btn-secondary" id="exportSuppliers">
+                                <i class="fas fa-file-pdf"></i> Export
                             </button>
                         </div>
                     </div>
@@ -968,6 +981,9 @@
                         <div>
                             <button class="btn btn-primary" id="addInventoryBtn">
                                 <i class="fas fa-plus"></i> Stock Adjustment
+                            </button>
+                            <button class="btn btn-secondary" id="exportInventory">
+                                <i class="fas fa-file-pdf"></i> Export
                             </button>
                         </div>
                     </div>
@@ -1012,6 +1028,9 @@
                         <div class="card">
                             <div class="card-header">
                                 <h2 class="card-title">Stock Adjustments</h2>
+                                <button class="btn btn-secondary" id="exportAdjustments">
+                                    <i class="fas fa-file-pdf"></i> Export
+                                </button>
                             </div>
                             <div class="table-responsive">
                                 <table>
@@ -1039,6 +1058,9 @@
                                 <h2 class="card-title">Stock Transfers</h2>
                                 <button class="btn btn-primary" id="addTransferBtn">
                                     <i class="fas fa-plus"></i> New Transfer
+                                </button>
+                                <button class="btn btn-secondary" id="exportTransfers">
+                                    <i class="fas fa-file-pdf"></i> Export
                                 </button>
                             </div>
                             <div class="table-responsive">
@@ -1070,6 +1092,9 @@
                         <div>
                             <button class="btn btn-primary" id="addSaleBtn">
                                 <i class="fas fa-plus"></i> New Sale
+                            </button>
+                            <button class="btn btn-secondary" id="exportSales">
+                                <i class="fas fa-file-pdf"></i> Export
                             </button>
                         </div>
                     </div>
@@ -1112,6 +1137,9 @@
                             <button class="btn btn-primary" id="addPurchaseBtn">
                                 <i class="fas fa-plus"></i> New Purchase
                             </button>
+                            <button class="btn btn-secondary" id="exportPurchases">
+                                <i class="fas fa-file-pdf"></i> Export
+                            </button>
                         </div>
                     </div>
 
@@ -1153,6 +1181,9 @@
                             <button class="btn btn-primary" id="printReport">
                                 <i class="fas fa-print"></i> Print
                             </button>
+                            <button class="btn btn-secondary" id="exportReport">
+                                <i class="fas fa-file-pdf"></i> Export PDF
+                            </button>
                         </div>
                     </div>
 
@@ -1168,8 +1199,8 @@
                             <div class="card-header">
                                 <h2 class="card-title">Inventory Report</h2>
                                 <div>
-                                    <button class="btn btn-secondary">
-                                        <i class="fas fa-download"></i> Export
+                                    <button class="btn btn-secondary" id="exportInventoryReport">
+                                        <i class="fas fa-file-pdf"></i> Export
                                     </button>
                                 </div>
                             </div>
@@ -1198,8 +1229,8 @@
                             <div class="card-header">
                                 <h2 class="card-title">Sales Report</h2>
                                 <div>
-                                    <button class="btn btn-secondary">
-                                        <i class="fas fa-download"></i> Export
+                                    <button class="btn btn-secondary" id="exportSalesReport">
+                                        <i class="fas fa-file-pdf"></i> Export
                                     </button>
                                 </div>
                             </div>
@@ -1231,8 +1262,8 @@
                             <div class="card-header">
                                 <h2 class="card-title">Purchase Report</h2>
                                 <div>
-                                    <button class="btn btn-secondary">
-                                        <i class="fas fa-download"></i> Export
+                                    <button class="btn btn-secondary" id="exportPurchaseReport">
+                                        <i class="fas fa-file-pdf"></i> Export
                                     </button>
                                 </div>
                             </div>
@@ -1264,8 +1295,8 @@
                             <div class="card-header">
                                 <h2 class="card-title">Profit & Loss Statement</h2>
                                 <div>
-                                    <button class="btn btn-secondary">
-                                        <i class="fas fa-download"></i> Export
+                                    <button class="btn btn-secondary" id="exportProfitLoss">
+                                        <i class="fas fa-file-pdf"></i> Export
                                     </button>
                                 </div>
                             </div>
@@ -1664,6 +1695,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Initialize jsPDF
+        const { jsPDF } = window.jspdf;
+        
         // DOM Elements
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
@@ -1770,111 +1804,7 @@
             purchasePrefix: 'PUR'
         };
 
-        // Initialize with sample data if empty
-        if (categories.length === 0) {
-            categories = [
-                { id: 1, name: 'Electronics', description: 'Electronic devices and components' },
-                { id: 2, name: 'Clothing', description: 'Apparel and accessories' },
-                { id: 3, name: 'Groceries', description: 'Food and household items' },
-                { id: 4, name: 'Furniture', description: 'Home and office furniture' }
-            ];
-            localStorage.setItem('categories', JSON.stringify(categories));
-        }
-
-        if (suppliers.length === 0) {
-            suppliers = [
-                { 
-                    id: 1, 
-                    name: 'Tech Suppliers Ltd', 
-                    contactPerson: 'Robert Mugabe', 
-                    phone: '+256772123456', 
-                    email: 'info@techsuppliers.com', 
-                    address: 'Kampala Road, Kampala', 
-                    products: [1, 2], 
-                    paymentTerms: 'Net 30' 
-                },
-                { 
-                    id: 2, 
-                    name: 'Fashion World', 
-                    contactPerson: 'Sarah Johnson', 
-                    phone: '+256752987654', 
-                    email: 'sales@fashionworld.com', 
-                    address: 'Nakawa Division, Kampala', 
-                    products: [3], 
-                    paymentTerms: 'Cash on Delivery' 
-                }
-            ];
-            localStorage.setItem('suppliers', JSON.stringify(suppliers));
-        }
-
-        if (products.length === 0) {
-            products = [
-                { 
-                    id: 1, 
-                    name: 'Smartphone', 
-                    categoryId: 1, 
-                    description: 'Latest smartphone model', 
-                    purchasePrice: 500000, 
-                    sellingPrice: 700000, 
-                    stock: 15, 
-                    reorderLevel: 5, 
-                    unit: 'pcs', 
-                    barcode: '123456789', 
-                    createdAt: new Date().toISOString() 
-                },
-                { 
-                    id: 2, 
-                    name: 'Laptop', 
-                    categoryId: 1, 
-                    description: 'High-performance laptop', 
-                    purchasePrice: 1500000, 
-                    sellingPrice: 2000000, 
-                    stock: 8, 
-                    reorderLevel: 3, 
-                    unit: 'pcs', 
-                    barcode: '987654321', 
-                    createdAt: new Date().toISOString() 
-                },
-                { 
-                    id: 3, 
-                    name: 'T-Shirt', 
-                    categoryId: 2, 
-                    description: 'Cotton t-shirt', 
-                    purchasePrice: 15000, 
-                    sellingPrice: 25000, 
-                    stock: 50, 
-                    reorderLevel: 20, 
-                    unit: 'pcs', 
-                    barcode: '456123789', 
-                    createdAt: new Date().toISOString() 
-                },
-                { 
-                    id: 4, 
-                    name: 'Rice (5kg)', 
-                    categoryId: 3, 
-                    description: 'Premium quality rice', 
-                    purchasePrice: 20000, 
-                    sellingPrice: 28000, 
-                    stock: 30, 
-                    reorderLevel: 10, 
-                    unit: 'bag', 
-                    barcode: '789456123', 
-                    createdAt: new Date().toISOString() 
-                }
-            ];
-            localStorage.setItem('products', JSON.stringify(products));
-        }
-
-        if (activities.length === 0) {
-            activities = [
-                { id: 1, date: new Date().toISOString(), activity: 'Product added', user: 'John Doe', details: 'Added new product: Smartphone' },
-                { id: 2, date: new Date(Date.now() - 86400000).toISOString(), activity: 'Stock adjusted', user: 'John Doe', details: 'Adjusted stock for Laptop: +2 units' },
-                { id: 3, date: new Date(Date.now() - 172800000).toISOString(), activity: 'Sale recorded', user: 'Jane Smith', details: 'Recorded sale #INV-001 for UGX 700,000' },
-                { id: 4, date: new Date(Date.now() - 259200000).toISOString(), activity: 'Category added', user: 'John Doe', details: 'Added new category: Electronics' }
-            ];
-            localStorage.setItem('activities', JSON.stringify(activities));
-        }
-
+        // Initialize with empty data
         if (!localStorage.getItem('settings')) {
             localStorage.setItem('settings', JSON.stringify(settings));
         }
@@ -1938,6 +1868,12 @@
             document.getElementById('outOfStockItems').textContent = outOfStockItems;
             document.getElementById('inventoryValue').textContent = `UGX ${inventoryValue.toLocaleString()}`;
             
+            // Set change percentages to 0 (since we removed sample data)
+            document.getElementById('productChange').textContent = '0%';
+            document.getElementById('lowStockChange').textContent = '0%';
+            document.getElementById('outOfStockChange').textContent = '0%';
+            document.getElementById('inventoryValueChange').textContent = '0%';
+            
             // Load activities
             const activitiesTable = document.getElementById('activitiesTable');
             activitiesTable.innerHTML = activities.slice(0, 5).map(activity => `
@@ -1968,28 +1904,30 @@
                 `;
             }).join('');
             
-            // Load recent sales (sample data)
+            // Load recent sales
             const recentSalesTable = document.getElementById('recentSalesTable');
-            recentSalesTable.innerHTML = `
-                <tr>
-                    <td>${new Date().toLocaleDateString()}</td>
-                    <td>INV-${Math.floor(Math.random() * 1000)}</td>
-                    <td>UGX ${(Math.random() * 1000000).toLocaleString()}</td>
-                    <td><span class="badge badge-success">Completed</span></td>
-                </tr>
-                <tr>
-                    <td>${new Date(Date.now() - 86400000).toLocaleDateString()}</td>
-                    <td>INV-${Math.floor(Math.random() * 1000)}</td>
-                    <td>UGX ${(Math.random() * 1000000).toLocaleString()}</td>
-                    <td><span class="badge badge-success">Completed</span></td>
-                </tr>
-                <tr>
-                    <td>${new Date(Date.now() - 172800000).toLocaleDateString()}</td>
-                    <td>INV-${Math.floor(Math.random() * 1000)}</td>
-                    <td>UGX ${(Math.random() * 1000000).toLocaleString()}</td>
-                    <td><span class="badge badge-success">Completed</span></td>
-                </tr>
-            `;
+            recentSalesTable.innerHTML = sales.slice(0, 5).map(sale => {
+                const totalAmount = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                return `
+                    <tr>
+                        <td>${new Date(sale.date).toLocaleDateString()}</td>
+                        <td>${sale.invoiceNumber}</td>
+                        <td>UGX ${totalAmount.toLocaleString()}</td>
+                        <td><span class="badge badge-success">Completed</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            if (sales.length === 0) {
+                recentSalesTable.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="empty-state">
+                            <i class="fas fa-shopping-cart"></i>
+                            <p>No recent sales found</p>
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
         // Products management
@@ -2021,6 +1959,24 @@
                     </tr>
                 `;
             }).join('');
+            
+            if (products.length === 0) {
+                productsTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="fas fa-boxes"></i>
+                            <p>No products found. Add your first product to get started.</p>
+                            <button class="btn btn-primary" id="addProductBtnEmpty">
+                                <i class="fas fa-plus"></i> Add Product
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                
+                document.getElementById('addProductBtnEmpty').addEventListener('click', () => {
+                    document.getElementById('addProductBtn').click();
+                });
+            }
         }
 
         // Categories management
@@ -2046,6 +2002,24 @@
                     </tr>
                 `;
             }).join('');
+            
+            if (categories.length === 0) {
+                categoriesTable.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-tags"></i>
+                            <p>No categories found. Add your first category to get started.</p>
+                            <button class="btn btn-primary" id="addCategoryBtnEmpty">
+                                <i class="fas fa-plus"></i> Add Category
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                
+                document.getElementById('addCategoryBtnEmpty').addEventListener('click', () => {
+                    document.getElementById('addCategoryBtn').click();
+                });
+            }
         }
 
         // Suppliers management
@@ -2075,6 +2049,24 @@
                     </tr>
                 `;
             }).join('');
+            
+            if (suppliers.length === 0) {
+                suppliersTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-truck"></i>
+                            <p>No suppliers found. Add your first supplier to get started.</p>
+                            <button class="btn btn-primary" id="addSupplierBtnEmpty">
+                                <i class="fas fa-plus"></i> Add Supplier
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                
+                document.getElementById('addSupplierBtnEmpty').addEventListener('click', () => {
+                    document.getElementById('addSupplierBtn').click();
+                });
+            }
         }
 
         // Sales management
@@ -2104,6 +2096,24 @@
                     </tr>
                 `;
             }).join('');
+            
+            if (sales.length === 0) {
+                salesTable.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <i class="fas fa-shopping-cart"></i>
+                            <p>No sales records found. Add your first sale to get started.</p>
+                            <button class="btn btn-primary" id="addSaleBtnEmpty">
+                                <i class="fas fa-plus"></i> New Sale
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                
+                document.getElementById('addSaleBtnEmpty').addEventListener('click', () => {
+                    document.getElementById('addSaleBtn').click();
+                });
+            }
         }
 
         // Purchases management
@@ -2134,6 +2144,24 @@
                     </tr>
                 `;
             }).join('');
+            
+            if (purchases.length === 0) {
+                purchasesTable.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <i class="fas fa-shopping-basket"></i>
+                            <p>No purchase records found. Add your first purchase to get started.</p>
+                            <button class="btn btn-primary" id="addPurchaseBtnEmpty">
+                                <i class="fas fa-plus"></i> New Purchase
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                
+                document.getElementById('addPurchaseBtnEmpty').addEventListener('click', () => {
+                    document.getElementById('addPurchaseBtn').click();
+                });
+            }
         }
 
         // Inventory management
@@ -2166,6 +2194,17 @@
                     </tr>
                 `;
             }).join('');
+            
+            if (products.length === 0) {
+                inventoryTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="fas fa-warehouse"></i>
+                            <p>No inventory items found. Add products to see them here.</p>
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
         function loadAdjustments() {
@@ -2183,6 +2222,17 @@
                     </tr>
                 `;
             }).join('');
+            
+            if (adjustments.length === 0) {
+                adjustmentsTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-exchange-alt"></i>
+                            <p>No stock adjustments found. Make adjustments to see them here.</p>
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
         // Reports
@@ -2211,6 +2261,17 @@
                     </tr>
                 `;
             }).join('');
+            
+            if (products.length === 0) {
+                inventoryReportTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-boxes"></i>
+                            <p>No inventory data available. Add products to generate reports.</p>
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
         function loadSalesReport() {
@@ -2220,14 +2281,44 @@
                 window.salesChart.destroy();
             }
             
-            // Sample sales data for chart
+            // Group sales by month
+            const salesByMonth = {};
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const salesData = months.map(() => Math.floor(Math.random() * 10000000) + 5000000);
+            
+            sales.forEach(sale => {
+                const date = new Date(sale.date);
+                const monthYear = `${date.getFullYear()}-${date.getMonth()}`;
+                
+                if (!salesByMonth[monthYear]) {
+                    salesByMonth[monthYear] = 0;
+                }
+                
+                const total = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                salesByMonth[monthYear] += total;
+            });
+            
+            // Fill in missing months with 0
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth();
+            
+            const salesData = [];
+            for (let i = 0; i < 12; i++) {
+                const date = new Date(currentYear, currentMonth - 11 + i, 1);
+                const monthYear = `${date.getFullYear()}-${date.getMonth()}`;
+                salesData.push(salesByMonth[monthYear] || 0);
+            }
+            
+            const monthLabels = [];
+            for (let i = 0; i < 12; i++) {
+                const date = new Date(currentYear, currentMonth - 11 + i, 1);
+                monthLabels.push(months[date.getMonth()] + ' ' + date.getFullYear().toString().slice(-2));
+            }
             
             window.salesChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: months,
+                    labels: monthLabels,
                     datasets: [{
                         label: 'Sales (UGX)',
                         data: salesData,
@@ -2263,42 +2354,34 @@
                 }
             });
             
-            // Sample sales data for table
+            // Load sales report table
             const salesReportTable = document.getElementById('salesReportTable');
-            salesReportTable.innerHTML = `
-                <tr>
-                    <td>${new Date().toLocaleDateString()}</td>
-                    <td>INV-${Math.floor(Math.random() * 1000)}</td>
-                    <td>Customer ${Math.floor(Math.random() * 100)}</td>
-                    <td>${Math.floor(Math.random() * 10) + 1}</td>
-                    <td>${(Math.random() * 1000000 + 500000).toLocaleString()}</td>
-                    <td><span class="badge badge-success">Paid</span></td>
-                </tr>
-                <tr>
-                    <td>${new Date(Date.now() - 86400000).toLocaleDateString()}</td>
-                    <td>INV-${Math.floor(Math.random() * 1000)}</td>
-                    <td>Customer ${Math.floor(Math.random() * 100)}</td>
-                    <td>${Math.floor(Math.random() * 10) + 1}</td>
-                    <td>${(Math.random() * 1000000 + 500000).toLocaleString()}</td>
-                    <td><span class="badge badge-success">Paid</span></td>
-                </tr>
-                <tr>
-                    <td>${new Date(Date.now() - 172800000).toLocaleDateString()}</td>
-                    <td>INV-${Math.floor(Math.random() * 1000)}</td>
-                    <td>Customer ${Math.floor(Math.random() * 100)}</td>
-                    <td>${Math.floor(Math.random() * 10) + 1}</td>
-                    <td>${(Math.random() * 1000000 + 500000).toLocaleString()}</td>
-                    <td><span class="badge badge-warning">Pending</span></td>
-                </tr>
-                <tr>
-                    <td>${new Date(Date.now() - 259200000).toLocaleDateString()}</td>
-                    <td>INV-${Math.floor(Math.random() * 1000)}</td>
-                    <td>Customer ${Math.floor(Math.random() * 100)}</td>
-                    <td>${Math.floor(Math.random() * 10) + 1}</td>
-                    <td>${(Math.random() * 1000000 + 500000).toLocaleString()}</td>
-                    <td><span class="badge badge-success">Paid</span></td>
-                </tr>
-            `;
+            salesReportTable.innerHTML = sales.slice(0, 10).map(sale => {
+                const itemsCount = sale.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return `
+                    <tr>
+                        <td>${new Date(sale.date).toLocaleDateString()}</td>
+                        <td>${sale.invoiceNumber}</td>
+                        <td>${sale.customer || 'Walk-in Customer'}</td>
+                        <td>${itemsCount}</td>
+                        <td>${totalAmount.toLocaleString()}</td>
+                        <td><span class="badge badge-success">Completed</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            if (sales.length === 0) {
+                salesReportTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-chart-line"></i>
+                            <p>No sales data available. Make sales to generate reports.</p>
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
         // Settings
@@ -2477,8 +2560,15 @@
             // Create product dropdown
             let productOptions = '<option value="">Select Product</option>';
             products.forEach(product => {
-                productOptions += `<option value="${product.id}" data-price="${product.sellingPrice}">${product.name} (${product.sellingPrice.toLocaleString()} UGX)</option>`;
+                if (product.stock > 0) { // Only show products with available stock
+                    productOptions += `<option value="${product.id}" data-price="${product.sellingPrice}">${product.name} (${product.stock} available, ${product.sellingPrice.toLocaleString()} UGX)</option>`;
+                }
             });
+            
+            if (productOptions === '<option value="">Select Product</option>') {
+                showToast('No products available for sale', 'error');
+                return;
+            }
             
             saleItemsTable.innerHTML += `
                 <tr id="row-${rowId}">
@@ -2525,6 +2615,15 @@
             
             quantityInput.addEventListener('input', function() {
                 if (productSelect.value) {
+                    const selectedOption = productSelect.options[productSelect.selectedIndex];
+                    const productText = selectedOption.text;
+                    const availableStock = parseInt(productText.match(/\((\d+) available/)[1]);
+                    
+                    if (this.value > availableStock) {
+                        this.value = availableStock;
+                        showToast(`Cannot exceed available stock of ${availableStock}`, 'warning');
+                    }
+                    
                     totalInput.value = (priceInput.value * this.value).toLocaleString();
                     updateSaleTotal();
                 }
@@ -2820,7 +2919,7 @@
             const productSelect = document.getElementById('adjustmentProduct');
             productSelect.innerHTML = '<option value="">Select Product</option>';
             products.forEach(product => {
-                productSelect.innerHTML += `<option value="${product.id}">${product.name}</option>`;
+                productSelect.innerHTML += `<option value="${product.id}">${product.name} (Current: ${product.stock} ${product.unit})</option>`;
             });
             
             // Reset form
@@ -2933,6 +3032,373 @@
             window.print();
         });
 
+        // PDF Export functionality
+        function exportToPDF(title, headers, data, fileName) {
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(18);
+            doc.text(title, 14, 15);
+            
+            // Add date
+            doc.setFontSize(10);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 22);
+            
+            // Add business name
+            doc.text(`${settings.businessName}`, 14, 28);
+            
+            // Add table
+            doc.autoTable({
+                startY: 35,
+                head: [headers],
+                body: data,
+                margin: { top: 10 },
+                styles: {
+                    fontSize: 8,
+                    cellPadding: 3,
+                    overflow: 'linebreak'
+                },
+                headStyles: {
+                    fillColor: [37, 99, 235],
+                    textColor: 255,
+                    fontSize: 9
+                }
+            });
+            
+            // Save the PDF
+            doc.save(`${fileName}_${new Date().toISOString().slice(0, 10)}.pdf`);
+        }
+
+        // Dashboard Export
+        document.getElementById('exportDashboard').addEventListener('click', () => {
+            const title = 'Dashboard Summary Report';
+            const headers = ['Metric', 'Value', 'Change'];
+            
+            const totalProducts = products.length;
+            const lowStockItems = products.filter(p => p.stock > 0 && p.stock <= p.reorderLevel).length;
+            const outOfStockItems = products.filter(p => p.stock === 0).length;
+            const inventoryValue = products.reduce((sum, p) => sum + (p.stock * p.purchasePrice), 0);
+            
+            const data = [
+                ['Total Products', totalProducts, '0%'],
+                ['Low Stock Items', lowStockItems, '0%'],
+                ['Out of Stock Items', outOfStockItems, '0%'],
+                ['Inventory Value', `UGX ${inventoryValue.toLocaleString()}`, '0%']
+            ];
+            
+            exportToPDF(title, headers, data, 'dashboard_report');
+        });
+
+        // Products Export
+        document.getElementById('exportProducts').addEventListener('click', () => {
+            const title = 'Products Report';
+            const headers = ['ID', 'Name', 'Category', 'Price (UGX)', 'Stock', 'Status'];
+            
+            const data = products.map(product => {
+                const category = categories.find(c => c.id === product.categoryId);
+                const status = product.stock === 0 ? 'Out of Stock' : 
+                               product.stock <= product.reorderLevel ? 'Low Stock' : 'In Stock';
+                
+                return [
+                    product.id,
+                    product.name,
+                    category ? category.name : 'N/A',
+                    product.sellingPrice.toLocaleString(),
+                    `${product.stock} ${product.unit}`,
+                    status
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'products_report');
+        });
+
+        // Categories Export
+        document.getElementById('exportCategories').addEventListener('click', () => {
+            const title = 'Categories Report';
+            const headers = ['ID', 'Name', 'Description', 'No. of Products'];
+            
+            const data = categories.map(category => {
+                const productCount = products.filter(p => p.categoryId === category.id).length;
+                return [
+                    category.id,
+                    category.name,
+                    category.description || 'N/A',
+                    productCount
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'categories_report');
+        });
+
+        // Suppliers Export
+        document.getElementById('exportSuppliers').addEventListener('click', () => {
+            const title = 'Suppliers Report';
+            const headers = ['ID', 'Name', 'Contact', 'Email', 'Products Supplied'];
+            
+            const data = suppliers.map(supplier => {
+                const productsSupplied = supplier.products.map(id => {
+                    const product = products.find(p => p.id === id);
+                    return product ? product.name : 'Unknown';
+                }).join(', ');
+                
+                return [
+                    supplier.id,
+                    supplier.name,
+                    supplier.phone,
+                    supplier.email || 'N/A',
+                    productsSupplied || 'N/A'
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'suppliers_report');
+        });
+
+        // Inventory Export
+        document.getElementById('exportInventory').addEventListener('click', () => {
+            const title = 'Current Inventory Report';
+            const headers = ['ID', 'Product', 'Category', 'Current Stock', 'Reorder Level', 'Status'];
+            
+            const data = products.map(product => {
+                const category = categories.find(c => c.id === product.categoryId);
+                const status = product.stock === 0 ? 'Out of Stock' : 
+                               product.stock <= product.reorderLevel ? 'Low Stock' : 'In Stock';
+                
+                return [
+                    product.id,
+                    product.name,
+                    category ? category.name : 'N/A',
+                    `${product.stock} ${product.unit}`,
+                    `${product.reorderLevel} ${product.unit}`,
+                    status
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'inventory_report');
+        });
+
+        // Adjustments Export
+        document.getElementById('exportAdjustments').addEventListener('click', () => {
+            const title = 'Stock Adjustments Report';
+            const headers = ['ID', 'Date', 'Product', 'Adjustment', 'Reason', 'By'];
+            
+            const data = adjustments.map(adj => {
+                const product = products.find(p => p.id === adj.productId);
+                return [
+                    adj.id,
+                    new Date(adj.date).toLocaleDateString(),
+                    product ? product.name : 'N/A',
+                    `${adj.type === 'add' ? '+' : '-'}${adj.quantity}`,
+                    adj.reason,
+                    adj.user || 'System'
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'adjustments_report');
+        });
+
+        // Sales Export
+        document.getElementById('exportSales').addEventListener('click', () => {
+            const title = 'Sales Report';
+            const headers = ['ID', 'Date', 'Invoice No.', 'Customer', 'Items', 'Total (UGX)', 'Status'];
+            
+            const data = sales.map(sale => {
+                const itemsCount = sale.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return [
+                    sale.id,
+                    new Date(sale.date).toLocaleDateString(),
+                    sale.invoiceNumber,
+                    sale.customer || 'Walk-in Customer',
+                    itemsCount,
+                    totalAmount.toLocaleString(),
+                    'Completed'
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'sales_report');
+        });
+
+        // Purchases Export
+        document.getElementById('exportPurchases').addEventListener('click', () => {
+            const title = 'Purchases Report';
+            const headers = ['ID', 'Date', 'Reference', 'Supplier', 'Items', 'Total (UGX)', 'Status'];
+            
+            const data = purchases.map(purchase => {
+                const supplier = suppliers.find(s => s.id === purchase.supplierId);
+                const itemsCount = purchase.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = purchase.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return [
+                    purchase.id,
+                    new Date(purchase.date).toLocaleDateString(),
+                    purchase.referenceNumber,
+                    supplier ? supplier.name : 'N/A',
+                    itemsCount,
+                    totalAmount.toLocaleString(),
+                    'Completed'
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'purchases_report');
+        });
+
+        // Reports Export
+        document.getElementById('exportReport').addEventListener('click', () => {
+            const activeTab = document.querySelector('#reports .tab.active');
+            if (!activeTab) return;
+            
+            const tabId = activeTab.getAttribute('data-tab');
+            
+            switch(tabId) {
+                case 'inventory-report':
+                    document.getElementById('exportInventoryReport').click();
+                    break;
+                case 'sales-report':
+                    document.getElementById('exportSalesReport').click();
+                    break;
+                case 'purchase-report':
+                    document.getElementById('exportPurchaseReport').click();
+                    break;
+                case 'profit-loss':
+                    document.getElementById('exportProfitLoss').click();
+                    break;
+            }
+        });
+
+        // Inventory Report Export
+        document.getElementById('exportInventoryReport').addEventListener('click', () => {
+            const title = 'Inventory Valuation Report';
+            const headers = ['Product', 'Category', 'Current Stock', 'Unit Price (UGX)', 'Total Value (UGX)', 'Status'];
+            
+            const data = products.map(product => {
+                const category = categories.find(c => c.id === product.categoryId);
+                const totalValue = product.stock * product.purchasePrice;
+                const status = product.stock === 0 ? 'Out of Stock' : 
+                               product.stock <= product.reorderLevel ? 'Low Stock' : 'In Stock';
+                
+                return [
+                    product.name,
+                    category ? category.name : 'N/A',
+                    `${product.stock} ${product.unit}`,
+                    product.purchasePrice.toLocaleString(),
+                    totalValue.toLocaleString(),
+                    status
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'inventory_valuation_report');
+        });
+
+        // Sales Report Export
+        document.getElementById('exportSalesReport').addEventListener('click', () => {
+            const title = 'Sales Analysis Report';
+            const headers = ['Date', 'Invoice No.', 'Customer', 'Items', 'Total (UGX)', 'Status'];
+            
+            const data = sales.map(sale => {
+                const itemsCount = sale.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return [
+                    new Date(sale.date).toLocaleDateString(),
+                    sale.invoiceNumber,
+                    sale.customer || 'Walk-in Customer',
+                    itemsCount,
+                    totalAmount.toLocaleString(),
+                    'Completed'
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'sales_analysis_report');
+        });
+
+        // Purchase Report Export
+        document.getElementById('exportPurchaseReport').addEventListener('click', () => {
+            const title = 'Purchase Analysis Report';
+            const headers = ['Date', 'Reference', 'Supplier', 'Items', 'Total (UGX)', 'Status'];
+            
+            const data = purchases.map(purchase => {
+                const supplier = suppliers.find(s => s.id === purchase.supplierId);
+                const itemsCount = purchase.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = purchase.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return [
+                    new Date(purchase.date).toLocaleDateString(),
+                    purchase.referenceNumber,
+                    supplier ? supplier.name : 'N/A',
+                    itemsCount,
+                    totalAmount.toLocaleString(),
+                    'Completed'
+                ];
+            });
+            
+            exportToPDF(title, headers, data, 'purchase_analysis_report');
+        });
+
+        // Profit & Loss Export
+        document.getElementById('exportProfitLoss').addEventListener('click', () => {
+            const title = 'Profit & Loss Statement';
+            const headers = ['Period', 'Revenue (UGX)', 'Cost of Goods Sold (UGX)', 'Gross Profit (UGX)', 'Expenses (UGX)', 'Net Profit (UGX)'];
+            
+            // Group sales by month
+            const salesByMonth = {};
+            sales.forEach(sale => {
+                const date = new Date(sale.date);
+                const monthYear = `${date.getFullYear()}-${date.getMonth()}`;
+                
+                if (!salesByMonth[monthYear]) {
+                    salesByMonth[monthYear] = 0;
+                }
+                
+                const total = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                salesByMonth[monthYear] += total;
+            });
+            
+            // Group purchases by month
+            const purchasesByMonth = {};
+            purchases.forEach(purchase => {
+                const date = new Date(purchase.date);
+                const monthYear = `${date.getFullYear()}-${date.getMonth()}`;
+                
+                if (!purchasesByMonth[monthYear]) {
+                    purchasesByMonth[monthYear] = 0;
+                }
+                
+                const total = purchase.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                purchasesByMonth[monthYear] += total;
+            });
+            
+            // Prepare data
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth();
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            const data = [];
+            for (let i = 0; i < 12; i++) {
+                const date = new Date(currentYear, currentMonth - 11 + i, 1);
+                const monthYear = `${date.getFullYear()}-${date.getMonth()}`;
+                const monthName = months[date.getMonth()] + ' ' + date.getFullYear().toString().slice(-2);
+                
+                const revenue = salesByMonth[monthYear] || 0;
+                const cogs = purchasesByMonth[monthYear] || 0;
+                const grossProfit = revenue - cogs;
+                const expenses = Math.floor(revenue * 0.2); // Assuming 20% expenses
+                const netProfit = grossProfit - expenses;
+                
+                data.push([
+                    monthName,
+                    revenue.toLocaleString(),
+                    cogs.toLocaleString(),
+                    grossProfit.toLocaleString(),
+                    expenses.toLocaleString(),
+                    netProfit.toLocaleString()
+                ]);
+            }
+            
+            exportToPDF(title, headers, data, 'profit_loss_statement');
+        });
+
         // Search functionality
         document.getElementById('productSearch').addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
@@ -3008,7 +3474,7 @@
                     const productSelect = document.getElementById('adjustmentProduct');
                     productSelect.innerHTML = '<option value="">Select Product</option>';
                     products.forEach(product => {
-                        productSelect.innerHTML += `<option value="${product.id}" ${product.id === productId ? 'selected' : ''}>${product.name}</option>`;
+                        productSelect.innerHTML += `<option value="${product.id}" ${product.id === productId ? 'selected' : ''}>${product.name} (Current: ${product.stock} ${product.unit})</option>`;
                     });
                     
                     // Reset form
@@ -3126,236 +3592,28 @@
                         supplierModal.classList.add('active');
                     }
                 }
+                
+                if (e.target.closest('#viewAllLowStock')) {
+                    // Navigate to inventory tab and show low stock items
+                    document.querySelector('.menu-item[data-target="inventory"]').click();
+                    document.querySelector('.tab[data-tab="current"]').click();
+                    
+                    // Filter to show only low stock items
+                    document.getElementById('inventorySearch').value = 'low stock';
+                    document.getElementById('inventorySearch').dispatchEvent(new Event('input'));
+                }
+                
+                if (e.target.closest('#viewAllSales')) {
+                    // Navigate to sales tab
+                    document.querySelector('.menu-item[data-target="sales"]').click();
+                }
+                
+                if (e.target.closest('#refreshActivities')) {
+                    loadDashboardData();
+                    showToast('Activities refreshed');
+                }
             });
         });
-        // Add this to your existing JavaScript code
-
-// Export functionality for reports
-document.querySelectorAll('#reports .btn-secondary').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const tabId = this.closest('.tab-content').id;
-        exportReport(tabId);
-    });
-});
-
-function exportReport(tabId) {
-    let csvContent = "";
-    let headers = [];
-    let data = [];
-    
-    switch(tabId) {
-        case 'inventory-report':
-            headers = ["Product", "Category", "Current Stock", "Unit Price (UGX)", "Total Value (UGX)", "Status"];
-            data = products.map(product => {
-                const category = categories.find(c => c.id === product.categoryId);
-                const totalValue = product.stock * product.purchasePrice;
-                const status = product.stock === 0 ? 'Out of Stock' : 
-                               product.stock <= product.reorderLevel ? 'Low Stock' : 'In Stock';
-                
-                return [
-                    product.name,
-                    category ? category.name : 'N/A',
-                    `${product.stock} ${product.unit}`,
-                    product.purchasePrice.toLocaleString(),
-                    totalValue.toLocaleString(),
-                    status
-                ];
-            });
-            break;
-            
-        case 'sales-report':
-            headers = ["Date", "Invoice No.", "Customer", "Items", "Total (UGX)", "Status"];
-            data = sales.map(sale => {
-                const itemsCount = sale.items.reduce((sum, item) => sum + item.quantity, 0);
-                const totalAmount = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-                
-                return [
-                    new Date(sale.date).toLocaleDateString(),
-                    sale.invoiceNumber,
-                    sale.customer || 'Walk-in Customer',
-                    itemsCount,
-                    totalAmount.toLocaleString(),
-                    'Completed'
-                ];
-            });
-            break;
-            
-        case 'purchase-report':
-            headers = ["Date", "Reference", "Supplier", "Items", "Total (UGX)", "Status"];
-            data = purchases.map(purchase => {
-                const supplier = suppliers.find(s => s.id === purchase.supplierId);
-                const itemsCount = purchase.items.reduce((sum, item) => sum + item.quantity, 0);
-                const totalAmount = purchase.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-                
-                return [
-                    new Date(purchase.date).toLocaleDateString(),
-                    purchase.referenceNumber,
-                    supplier ? supplier.name : 'N/A',
-                    itemsCount,
-                    totalAmount.toLocaleString(),
-                    'Completed'
-                ];
-            });
-            break;
-            
-        case 'profit-loss':
-            headers = ["Period", "Revenue (UGX)", "Cost of Goods Sold (UGX)", "Gross Profit (UGX)", "Expenses (UGX)", "Net Profit (UGX)"];
-            // Sample data - in a real app you would calculate these values
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            data = months.map((month, index) => {
-                const revenue = Math.floor(Math.random() * 10000000) + 5000000;
-                const cogs = Math.floor(revenue * 0.6);
-                const grossProfit = revenue - cogs;
-                const expenses = Math.floor(revenue * 0.2);
-                const netProfit = grossProfit - expenses;
-                
-                return [
-                    month,
-                    revenue.toLocaleString(),
-                    cogs.toLocaleString(),
-                    grossProfit.toLocaleString(),
-                    expenses.toLocaleString(),
-                    netProfit.toLocaleString()
-                ];
-            });
-            break;
-    }
-    
-    // Combine headers and data
-    csvContent = [headers, ...data].map(row => 
-        row.map(field => `"${field}"`).join(',')
-    ).join('\n');
-    
-    // Create download link
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${tabId.replace('-', '_')}_${new Date().toISOString().slice(0, 10)}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    showToast('Report exported successfully');
-}
-
-// Add this to your existing loadReports function
-function loadReports() {
-    loadInventoryReport();
-    
-    // Initialize charts for sales and profit/loss reports
-    initSalesChart();
-    initProfitLossChart();
-}
-
-function initSalesChart() {
-    const ctx = document.getElementById('salesChart').getContext('2d');
-    if (window.salesChart) {
-        window.salesChart.destroy();
-    }
-    
-    // Sample sales data for chart
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const salesData = months.map(() => Math.floor(Math.random() * 10000000) + 5000000);
-    
-    window.salesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: months,
-            datasets: [{
-                label: 'Sales (UGX)',
-                data: salesData,
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                borderColor: 'rgba(37, 99, 235, 1)',
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: false,
-                    ticks: {
-                        callback: function(value) {
-                            return 'UGX ' + value.toLocaleString();
-                        }
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return 'UGX ' + context.raw.toLocaleString();
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-function initProfitLossChart() {
-    const ctx = document.getElementById('profitLossChart').getContext('2d');
-    if (window.profitLossChart) {
-        window.profitLossChart.destroy();
-    }
-    
-    // Sample data for chart
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const revenueData = months.map(() => Math.floor(Math.random() * 10000000) + 5000000);
-    const profitData = revenueData.map(rev => Math.floor(rev * 0.3));
-    
-    window.profitLossChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: months,
-            datasets: [
-                {
-                    label: 'Revenue',
-                    data: revenueData,
-                    backgroundColor: 'rgba(16, 185, 129, 0.6)',
-                    borderColor: 'rgba(16, 185, 129, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Profit',
-                    data: profitData,
-                    backgroundColor: 'rgba(37, 99, 235, 0.6)',
-                    borderColor: 'rgba(37, 99, 235, 1)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: false,
-                    ticks: {
-                        callback: function(value) {
-                            return 'UGX ' + value.toLocaleString();
-                        }
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return 'UGX ' + context.raw.toLocaleString();
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
     </script>
     
 </body>
