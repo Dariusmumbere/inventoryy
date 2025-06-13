@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockMaster UG | SME Inventory System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="inventory.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -922,6 +921,45 @@
                     </div>
                 </div>
 
+                <!-- Suppliers Content -->
+                <div class="tab-content" id="suppliers">
+                    <div class="page-header">
+                        <h1 class="page-title">Suppliers</h1>
+                        <div>
+                            <button class="btn btn-primary" id="addSupplierBtn">
+                                <i class="fas fa-plus"></i> Add Supplier
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Supplier List</h2>
+                            <div class="search-bar" style="width: 200px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search suppliers..." id="supplierSearch">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Supplier Name</th>
+                                        <th>Contact</th>
+                                        <th>Email</th>
+                                        <th>Products Supplied</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="suppliersTable">
+                                    <!-- Suppliers will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Inventory Content -->
                 <div class="tab-content" id="inventory">
                     <div class="page-header">
@@ -998,7 +1036,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h2 class="card-title">Stock Transfers</h2>
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" id="addTransferBtn">
                                     <i class="fas fa-plus"></i> New Transfer
                                 </button>
                             </div>
@@ -1020,6 +1058,88 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales Content -->
+                <div class="tab-content" id="sales">
+                    <div class="page-header">
+                        <h1 class="page-title">Sales</h1>
+                        <div>
+                            <button class="btn btn-primary" id="addSaleBtn">
+                                <i class="fas fa-plus"></i> New Sale
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Sales Records</h2>
+                            <div class="search-bar" style="width: 200px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search sales..." id="salesSearch">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Invoice No.</th>
+                                        <th>Customer</th>
+                                        <th>Items</th>
+                                        <th>Total (UGX)</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="salesTable">
+                                    <!-- Sales will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purchases Content -->
+                <div class="tab-content" id="purchases">
+                    <div class="page-header">
+                        <h1 class="page-title">Purchases</h1>
+                        <div>
+                            <button class="btn btn-primary" id="addPurchaseBtn">
+                                <i class="fas fa-plus"></i> New Purchase
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Purchase Records</h2>
+                            <div class="search-bar" style="width: 200px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search purchases..." id="purchasesSearch">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Reference</th>
+                                        <th>Supplier</th>
+                                        <th>Items</th>
+                                        <th>Total (UGX)</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="purchasesTable">
+                                    <!-- Purchases will be loaded here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1172,48 +1292,50 @@
                     </div>
                 </div>
 
-                <!-- Other tabs content would go here -->
-                <div class="tab-content" id="suppliers">
-                    <div class="empty-state">
-                        <i class="fas fa-truck"></i>
-                        <h2>Suppliers Management</h2>
-                        <p>Manage your suppliers and track purchase history</p>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add Supplier
-                        </button>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="sales">
-                    <div class="empty-state">
-                        <i class="fas fa-shopping-cart"></i>
-                        <h2>Sales Management</h2>
-                        <p>Record and track your sales transactions</p>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-plus"></i> New Sale
-                        </button>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="purchases">
-                    <div class="empty-state">
-                        <i class="fas fa-shopping-basket"></i>
-                        <h2>Purchase Management</h2>
-                        <p>Record and track your purchase transactions</p>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-plus"></i> New Purchase
-                        </button>
-                    </div>
-                </div>
-
+                <!-- Settings Content -->
                 <div class="tab-content" id="settings">
-                    <div class="empty-state">
-                        <i class="fas fa-cog"></i>
-                        <h2>System Settings</h2>
-                        <p>Configure your inventory system settings</p>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-cog"></i> Configure Settings
-                        </button>
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">System Settings</h2>
+                        </div>
+                        <div class="card-body">
+                            <form id="settingsForm">
+                                <div class="form-group">
+                                    <label class="form-label">Business Name</label>
+                                    <input type="text" class="form-control" id="businessName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Currency</label>
+                                    <select class="form-control" id="currency" required>
+                                        <option value="UGX">UGX - Ugandan Shilling</option>
+                                        <option value="USD">USD - US Dollar</option>
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="GBP">GBP - British Pound</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tax Rate (%)</label>
+                                    <input type="number" class="form-control" id="taxRate" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Default Low Stock Threshold</label>
+                                    <input type="number" class="form-control" id="lowStockThreshold" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Invoice Prefix</label>
+                                    <input type="text" class="form-control" id="invoicePrefix" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Purchase Prefix</label>
+                                    <input type="text" class="form-control" id="purchasePrefix" required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary" id="saveSettings">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1302,6 +1424,198 @@
         </div>
     </div>
 
+    <!-- Add Supplier Modal -->
+    <div class="modal" id="supplierModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Supplier</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="supplierForm">
+                    <div class="form-group">
+                        <label class="form-label">Supplier Name</label>
+                        <input type="text" class="form-control" id="supplierName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Contact Person</label>
+                        <input type="text" class="form-control" id="supplierContactPerson">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="supplierPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="supplierEmail">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" id="supplierAddress" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Products Supplied</label>
+                        <select class="form-control" id="supplierProducts" multiple>
+                            <!-- Products will be populated here -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Payment Terms</label>
+                        <input type="text" class="form-control" id="supplierPaymentTerms">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger modal-close">Cancel</button>
+                <button class="btn btn-success" id="saveSupplier">Save Supplier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Sale Modal -->
+    <div class="modal" id="saleModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title">New Sale</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="saleForm">
+                    <div class="form-group">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="saleCustomer" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" id="saleDate" required>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Sale Items</h4>
+                            <button type="button" class="btn btn-secondary" id="addSaleItem">
+                                <i class="fas fa-plus"></i> Add Item
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price (UGX)</th>
+                                        <th>Total (UGX)</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="saleItemsTable">
+                                    <!-- Sale items will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-control" id="salePaymentMethod" required>
+                            <option value="cash">Cash</option>
+                            <option value="mobile_money">Mobile Money</option>
+                            <option value="credit">Credit</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-control" id="saleNotes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Total Amount (UGX)</label>
+                        <input type="text" class="form-control" id="saleTotal" readonly>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger modal-close">Cancel</button>
+                <button class="btn btn-success" id="saveSale">Complete Sale</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Purchase Modal -->
+    <div class="modal" id="purchaseModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title">New Purchase</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="purchaseForm">
+                    <div class="form-group">
+                        <label class="form-label">Supplier</label>
+                        <select class="form-control" id="purchaseSupplier" required>
+                            <option value="">Select Supplier</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" id="purchaseDate" required>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Purchase Items</h4>
+                            <button type="button" class="btn btn-secondary" id="addPurchaseItem">
+                                <i class="fas fa-plus"></i> Add Item
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price (UGX)</th>
+                                        <th>Total (UGX)</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="purchaseItemsTable">
+                                    <!-- Purchase items will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-control" id="purchasePaymentMethod" required>
+                            <option value="cash">Cash</option>
+                            <option value="mobile_money">Mobile Money</option>
+                            <option value="credit">Credit</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-control" id="purchaseNotes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Total Amount (UGX)</label>
+                        <input type="text" class="form-control" id="purchaseTotal" readonly>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger modal-close">Cancel</button>
+                <button class="btn btn-success" id="savePurchase">Complete Purchase</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Inventory Adjustment Modal -->
     <div class="modal" id="inventoryModal">
         <div class="modal-content">
@@ -1357,6 +1671,9 @@
         const tabs = document.querySelectorAll('.tab');
         const productModal = document.getElementById('productModal');
         const categoryModal = document.getElementById('categoryModal');
+        const supplierModal = document.getElementById('supplierModal');
+        const saleModal = document.getElementById('saleModal');
+        const purchaseModal = document.getElementById('purchaseModal');
         const inventoryModal = document.getElementById('inventoryModal');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
@@ -1415,6 +1732,9 @@
             btn.addEventListener('click', () => {
                 productModal.classList.remove('active');
                 categoryModal.classList.remove('active');
+                supplierModal.classList.remove('active');
+                saleModal.classList.remove('active');
+                purchaseModal.classList.remove('active');
                 inventoryModal.classList.remove('active');
             });
         });
@@ -1434,11 +1754,20 @@
         // Data Storage
         let products = JSON.parse(localStorage.getItem('products')) || [];
         let categories = JSON.parse(localStorage.getItem('categories')) || [];
+        let suppliers = JSON.parse(localStorage.getItem('suppliers')) || [];
         let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
         let adjustments = JSON.parse(localStorage.getItem('adjustments')) || [];
         let sales = JSON.parse(localStorage.getItem('sales')) || [];
         let purchases = JSON.parse(localStorage.getItem('purchases')) || [];
         let activities = JSON.parse(localStorage.getItem('activities')) || [];
+        let settings = JSON.parse(localStorage.getItem('settings')) || {
+            businessName: 'StockMaster UG',
+            currency: 'UGX',
+            taxRate: 18,
+            lowStockThreshold: 5,
+            invoicePrefix: 'INV',
+            purchasePrefix: 'PUR'
+        };
 
         // Initialize with sample data if empty
         if (categories.length === 0) {
@@ -1449,6 +1778,32 @@
                 { id: 4, name: 'Furniture', description: 'Home and office furniture' }
             ];
             localStorage.setItem('categories', JSON.stringify(categories));
+        }
+
+        if (suppliers.length === 0) {
+            suppliers = [
+                { 
+                    id: 1, 
+                    name: 'Tech Suppliers Ltd', 
+                    contactPerson: 'Robert Mugabe', 
+                    phone: '+256772123456', 
+                    email: 'info@techsuppliers.com', 
+                    address: 'Kampala Road, Kampala', 
+                    products: [1, 2], 
+                    paymentTerms: 'Net 30' 
+                },
+                { 
+                    id: 2, 
+                    name: 'Fashion World', 
+                    contactPerson: 'Sarah Johnson', 
+                    phone: '+256752987654', 
+                    email: 'sales@fashionworld.com', 
+                    address: 'Nakawa Division, Kampala', 
+                    products: [3], 
+                    paymentTerms: 'Cash on Delivery' 
+                }
+            ];
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
         }
 
         if (products.length === 0) {
@@ -1519,6 +1874,10 @@
             localStorage.setItem('activities', JSON.stringify(activities));
         }
 
+        if (!localStorage.getItem('settings')) {
+            localStorage.setItem('settings', JSON.stringify(settings));
+        }
+
         // Load tab data
         function loadTabData(tabId) {
             switch(tabId) {
@@ -1531,6 +1890,9 @@
                 case 'categories':
                     loadCategories();
                     break;
+                case 'suppliers':
+                    loadSuppliers();
+                    break;
                 case 'inventory':
                     loadInventory();
                     break;
@@ -1540,6 +1902,12 @@
                 case 'adjustments':
                     loadAdjustments();
                     break;
+                case 'sales':
+                    loadSales();
+                    break;
+                case 'purchases':
+                    loadPurchases();
+                    break;
                 case 'reports':
                     loadReports();
                     break;
@@ -1548,6 +1916,9 @@
                     break;
                 case 'sales-report':
                     loadSalesReport();
+                    break;
+                case 'settings':
+                    loadSettings();
                     break;
             }
         }
@@ -1668,6 +2039,94 @@
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button class="action-btn delete" data-id="${category.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Suppliers management
+        function loadSuppliers() {
+            const suppliersTable = document.getElementById('suppliersTable');
+            suppliersTable.innerHTML = suppliers.map(supplier => {
+                const productsSupplied = supplier.products.map(id => {
+                    const product = products.find(p => p.id === id);
+                    return product ? product.name : 'Unknown';
+                }).join(', ');
+                
+                return `
+                    <tr>
+                        <td>${supplier.id}</td>
+                        <td>${supplier.name}</td>
+                        <td>${supplier.phone}</td>
+                        <td>${supplier.email || 'N/A'}</td>
+                        <td>${productsSupplied || 'N/A'}</td>
+                        <td>
+                            <button class="action-btn edit" data-id="${supplier.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" data-id="${supplier.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Sales management
+        function loadSales() {
+            const salesTable = document.getElementById('salesTable');
+            salesTable.innerHTML = sales.map(sale => {
+                const itemsCount = sale.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = sale.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return `
+                    <tr>
+                        <td>${sale.id}</td>
+                        <td>${new Date(sale.date).toLocaleDateString()}</td>
+                        <td>${sale.invoiceNumber}</td>
+                        <td>${sale.customer || 'Walk-in Customer'}</td>
+                        <td>${itemsCount}</td>
+                        <td>UGX ${totalAmount.toLocaleString()}</td>
+                        <td><span class="badge badge-success">Completed</span></td>
+                        <td>
+                            <button class="action-btn edit" data-id="${sale.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" data-id="${sale.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Purchases management
+        function loadPurchases() {
+            const purchasesTable = document.getElementById('purchasesTable');
+            purchasesTable.innerHTML = purchases.map(purchase => {
+                const supplier = suppliers.find(s => s.id === purchase.supplierId);
+                const itemsCount = purchase.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalAmount = purchase.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                return `
+                    <tr>
+                        <td>${purchase.id}</td>
+                        <td>${new Date(purchase.date).toLocaleDateString()}</td>
+                        <td>${purchase.referenceNumber}</td>
+                        <td>${supplier ? supplier.name : 'N/A'}</td>
+                        <td>${itemsCount}</td>
+                        <td>UGX ${totalAmount.toLocaleString()}</td>
+                        <td><span class="badge badge-success">Completed</span></td>
+                        <td>
+                            <button class="action-btn edit" data-id="${purchase.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" data-id="${purchase.id}">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
@@ -1841,6 +2300,16 @@
             `;
         }
 
+        // Settings
+        function loadSettings() {
+            document.getElementById('businessName').value = settings.businessName;
+            document.getElementById('currency').value = settings.currency;
+            document.getElementById('taxRate').value = settings.taxRate;
+            document.getElementById('lowStockThreshold').value = settings.lowStockThreshold;
+            document.getElementById('invoicePrefix').value = settings.invoicePrefix;
+            document.getElementById('purchasePrefix').value = settings.purchasePrefix;
+        }
+
         // Add Product
         document.getElementById('addProductBtn').addEventListener('click', () => {
             // Populate category dropdown
@@ -1934,6 +2403,416 @@
             loadCategories();
         });
 
+        // Add Supplier
+        document.getElementById('addSupplierBtn').addEventListener('click', () => {
+            // Populate products dropdown
+            const productsSelect = document.getElementById('supplierProducts');
+            productsSelect.innerHTML = '';
+            products.forEach(product => {
+                productsSelect.innerHTML += `<option value="${product.id}">${product.name}</option>`;
+            });
+            
+            // Reset form
+            document.getElementById('supplierForm').reset();
+            supplierModal.classList.add('active');
+        });
+
+        // Save Supplier
+        document.getElementById('saveSupplier').addEventListener('click', () => {
+            const form = document.getElementById('supplierForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const selectedProducts = Array.from(document.getElementById('supplierProducts').selectedOptions)
+                .map(option => parseInt(option.value));
+            
+            const newSupplier = {
+                id: suppliers.length > 0 ? Math.max(...suppliers.map(s => s.id)) + 1 : 1,
+                name: document.getElementById('supplierName').value,
+                contactPerson: document.getElementById('supplierContactPerson').value,
+                phone: document.getElementById('supplierPhone').value,
+                email: document.getElementById('supplierEmail').value,
+                address: document.getElementById('supplierAddress').value,
+                products: selectedProducts,
+                paymentTerms: document.getElementById('supplierPaymentTerms').value
+            };
+            
+            suppliers.push(newSupplier);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            
+            // Add activity
+            activities.unshift({
+                id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
+                date: new Date().toISOString(),
+                activity: 'Supplier added',
+                user: 'John Doe',
+                details: `Added new supplier: ${newSupplier.name}`
+            });
+            localStorage.setItem('activities', JSON.stringify(activities));
+            
+            supplierModal.classList.remove('active');
+            showToast('Supplier added successfully');
+            loadSuppliers();
+        });
+
+        // Add Sale
+        document.getElementById('addSaleBtn').addEventListener('click', () => {
+            // Reset form
+            document.getElementById('saleForm').reset();
+            document.getElementById('saleItemsTable').innerHTML = '';
+            document.getElementById('saleDate').valueAsDate = new Date();
+            document.getElementById('saleTotal').value = '0';
+            
+            saleModal.classList.add('active');
+        });
+
+        // Add Sale Item
+        document.getElementById('addSaleItem').addEventListener('click', () => {
+            const saleItemsTable = document.getElementById('saleItemsTable');
+            const rowId = Date.now();
+            
+            // Create product dropdown
+            let productOptions = '<option value="">Select Product</option>';
+            products.forEach(product => {
+                productOptions += `<option value="${product.id}" data-price="${product.sellingPrice}">${product.name} (${product.sellingPrice.toLocaleString()} UGX)</option>`;
+            });
+            
+            saleItemsTable.innerHTML += `
+                <tr id="row-${rowId}">
+                    <td>
+                        <select class="form-control product-select" required>
+                            ${productOptions}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control quantity" min="1" value="1" required>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control price" readonly>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control total" readonly>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-item" data-row="${rowId}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            
+            // Add event listeners to the new row
+            const row = document.getElementById(`row-${rowId}`);
+            const productSelect = row.querySelector('.product-select');
+            const quantityInput = row.querySelector('.quantity');
+            const priceInput = row.querySelector('.price');
+            const totalInput = row.querySelector('.total');
+            
+            productSelect.addEventListener('change', function() {
+                if (this.value) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    priceInput.value = selectedOption.getAttribute('data-price');
+                    totalInput.value = (priceInput.value * quantityInput.value).toLocaleString();
+                    updateSaleTotal();
+                } else {
+                    priceInput.value = '';
+                    totalInput.value = '';
+                }
+            });
+            
+            quantityInput.addEventListener('input', function() {
+                if (productSelect.value) {
+                    totalInput.value = (priceInput.value * this.value).toLocaleString();
+                    updateSaleTotal();
+                }
+            });
+            
+            row.querySelector('.remove-item').addEventListener('click', function() {
+                row.remove();
+                updateSaleTotal();
+            });
+        });
+
+        // Update Sale Total
+        function updateSaleTotal() {
+            const rows = document.querySelectorAll('#saleItemsTable tr');
+            let total = 0;
+            
+            rows.forEach(row => {
+                const totalInput = row.querySelector('.total');
+                if (totalInput.value) {
+                    total += parseFloat(totalInput.value.replace(/,/g, ''));
+                }
+            });
+            
+            document.getElementById('saleTotal').value = total.toLocaleString();
+        }
+
+        // Save Sale
+        document.getElementById('saveSale').addEventListener('click', () => {
+            const form = document.getElementById('saleForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const rows = document.querySelectorAll('#saleItemsTable tr');
+            if (rows.length === 0) {
+                showToast('Please add at least one item to the sale', 'error');
+                return;
+            }
+            
+            const saleItems = [];
+            rows.forEach(row => {
+                const productSelect = row.querySelector('.product-select');
+                const productId = parseInt(productSelect.value);
+                const product = products.find(p => p.id === productId);
+                const quantity = parseInt(row.querySelector('.quantity').value);
+                const price = parseFloat(row.querySelector('.price').value);
+                
+                if (product.stock < quantity) {
+                    showToast(`Not enough stock for ${product.name}. Available: ${product.stock}`, 'error');
+                    return;
+                }
+                
+                saleItems.push({
+                    productId,
+                    productName: product.name,
+                    quantity,
+                    price
+                });
+            });
+            
+            if (saleItems.length === 0) return;
+            
+            // Generate invoice number
+            const invoiceNumber = `${settings.invoicePrefix}-${Math.floor(1000 + Math.random() * 9000)}`;
+            
+            const newSale = {
+                id: sales.length > 0 ? Math.max(...sales.map(s => s.id)) + 1 : 1,
+                date: document.getElementById('saleDate').value,
+                invoiceNumber,
+                customer: document.getElementById('saleCustomer').value || 'Walk-in Customer',
+                items: saleItems,
+                paymentMethod: document.getElementById('salePaymentMethod').value,
+                notes: document.getElementById('saleNotes').value
+            };
+            
+            // Update product stock
+            saleItems.forEach(item => {
+                const productIndex = products.findIndex(p => p.id === item.productId);
+                if (productIndex !== -1) {
+                    products[productIndex].stock -= item.quantity;
+                }
+            });
+            
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            // Save sale
+            sales.push(newSale);
+            localStorage.setItem('sales', JSON.stringify(sales));
+            
+            // Add activity
+            const totalAmount = saleItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+            activities.unshift({
+                id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
+                date: new Date().toISOString(),
+                activity: 'Sale recorded',
+                user: 'John Doe',
+                details: `Recorded sale ${invoiceNumber} for UGX ${totalAmount.toLocaleString()}`
+            });
+            localStorage.setItem('activities', JSON.stringify(activities));
+            
+            saleModal.classList.remove('active');
+            showToast('Sale recorded successfully');
+            loadSales();
+            loadDashboardData();
+        });
+
+        // Add Purchase
+        document.getElementById('addPurchaseBtn').addEventListener('click', () => {
+            // Populate suppliers dropdown
+            const supplierSelect = document.getElementById('purchaseSupplier');
+            supplierSelect.innerHTML = '<option value="">Select Supplier</option>';
+            suppliers.forEach(supplier => {
+                supplierSelect.innerHTML += `<option value="${supplier.id}">${supplier.name}</option>`;
+            });
+            
+            // Reset form
+            document.getElementById('purchaseForm').reset();
+            document.getElementById('purchaseItemsTable').innerHTML = '';
+            document.getElementById('purchaseDate').valueAsDate = new Date();
+            document.getElementById('purchaseTotal').value = '0';
+            
+            purchaseModal.classList.add('active');
+        });
+
+        // Add Purchase Item
+        document.getElementById('addPurchaseItem').addEventListener('click', () => {
+            const purchaseItemsTable = document.getElementById('purchaseItemsTable');
+            const rowId = Date.now();
+            
+            // Create product dropdown
+            let productOptions = '<option value="">Select Product</option>';
+            products.forEach(product => {
+                productOptions += `<option value="${product.id}" data-price="${product.purchasePrice}">${product.name} (${product.purchasePrice.toLocaleString()} UGX)</option>`;
+            });
+            
+            purchaseItemsTable.innerHTML += `
+                <tr id="row-${rowId}">
+                    <td>
+                        <select class="form-control product-select" required>
+                            ${productOptions}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control quantity" min="1" value="1" required>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control price" readonly>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control total" readonly>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-item" data-row="${rowId}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            
+            // Add event listeners to the new row
+            const row = document.getElementById(`row-${rowId}`);
+            const productSelect = row.querySelector('.product-select');
+            const quantityInput = row.querySelector('.quantity');
+            const priceInput = row.querySelector('.price');
+            const totalInput = row.querySelector('.total');
+            
+            productSelect.addEventListener('change', function() {
+                if (this.value) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    priceInput.value = selectedOption.getAttribute('data-price');
+                    totalInput.value = (priceInput.value * quantityInput.value).toLocaleString();
+                    updatePurchaseTotal();
+                } else {
+                    priceInput.value = '';
+                    totalInput.value = '';
+                }
+            });
+            
+            quantityInput.addEventListener('input', function() {
+                if (productSelect.value) {
+                    totalInput.value = (priceInput.value * this.value).toLocaleString();
+                    updatePurchaseTotal();
+                }
+            });
+            
+            row.querySelector('.remove-item').addEventListener('click', function() {
+                row.remove();
+                updatePurchaseTotal();
+            });
+        });
+
+        // Update Purchase Total
+        function updatePurchaseTotal() {
+            const rows = document.querySelectorAll('#purchaseItemsTable tr');
+            let total = 0;
+            
+            rows.forEach(row => {
+                const totalInput = row.querySelector('.total');
+                if (totalInput.value) {
+                    total += parseFloat(totalInput.value.replace(/,/g, ''));
+                }
+            });
+            
+            document.getElementById('purchaseTotal').value = total.toLocaleString();
+        }
+
+        // Save Purchase
+        document.getElementById('savePurchase').addEventListener('click', () => {
+            const form = document.getElementById('purchaseForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const supplierId = parseInt(document.getElementById('purchaseSupplier').value);
+            if (!supplierId) {
+                showToast('Please select a supplier', 'error');
+                return;
+            }
+            
+            const rows = document.querySelectorAll('#purchaseItemsTable tr');
+            if (rows.length === 0) {
+                showToast('Please add at least one item to the purchase', 'error');
+                return;
+            }
+            
+            const purchaseItems = [];
+            rows.forEach(row => {
+                const productSelect = row.querySelector('.product-select');
+                const productId = parseInt(productSelect.value);
+                const product = products.find(p => p.id === productId);
+                const quantity = parseInt(row.querySelector('.quantity').value);
+                const price = parseFloat(row.querySelector('.price').value);
+                
+                purchaseItems.push({
+                    productId,
+                    productName: product.name,
+                    quantity,
+                    price
+                });
+            });
+            
+            if (purchaseItems.length === 0) return;
+            
+            // Generate reference number
+            const referenceNumber = `${settings.purchasePrefix}-${Math.floor(1000 + Math.random() * 9000)}`;
+            
+            const newPurchase = {
+                id: purchases.length > 0 ? Math.max(...purchases.map(p => p.id)) + 1 : 1,
+                date: document.getElementById('purchaseDate').value,
+                referenceNumber,
+                supplierId,
+                items: purchaseItems,
+                paymentMethod: document.getElementById('purchasePaymentMethod').value,
+                notes: document.getElementById('purchaseNotes').value
+            };
+            
+            // Update product stock
+            purchaseItems.forEach(item => {
+                const productIndex = products.findIndex(p => p.id === item.productId);
+                if (productIndex !== -1) {
+                    products[productIndex].stock += item.quantity;
+                }
+            });
+            
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            // Save purchase
+            purchases.push(newPurchase);
+            localStorage.setItem('purchases', JSON.stringify(purchases));
+            
+            // Add activity
+            const totalAmount = purchaseItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+            activities.unshift({
+                id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
+                date: new Date().toISOString(),
+                activity: 'Purchase recorded',
+                user: 'John Doe',
+                details: `Recorded purchase ${referenceNumber} for UGX ${totalAmount.toLocaleString()}`
+            });
+            localStorage.setItem('activities', JSON.stringify(activities));
+            
+            purchaseModal.classList.remove('active');
+            showToast('Purchase recorded successfully');
+            loadPurchases();
+            loadDashboardData();
+        });
+
         // Add Inventory Adjustment
         document.getElementById('addInventoryBtn').addEventListener('click', () => {
             // Populate product dropdown
@@ -2012,6 +2891,38 @@
             loadDashboardData();
         });
 
+        // Save Settings
+        document.getElementById('saveSettings').addEventListener('click', () => {
+            const form = document.getElementById('settingsForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            settings = {
+                businessName: document.getElementById('businessName').value,
+                currency: document.getElementById('currency').value,
+                taxRate: parseFloat(document.getElementById('taxRate').value),
+                lowStockThreshold: parseInt(document.getElementById('lowStockThreshold').value),
+                invoicePrefix: document.getElementById('invoicePrefix').value,
+                purchasePrefix: document.getElementById('purchasePrefix').value
+            };
+            
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            // Add activity
+            activities.unshift({
+                id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
+                date: new Date().toISOString(),
+                activity: 'Settings updated',
+                user: 'John Doe',
+                details: 'System settings were updated'
+            });
+            localStorage.setItem('activities', JSON.stringify(activities));
+            
+            showToast('Settings saved successfully');
+        });
+
         // Print functionality
         document.getElementById('printDashboard').addEventListener('click', () => {
             window.print();
@@ -2042,6 +2953,36 @@
             });
         });
 
+        document.getElementById('supplierSearch').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#suppliersTable tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        document.getElementById('salesSearch').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#salesTable tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        document.getElementById('purchasesSearch').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#purchasesTable tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
         document.getElementById('inventorySearch').addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const rows = document.querySelectorAll('#inventoryTable tr');
@@ -2055,6 +2996,7 @@
         // Initialize the dashboard on load
         document.addEventListener('DOMContentLoaded', () => {
             loadDashboardData();
+            loadSettings();
             
             // Set up event delegation for dynamically added elements
             document.addEventListener('click', (e) => {
@@ -2077,7 +3019,7 @@
                     if (confirm('Are you sure you want to delete this item?')) {
                         const id = parseInt(e.target.closest('.action-btn').getAttribute('data-id'));
                         
-                        // Determine if it's a product or category
+                        // Determine which table the delete button is in
                         if (e.target.closest('#productsTable')) {
                             products = products.filter(p => p.id !== id);
                             localStorage.setItem('products', JSON.stringify(products));
@@ -2096,6 +3038,28 @@
                             localStorage.setItem('categories', JSON.stringify(categories));
                             showToast('Category deleted successfully');
                             loadCategories();
+                        } else if (e.target.closest('#suppliersTable')) {
+                            // Check if supplier is in use
+                            const purchasesUsingSupplier = purchases.filter(p => p.supplierId === id);
+                            if (purchasesUsingSupplier.length > 0) {
+                                showToast('Cannot delete supplier - they have purchase records', 'error');
+                                return;
+                            }
+                            
+                            suppliers = suppliers.filter(s => s.id !== id);
+                            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+                            showToast('Supplier deleted successfully');
+                            loadSuppliers();
+                        } else if (e.target.closest('#salesTable')) {
+                            sales = sales.filter(s => s.id !== id);
+                            localStorage.setItem('sales', JSON.stringify(sales));
+                            showToast('Sale record deleted successfully');
+                            loadSales();
+                        } else if (e.target.closest('#purchasesTable')) {
+                            purchases = purchases.filter(p => p.id !== id);
+                            localStorage.setItem('purchases', JSON.stringify(purchases));
+                            showToast('Purchase record deleted successfully');
+                            loadPurchases();
                         }
                     }
                 }
@@ -2103,7 +3067,7 @@
                 if (e.target.closest('.action-btn.edit')) {
                     const id = parseInt(e.target.closest('.action-btn').getAttribute('data-id'));
                     
-                    // Determine if it's a product or category
+                    // Determine which table the edit button is in
                     if (e.target.closest('#productsTable')) {
                         const product = products.find(p => p.id === id);
                         if (!product) return;
@@ -2137,6 +3101,28 @@
                         
                         // TODO: Implement update functionality
                         categoryModal.classList.add('active');
+                    } else if (e.target.closest('#suppliersTable')) {
+                        const supplier = suppliers.find(s => s.id === id);
+                        if (!supplier) return;
+                        
+                        // Populate products dropdown
+                        const productsSelect = document.getElementById('supplierProducts');
+                        productsSelect.innerHTML = '';
+                        products.forEach(product => {
+                            const isSelected = supplier.products.includes(product.id);
+                            productsSelect.innerHTML += `<option value="${product.id}" ${isSelected ? 'selected' : ''}>${product.name}</option>`;
+                        });
+                        
+                        // Fill form
+                        document.getElementById('supplierName').value = supplier.name;
+                        document.getElementById('supplierContactPerson').value = supplier.contactPerson || '';
+                        document.getElementById('supplierPhone').value = supplier.phone;
+                        document.getElementById('supplierEmail').value = supplier.email || '';
+                        document.getElementById('supplierAddress').value = supplier.address || '';
+                        document.getElementById('supplierPaymentTerms').value = supplier.paymentTerms || '';
+                        
+                        // TODO: Implement update functionality
+                        supplierModal.classList.add('active');
                     }
                 }
             });
