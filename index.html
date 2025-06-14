@@ -3614,6 +3614,176 @@
                 }
             });
         });
+        // Sync functionality
+let lastSyncTime = localStorage.getItem('lastSyncTime') || null;
+let isOnline = navigator.onLine;
+
+// Check online status
+window.addEventListener('online', () => {
+    isOnline = true;
+    syncData();
+});
+
+window.addEventListener('offline', () => {
+    isOnline = false;
+    showToast('Connection lost. Working in offline mode.', 'warning');
+});
+
+// Sync data with server
+async function syncData() {
+    if (!isOnline) return;
+    
+    try {
+        showToast('Syncing data with server...');
+        
+        // Prepare data to send
+        const syncData = {
+            last_sync_time: lastSyncTime,
+            products: JSON.parse(localStorage.getItem('products')) || [],
+            categories: JSON.parse(localStorage.getItem('categories')) || [],
+            suppliers: JSON.parse(localStorage.getItem('suppliers')) || [],
+            sales: JSON.parse(localStorage.getItem('sales')) || [],
+            purchases: JSON.parse(localStorage.getItem('purchases')) || [],
+            adjustments: JSON.parse(localStorage.getItem('adjustments')) || [],
+            activities: JSON.parse(localStorage.getItem('activities')) || [],
+            settings: JSON.parse(localStorage.getItem('settings')) || null
+        };
+        
+        // Call sync API
+        const response = await fetch('https://your-render-app.onrender.com/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(syncData)
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.message || 'Sync failed');
+        }
+        
+        // Update local data with server changes
+        if (result.products && result.products.length > 0) {
+            const localProducts = JSON.parse(localStorage.getItem('products')) || [];
+            result.products.forEach(serverProduct => {
+                const index = localProducts.findIndex(p => p.id === serverProduct.id);
+                if (index >= 0) {
+                    localProducts[index] = serverProduct;
+                } else {
+                    localProducts.push(serverProduct);
+                }
+            });
+            localStorage.setItem('products', JSON.stringify(localProducts));
+        }
+        
+        if (result.categories && result.categories.length > 0) {
+            const localCategories = JSON.parse(localStorage.getItem('categories')) || [];
+            result.categories.forEach(serverCategory => {
+                const index = localCategories.findIndex(c => c.id === serverCategory.id);
+                if (index >= 0) {
+                    localCategories[index] = serverCategory;
+                } else {
+                    localCategories.push(serverCategory);
+                }
+            });
+            localStorage.setItem('categories', JSON.stringify(localCategories));
+        }
+        
+        if (result.suppliers && result.suppliers.length > 0) {
+            const localSuppliers = JSON.parse(localStorage.getItem('suppliers')) || [];
+            result.suppliers.forEach(serverSupplier => {
+                const index = localSuppliers.findIndex(s => s.id === serverSupplier.id);
+                if (index >= 0) {
+                    localSuppliers[index] = serverSupplier;
+                } else {
+                    localSuppliers.push(serverSupplier);
+                }
+            });
+            localStorage.setItem('suppliers', JSON.stringify(localSuppliers));
+        }
+        
+        if (result.sales && result.sales.length > 0) {
+            const localSales = JSON.parse(localStorage.getItem('sales')) || [];
+            result.sales.forEach(serverSale => {
+                const index = localSales.findIndex(s => s.id === serverSale.id);
+                if (index >= 0) {
+                    localSales[index] = serverSale;
+                } else {
+                    localSales.push(serverSale);
+                }
+            });
+            localStorage.setItem('sales', JSON.stringify(localSales));
+        }
+        
+        if (result.purchases && result.purchases.length > 0) {
+            const localPurchases = JSON.parse(localStorage.getItem('purchases')) || [];
+            result.purchases.forEach(serverPurchase => {
+                const index = localPurchases.findIndex(p => p.id === serverPurchase.id);
+                if (index >= 0) {
+                    localPurchases[index] = serverPurchase;
+                } else {
+                    localPurchases.push(serverPurchase);
+                }
+            });
+            localStorage.setItem('purchases', JSON.stringify(localPurchases));
+        }
+        
+        if (result.adjustments && result.adjustments.length > 0) {
+            const localAdjustments = JSON.parse(localStorage.getItem('adjustments')) || [];
+            result.adjustments.forEach(serverAdjustment => {
+                const index = localAdjustments.findIndex(a => a.id === serverAdjustment.id);
+                if (index >= 0) {
+                    localAdjustments[index] = serverAdjustment;
+                } else {
+                    localAdjustments.push(serverAdjustment);
+                }
+            });
+            localStorage.setItem('adjustments', JSON.stringify(localAdjustments));
+        }
+        
+        if (result.activities && result.activities.length > 0) {
+            const localActivities = JSON.parse(localStorage.getItem('activities')) || [];
+            result.activities.forEach(serverActivity => {
+                const index = localActivities.findIndex(a => a.id === serverActivity.id);
+                if (index >= 0) {
+                    localActivities[index] = serverActivity;
+                } else {
+                    localActivities.push(serverActivity);
+                }
+            });
+            localStorage.setItem('activities', JSON.stringify(localActivities));
+        }
+        
+        if (result.settings) {
+            localStorage.setItem('settings', JSON.stringify(result.settings));
+        }
+        
+        // Update last sync time
+        lastSyncTime = result.server_time;
+        localStorage.setItem('lastSyncTime', lastSyncTime);
+        
+        showToast('Data synchronized successfully');
+        
+        // Refresh UI
+        const activeTab = document.querySelector('.tab-content.active').id;
+        loadTabData(activeTab);
+        
+    } catch (error) {
+        console.error('Sync error:', error);
+        showToast('Sync failed: ' + error.message, 'error');
+    }
+}
+
+// Add sync button to your UI and call syncData() when clicked
+document.getElementById('syncButton').addEventListener('click', syncData);
+
+// Periodically sync data (every 5 minutes)
+setInterval(syncData, 5 * 60 * 1000);
+
+// Initial sync
+syncData();
     </script>
     
 </body>
