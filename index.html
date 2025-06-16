@@ -166,6 +166,7 @@
 
         .content {
             padding: 1.5rem;
+            margin-bottom: 40px; 
         }
 
         .page-header {
@@ -656,6 +657,33 @@
         .empty-state p {
             margin-bottom: 1.5rem;
         }
+        /* Footer Styles */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--gray);
+    border-top: 1px solid var(--gray-light);
+    z-index: 40;
+    margin-left: 250px; /* Match sidebar width */
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        margin-left: 0;
+    }
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
     </style>
 </head>
 <body>
@@ -3785,6 +3813,11 @@ setInterval(syncData, 5 * 60 * 1000);
 // Initial sync
 syncData();
     </script>
+    <footer class="footer">
+    <div class="footer-content">
+        Powered by Mumbere Darius
+    </div>
+</footer>
     
 </body>
 </html>
