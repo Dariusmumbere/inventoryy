@@ -684,6 +684,127 @@
     max-width: 1200px;
     margin: 0 auto;
 }
+
+/* Notification Bell Styles */
+.notification-bell {
+    position: relative;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+.notification-bell i {
+    font-size: 1.25rem;
+    color: var(--gray);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--danger);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: bold;
+}
+
+/* Alert Modal Styles */
+.alert-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    display: none;
+}
+
+.alert-modal.active {
+    display: block;
+}
+
+.alert-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.alert-close {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: var(--gray);
+}
+
+.alert-body {
+    padding: 1.5rem;
+}
+
+.alert-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.alert-item:last-child {
+    border-bottom: none;
+}
+
+.alert-item-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.alert-item-message {
+    font-size: 0.875rem;
+    color: var(--gray);
+}
+
+.alert-item-time {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 0.25rem;
+}
+
+.alert-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--gray-light);
+    text-align: right;
+}
+
+/* Overlay for modal and alert */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
     </style>
 </head>
 <body>
@@ -746,6 +867,10 @@
                     <input type="text" placeholder="Search...">
                 </div>
                 <div class="user-profile">
+                    <div class="notification-bell" id="notificationBell">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationBadge">0</span>
+                    </div>
                     <img src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff" alt="User">
                     <div class="user-info">
                         <h4>John Doe</h4>
@@ -1715,6 +1840,23 @@
         </div>
     </div>
 
+    <!-- Alert Modal -->
+    <div class="alert-modal" id="alertModal">
+        <div class="alert-header">
+            <h3 class="alert-title">Notifications</h3>
+            <button class="alert-close">&times;</button>
+        </div>
+        <div class="alert-body" id="alertBody">
+            <!-- Alerts will be loaded here -->
+        </div>
+        <div class="alert-footer">
+            <button class="btn btn-primary" id="markAllAsRead">Mark All as Read</button>
+        </div>
+    </div>
+
+    <!-- Overlay for modals -->
+    <div class="overlay" id="overlay"></div>
+
     <!-- Toast Notification -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
@@ -1738,8 +1880,14 @@
         const saleModal = document.getElementById('saleModal');
         const purchaseModal = document.getElementById('purchaseModal');
         const inventoryModal = document.getElementById('inventoryModal');
+        const alertModal = document.getElementById('alertModal');
+        const overlay = document.getElementById('overlay');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
+        const notificationBell = document.getElementById('notificationBell');
+        const notificationBadge = document.getElementById('notificationBadge');
+        const alertBody = document.getElementById('alertBody');
+        const markAllAsReadBtn = document.getElementById('markAllAsRead');
 
         // Toggle sidebar on mobile
         sidebarToggle.addEventListener('click', () => {
@@ -1799,7 +1947,31 @@
                 saleModal.classList.remove('active');
                 purchaseModal.classList.remove('active');
                 inventoryModal.classList.remove('active');
+                overlay.classList.remove('active');
             });
+        });
+
+        // Alert modal handlers
+        notificationBell.addEventListener('click', () => {
+            alertModal.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        document.querySelector('.alert-close').addEventListener('click', () => {
+            alertModal.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        markAllAsReadBtn.addEventListener('click', () => {
+            alerts = alerts.map(alert => ({ ...alert, read: true }));
+            localStorage.setItem('alerts', JSON.stringify(alerts));
+            updateNotificationBadge();
+            loadAlerts();
+        });
+
+        overlay.addEventListener('click', () => {
+            alertModal.classList.remove('active');
+            overlay.classList.remove('active');
         });
 
         // Show toast notification
@@ -1823,6 +1995,7 @@
         let sales = JSON.parse(localStorage.getItem('sales')) || [];
         let purchases = JSON.parse(localStorage.getItem('purchases')) || [];
         let activities = JSON.parse(localStorage.getItem('activities')) || [];
+        let alerts = JSON.parse(localStorage.getItem('alerts')) || [];
         let settings = JSON.parse(localStorage.getItem('settings')) || {
             businessName: 'StockMaster UG',
             currency: 'UGX',
@@ -1835,6 +2008,68 @@
         // Initialize with empty data
         if (!localStorage.getItem('settings')) {
             localStorage.setItem('settings', JSON.stringify(settings));
+        }
+
+        // Initialize alerts if empty
+        if (alerts.length === 0) {
+            alerts = [
+                {
+                    id: 1,
+                    title: 'Welcome to StockMaster UG',
+                    message: 'Thank you for using our inventory management system. Get started by adding your products.',
+                    type: 'info',
+                    date: new Date().toISOString(),
+                    read: false
+                }
+            ];
+            localStorage.setItem('alerts', JSON.stringify(alerts));
+        }
+
+        // Update notification badge
+        function updateNotificationBadge() {
+            const unreadCount = alerts.filter(alert => !alert.read).length;
+            notificationBadge.textContent = unreadCount;
+            notificationBadge.style.display = unreadCount > 0 ? 'flex' : 'none';
+        }
+
+        // Load alerts
+        function loadAlerts() {
+            alertBody.innerHTML = alerts.map(alert => `
+                <div class="alert-item ${alert.read ? '' : 'unread'}">
+                    <div class="alert-item-title">${alert.title}</div>
+                    <div class="alert-item-message">${alert.message}</div>
+                    <div class="alert-item-time">${new Date(alert.date).toLocaleString()}</div>
+                </div>
+            `).join('');
+
+            // Add click handlers to mark alerts as read
+            document.querySelectorAll('.alert-item').forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    if (!alerts[index].read) {
+                        alerts[index].read = true;
+                        localStorage.setItem('alerts', JSON.stringify(alerts));
+                        updateNotificationBadge();
+                        item.classList.remove('unread');
+                    }
+                });
+            });
+        }
+
+        // Add alert
+        function addAlert(title, message, type = 'info') {
+            const newAlert = {
+                id: alerts.length > 0 ? Math.max(...alerts.map(a => a.id)) + 1 : 1,
+                title,
+                message,
+                type,
+                date: new Date().toISOString(),
+                read: false
+            };
+            
+            alerts.unshift(newAlert);
+            localStorage.setItem('alerts', JSON.stringify(alerts));
+            updateNotificationBadge();
+            loadAlerts();
         }
 
         // Load tab data
@@ -2434,6 +2669,7 @@
             // Reset form
             document.getElementById('productForm').reset();
             productModal.classList.add('active');
+            overlay.classList.add('active');
         });
 
         // Save Product
@@ -2471,7 +2707,17 @@
             });
             localStorage.setItem('activities', JSON.stringify(activities));
             
+            // Add alert for low stock if applicable
+            if (newProduct.stock <= newProduct.reorderLevel) {
+                addAlert(
+                    'Low Stock Alert',
+                    `Product ${newProduct.name} is low on stock (${newProduct.stock} ${newProduct.unit}). Consider restocking.`,
+                    'warning'
+                );
+            }
+            
             productModal.classList.remove('active');
+            overlay.classList.remove('active');
             showToast('Product added successfully');
             loadProducts();
             loadDashboardData();
@@ -2481,6 +2727,7 @@
         document.getElementById('addCategoryBtn').addEventListener('click', () => {
             document.getElementById('categoryForm').reset();
             categoryModal.classList.add('active');
+            overlay.classList.add('active');
         });
 
         // Save Category
@@ -2511,6 +2758,7 @@
             localStorage.setItem('activities', JSON.stringify(activities));
             
             categoryModal.classList.remove('active');
+            overlay.classList.remove('active');
             showToast('Category added successfully');
             loadCategories();
         });
@@ -2527,6 +2775,7 @@
             // Reset form
             document.getElementById('supplierForm').reset();
             supplierModal.classList.add('active');
+            overlay.classList.add('active');
         });
 
         // Save Supplier
@@ -2565,6 +2814,7 @@
             localStorage.setItem('activities', JSON.stringify(activities));
             
             supplierModal.classList.remove('active');
+            overlay.classList.remove('active');
             showToast('Supplier added successfully');
             loadSuppliers();
         });
@@ -2578,6 +2828,7 @@
             document.getElementById('saleTotal').value = '0';
             
             saleModal.classList.add('active');
+            overlay.classList.add('active');
         });
 
         // Add Sale Item
@@ -2609,7 +2860,7 @@
                         <input type="number" class="form-control quantity" min="1" value="1" required>
                     </td>
                     <td>
-                        <input type="number" class="form-control price" readonly>
+                        <input type="number" class="form-control price" value="" required>
                     </td>
                     <td>
                         <input type="text" class="form-control total" readonly>
@@ -2653,6 +2904,13 @@
                     }
                     
                     totalInput.value = (priceInput.value * this.value).toLocaleString();
+                    updateSaleTotal();
+                }
+            });
+            
+            priceInput.addEventListener('input', function() {
+                if (productSelect.value && quantityInput.value) {
+                    totalInput.value = (this.value * quantityInput.value).toLocaleString();
                     updateSaleTotal();
                 }
             });
@@ -2733,6 +2991,15 @@
                 const productIndex = products.findIndex(p => p.id === item.productId);
                 if (productIndex !== -1) {
                     products[productIndex].stock -= item.quantity;
+                    
+                    // Add low stock alert if applicable
+                    if (products[productIndex].stock <= products[productIndex].reorderLevel) {
+                        addAlert(
+                            'Low Stock Alert',
+                            `Product ${products[productIndex].name} is low on stock (${products[productIndex].stock} ${products[productIndex].unit}). Consider restocking.`,
+                            'warning'
+                        );
+                    }
                 }
             });
             
@@ -2753,7 +3020,15 @@
             });
             localStorage.setItem('activities', JSON.stringify(activities));
             
+            // Add success alert
+            addAlert(
+                'New Sale Recorded',
+                `Sale ${invoiceNumber} for UGX ${totalAmount.toLocaleString()} has been recorded.`,
+                'success'
+            );
+            
             saleModal.classList.remove('active');
+            overlay.classList.remove('active');
             showToast('Sale recorded successfully');
             loadSales();
             loadDashboardData();
@@ -2775,6 +3050,7 @@
             document.getElementById('purchaseTotal').value = '0';
             
             purchaseModal.classList.add('active');
+            overlay.classList.add('active');
         });
 
         // Add Purchase Item
@@ -2935,7 +3211,15 @@
             });
             localStorage.setItem('activities', JSON.stringify(activities));
             
+            // Add success alert
+            addAlert(
+                'New Purchase Recorded',
+                `Purchase ${referenceNumber} for UGX ${totalAmount.toLocaleString()} has been recorded.`,
+                'success'
+            );
+            
             purchaseModal.classList.remove('active');
+            overlay.classList.remove('active');
             showToast('Purchase recorded successfully');
             loadPurchases();
             loadDashboardData();
@@ -2953,6 +3237,7 @@
             // Reset form
             document.getElementById('inventoryForm').reset();
             inventoryModal.classList.add('active');
+            overlay.classList.add('active');
         });
 
         // Save Adjustment
@@ -3013,7 +3298,17 @@
             });
             localStorage.setItem('activities', JSON.stringify(activities));
             
+            // Add alert for low stock if applicable
+            if (products[productIndex].stock <= products[productIndex].reorderLevel) {
+                addAlert(
+                    'Low Stock Alert',
+                    `Product ${products[productIndex].name} is low on stock (${products[productIndex].stock} ${products[productIndex].unit}). Consider restocking.`,
+                    'warning'
+                );
+            }
+            
             inventoryModal.classList.remove('active');
+            overlay.classList.remove('active');
             showToast('Stock adjusted successfully');
             loadInventory();
             loadDashboardData();
@@ -3492,6 +3787,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadDashboardData();
             loadSettings();
+            updateNotificationBadge();
+            loadAlerts();
             
             // Set up event delegation for dynamically added elements
             document.addEventListener('click', (e) => {
@@ -3508,6 +3805,7 @@
                     // Reset form
                     document.getElementById('inventoryForm').reset();
                     inventoryModal.classList.add('active');
+                    overlay.classList.add('active');
                 }
                 
                 if (e.target.closest('.action-btn.delete')) {
@@ -3586,6 +3884,7 @@
                         
                         // TODO: Implement update functionality
                         productModal.classList.add('active');
+                        overlay.classList.add('active');
                     } else if (e.target.closest('#categoriesTable')) {
                         const category = categories.find(c => c.id === id);
                         if (!category) return;
@@ -3596,6 +3895,7 @@
                         
                         // TODO: Implement update functionality
                         categoryModal.classList.add('active');
+                        overlay.classList.add('active');
                     } else if (e.target.closest('#suppliersTable')) {
                         const supplier = suppliers.find(s => s.id === id);
                         if (!supplier) return;
@@ -3618,6 +3918,7 @@
                         
                         // TODO: Implement update functionality
                         supplierModal.classList.add('active');
+                        overlay.classList.add('active');
                     }
                 }
                 
