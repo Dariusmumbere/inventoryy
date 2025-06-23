@@ -3987,7 +3987,6 @@
         // Sync functionality
 let lastSyncTime = localStorage.getItem('lastSyncTime') || null;
 let isOnline = navigator.onLine;
-let isSyncing = false;
 
 // Check online status
 window.addEventListener('online', () => {
@@ -4006,18 +4005,12 @@ async function syncData() {
         return;
     }
     
-    if (isSyncing) {
-        showToast('Sync already in progress', 'info');
-        return;
-    }
-    
     try {
-        isSyncing = true;
-        updateSyncStatus();
         showToast('Syncing data with server...');
         
-        // Prepare data to send
-        const localData = {
+        // Prepare data to send with all required fields
+        const syncData = {
+            last_sync_time: lastSyncTime,
             products: JSON.parse(localStorage.getItem('products')) || [],
             categories: JSON.parse(localStorage.getItem('categories')) || [],
             suppliers: JSON.parse(localStorage.getItem('suppliers')) || [],
@@ -4026,16 +4019,17 @@ async function syncData() {
             adjustments: JSON.parse(localStorage.getItem('adjustments')) || [],
             activities: JSON.parse(localStorage.getItem('activities')) || [],
             settings: JSON.parse(localStorage.getItem('settings')) || {
-                businessName: 'StockMaster UG',
+                business_name: 'StockMaster UG',
                 currency: 'UGX',
-                taxRate: 18,
-                lowStockThreshold: 5,
-                invoicePrefix: 'INV',
-                purchasePrefix: 'PUR'
+                tax_rate: 18,
+                low_stock_threshold: 5,
+                invoice_prefix: 'INV',
+                purchase_prefix: 'PUR'
             }
         };
         
-        const cleanedData = cleanDataForSync(localData);
+        // Validate and clean the data before sending
+        const cleanedData = cleanSyncData(syncData);
         
         // Call sync API
         const response = await fetch('https://inventry-mn6a.onrender.com/sync', {
@@ -4096,20 +4090,14 @@ async function syncData() {
         showToast('Data synchronized successfully');
         
         // Refresh UI
-        const activeTab = document.querySelector('.tab-content.active')?.id;
-        if (activeTab) {
-            loadTabData(activeTab);
-        }
+        const activeTab = document.querySelector('.tab-content.active').id;
+        loadTabData(activeTab);
         
     } catch (error) {
         console.error('Sync error:', error);
         showToast('Sync failed: ' + error.message, 'error');
-    } finally {
-        isSyncing = false;
-        updateSyncStatus();
     }
 }
-
 
 // Add this helper function to clean the data before sending
 function cleanSyncData(data) {
@@ -4167,11 +4155,6 @@ document.getElementById('syncButton').addEventListener('click', syncData);
 
 // Periodically sync data (every 5 minutes)
 setInterval(syncData, 5 * 60 * 1000);
-
-// Initial sync on load if online
-if (isOnline) {
-    setTimeout(syncData, 3000); // Small delay to let other initialization complete
-}
 
 // Initial sync
 syncData();
