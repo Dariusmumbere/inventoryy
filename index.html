@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockMaster UG | Inventory Management for SMEs</title>
+    <title>StockMaster UG | Modern Inventory Management for SMEs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -17,113 +20,124 @@
             --dark: #1e293b;
             --gray: #64748b;
             --gray-light: #e2e8f0;
+            --white: #ffffff;
+            --black: #000000;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --rounded-sm: 0.125rem;
+            --rounded: 0.25rem;
+            --rounded-md: 0.375rem;
+            --rounded-lg: 0.5rem;
+            --rounded-xl: 0.75rem;
+            --rounded-2xl: 1rem;
+            --rounded-full: 9999px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
-            background-color: white;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             color: var(--dark);
             line-height: 1.6;
-            overflow-x: hidden;
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background-color: white;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            position: fixed;
             width: 100%;
-            top: 0;
-            z-index: 100;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
-        .navbar {
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            height: 80px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.75rem;
         }
 
         .logo img {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
         }
 
-        .logo h1 {
-            font-size: 1.5rem;
+        .logo-text {
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--primary);
         }
 
+        .logo-text span {
+            color: var(--dark);
+        }
+
         .nav-links {
             display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 2rem;
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            border: none;
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark);
+            transition: color 0.2s;
+            position: relative;
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .btn-outline {
-            background-color: transparent;
+        .nav-link:hover {
             color: var(--primary);
-            border: 1px solid var(--primary);
         }
 
-        .btn-outline:hover {
-            background-color: rgba(37, 99, 235, 0.1);
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
         }
 
         .mobile-menu-btn {
@@ -135,62 +149,160 @@
             cursor: pointer;
         }
 
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--rounded-lg);
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .cta-button.primary {
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .cta-button.primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .cta-button.secondary {
+            background-color: var(--white);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .cta-button.secondary:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
         /* Hero Section */
         .hero {
-            padding: 180px 0 100px;
-            text-align: center;
+            padding: 180px 0 120px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            position: relative;
+            overflow: hidden;
         }
 
-        .hero h2 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            line-height: 1.2;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0) 70%);
+            z-index: 0;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--gray);
+        .hero-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            flex: 1;
             max-width: 600px;
-            margin: 0 auto 40px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .hero-title span {
+            color: var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 500px;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 50px;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray);
         }
 
         .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        .hero-image img {
             width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            border-radius: 12px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow-xl);
+            transform: perspective(1000px) rotateY(-10deg);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image:hover img {
+            transform: perspective(1000px) rotateY(-5deg);
         }
 
         /* Features Section */
-        .section {
-            padding: 100px 0;
+        .features {
+            padding: 120px 0;
+            background-color: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
         }
 
         .section-title {
-            text-align: center;
-            margin-bottom: 60px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--dark);
         }
 
-        .section-title h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .section-title p {
+        .section-subtitle {
+            font-size: 1.125rem;
             color: var(--gray);
             max-width: 600px;
             margin: 0 auto;
@@ -199,113 +311,227 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            gap: 2rem;
         }
 
         .feature-card {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            background-color: var(--white);
+            border-radius: var(--rounded-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-light);
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
         }
 
         .feature-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(37, 99, 235, 0.1);
-            border-radius: 10px;
+            width: 56px;
+            height: 56px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            background-color: rgba(37, 99, 235, 0.1);
+            border-radius: var(--rounded-lg);
+            margin-bottom: 1.5rem;
             color: var(--primary);
-            font-size: 1.2rem;
+            font-size: 1.5rem;
         }
 
-        .feature-card h4 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 15px;
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
         }
 
-        .feature-card p {
+        .feature-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .feature-link:hover {
+            gap: 0.75rem;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 120px 0;
+            background-color: #f8fafc;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            background-color: var(--white);
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: var(--rounded-full);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+
+        .step-description {
             color: var(--gray);
         }
 
-        /* Testimonials */
+        /* Testimonials Section */
         .testimonials {
-            background-color: #f8fafc;
-            position: relative;
+            padding: 120px 0;
+            background-color: var(--white);
         }
 
-        .testimonials::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background-color: white;
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
         .testimonial-card {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin: 0 15px;
+            background-color: var(--white);
+            border-radius: var(--rounded-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-light);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
 
         .testimonial-content {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            color: var(--dark);
+            font-style: italic;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .testimonial-content::before,
+        .testimonial-content::after {
+            content: '"';
+            font-size: 2rem;
+            color: var(--primary-light);
+            opacity: 0.3;
+            position: absolute;
+        }
+
+        .testimonial-content::before {
+            top: -10px;
+            left: -10px;
+        }
+
+        .testimonial-content::after {
+            bottom: -20px;
+            right: -10px;
         }
 
         .testimonial-author {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 1rem;
         }
 
-        .testimonial-author img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--rounded-full);
             object-fit: cover;
         }
 
-        .author-info h5 {
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
             font-weight: 600;
-            margin-bottom: 5px;
+            color: var(--dark);
         }
 
-        .author-info p {
+        .author-role {
+            font-size: 0.875rem;
             color: var(--gray);
-            font-size: 0.9rem;
         }
 
-        /* Pricing */
+        /* Pricing Section */
+        .pricing {
+            padding: 120px 0;
+            background-color: #f8fafc;
+        }
+
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .pricing-card {
-            background: white;
-            border-radius: 10px;
-            padding: 40px 30px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background-color: var(--white);
+            border-radius: var(--rounded-xl);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
             border: 1px solid var(--gray-light);
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
 
         .pricing-card.popular {
@@ -316,160 +542,350 @@
         .popular-badge {
             position: absolute;
             top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 2rem;
             background-color: var(--primary);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            color: var(--white);
+            padding: 0.25rem 1rem;
+            border-radius: var(--rounded-full);
+            font-size: 0.75rem;
             font-weight: 600;
         }
 
-        .pricing-card h4 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+        .pricing-header {
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
-        .price {
-            font-size: 2.5rem;
+        .pricing-title {
+            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 0.5rem;
             color: var(--dark);
         }
 
-        .price span {
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
             font-size: 1rem;
+            font-weight: 500;
             color: var(--gray);
-            font-weight: 400;
+        }
+
+        .pricing-description {
+            color: var(--gray);
+            margin-bottom: 2rem;
         }
 
         .pricing-features {
-            margin-bottom: 30px;
+            flex: 1;
+            margin-bottom: 2rem;
         }
 
-        .pricing-features li {
-            list-style: none;
-            padding: 8px 0;
-            color: var(--gray);
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
         }
 
-        /* CTA */
+        .feature-item i {
+            color: var(--success);
+        }
+
+        .pricing-button {
+            width: 100%;
+        }
+
+        /* CTA Section */
         .cta {
-            background-color: var(--primary);
-            color: white;
+            padding: 120px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
             text-align: center;
-            padding: 80px 0;
-            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cta h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
 
-        .cta p {
-            max-width: 600px;
-            margin: 0 auto 30px;
+        .cta-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.125rem;
             opacity: 0.9;
+            margin-bottom: 2rem;
         }
 
-        .cta .btn {
-            background-color: white;
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .cta-button.primary {
+            background-color: var(--white);
             color: var(--primary);
-            font-weight: 600;
         }
 
-        .cta .btn:hover {
+        .cta-button.primary:hover {
             background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-button.secondary {
+            background-color: transparent;
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .cta-button.secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
         /* Footer */
         footer {
             background-color: var(--dark);
-            color: white;
-            padding: 60px 0 30px;
+            color: var(--white);
+            padding: 4rem 0 2rem;
         }
 
-        .footer-grid {
+        .footer-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
+            gap: 3rem;
+            margin-bottom: 3rem;
         }
 
-        .footer-col h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 20px;
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
 
-        .footer-links li {
-            list-style: none;
-            margin-bottom: 12px;
+        .footer-logo img {
+            width: 32px;
+            height: 32px;
         }
 
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.2s;
+        .footer-logo-text {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--white);
         }
 
-        .footer-links a:hover {
-            color: white;
+        .footer-description {
+            color: var(--gray-light);
+            margin-bottom: 1.5rem;
         }
 
         .social-links {
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 1rem;
         }
 
-        .social-links a {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.2rem;
+        .social-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--rounded-full);
+            color: var(--white);
+            transition: all 0.2s;
+        }
+
+        .social-link:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .footer-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-link {
+            color: var(--gray-light);
             transition: color 0.2s;
         }
 
-        .social-links a:hover {
-            color: white;
+        .footer-link:hover {
+            color: var(--primary-light);
         }
 
         .footer-bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 30px;
+            padding-top: 2rem;
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
+            color: var(--gray-light);
+            font-size: 0.875rem;
         }
 
-        /* Responsive */
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--white);
+            z-index: 90;
+            padding: 2rem;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .mobile-nav-link {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .mobile-nav-link.active {
+            color: var(--primary);
+        }
+
+        .mobile-cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .hero-container {
+                flex-direction: column;
+                gap: 3rem;
+            }
+            
+            .hero-content {
+                text-align: center;
+                max-width: 800px;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .hero-image {
+                justify-content: center;
+            }
+            
+            .hero-image img {
+                max-width: 100%;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
-
+            
             .mobile-menu-btn {
                 display: block;
             }
-
-            .hero h2 {
-                font-size: 2.2rem;
+            
+            .hero {
+                padding: 140px 0 80px;
             }
-
-            .hero p {
-                font-size: 1rem;
+            
+            .hero-title {
+                font-size: 2.5rem;
             }
-
+            
+            .hero-subtitle {
+                font-size: 1.125rem;
+            }
+            
             .hero-buttons {
                 flex-direction: column;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .section-subtitle {
+                font-size: 1rem;
+            }
+            
+            .step {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
                 align-items: center;
             }
-
-            .section {
-                padding: 70px 0;
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
             }
         }
 
@@ -480,69 +896,195 @@
         }
 
         .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+            animation: fadeIn 0.6s ease forwards;
         }
 
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
-        .delay-4 { animation-delay: 0.8s; }
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.8s;
+        }
+
+        /* Demo Modal */
+        .demo-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .demo-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .demo-modal-content {
+            background: var(--white);
+            border-radius: var(--rounded-xl);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .demo-modal.active .demo-modal-content {
+            transform: translateY(0);
+        }
+
+        .demo-modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            z-index: 10;
+        }
+
+        .demo-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .demo-modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .demo-modal-body {
+            padding: 1.5rem;
+        }
+
+        .demo-iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: var(--rounded-lg);
+            box-shadow: var(--shadow);
+        }
+
+        .demo-modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzI1NjNlYiI+PHBhdGggZD0iTTMgM2gyYTEgMSAwIDAgMSAxIDF2MTZhMSAxIDAgMCAxLTEgMUgzYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDE3YTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXoiLz48L3N2Zz4=" alt="StockMaster Logo">
-                    <h1>StockMaster UG</h1>
-                </div>
-                
-                <div class="nav-links">
-                    <a href="#features">Features</a>
-                    <a href="#testimonials">Testimonials</a>
-                    <a href="#pricing">Pricing</a>
-                    <a href="#faq">FAQ</a>
-                </div>
-                
-                <div class="nav-buttons">
-                    <a href="#" class="btn btn-outline">Login</a>
-                    <a href="#pricing" class="btn btn-primary">Get Started</a>
-                </div>
-                
-                <button class="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h2 class="fade-in">Simplify Your Inventory Management</h2>
-            <p class="fade-in delay-1">StockMaster UG helps Ugandan SMEs streamline inventory, track sales, and grow their business with our easy-to-use inventory system.</p>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzI1NjNlYiI+PHBhdGggZD0iTTMgM2gyYTEgMSAwIDAgMSAxIDF2MTZhMSAxIDAgMCAxLTEgMUgzYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDE3YTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXoiLz48L3N2Zz4=" alt="StockMaster UG Logo">
+                <span class="logo-text">Stock<span>Master</span></span>
+            </a>
             
-            <div class="hero-buttons fade-in delay-2">
-                <a href="#pricing" class="btn btn-primary">
-                    <i class="fas fa-rocket"></i> Start Free Trial
-                </a>
-                <a href="#features" class="btn btn-outline">
-                    <i class="fas fa-play-circle"></i> Watch Demo
-                </a>
+            <nav class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#testimonials" class="nav-link">Testimonials</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#" class="nav-link">Resources</a>
+            </nav>
+            
+            <div class="cta-buttons">
+                <a href="#pricing" class="cta-button secondary">Get Started</a>
+                <button class="cta-button primary" id="demoButton">Live Demo</button>
             </div>
             
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="StockMaster Dashboard" class="hero-image fade-in delay-3">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-nav-links">
+                <a href="#features" class="mobile-nav-link">Features</a>
+                <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
+                <a href="#testimonials" class="mobile-nav-link">Testimonials</a>
+                <a href="#pricing" class="mobile-nav-link">Pricing</a>
+                <a href="#" class="mobile-nav-link">Resources</a>
+            </div>
+            
+            <div class="mobile-cta-buttons">
+                <a href="#pricing" class="cta-button secondary">Get Started</a>
+                <button class="cta-button primary" id="mobileDemoButton">Live Demo</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-container">
+            <div class="hero-content fade-in">
+                <h1 class="hero-title">Modern Inventory Management <span>for Ugandan SMEs</span></h1>
+                <p class="hero-subtitle">Streamline your business operations with our powerful, easy-to-use inventory system designed specifically for small and medium enterprises in Uganda.</p>
+                
+                <div class="hero-buttons">
+                    <a href="#pricing" class="cta-button primary">Start Free Trial</a>
+                    <button class="cta-button secondary" id="heroDemoButton">
+                        <i class="fas fa-play-circle"></i> Watch Demo
+                    </button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Businesses Trust Us</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Support</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-image fade-in delay-1">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="StockMaster UG Dashboard">
+            </div>
         </div>
     </section>
-
+    
     <!-- Features Section -->
-    <section class="section" id="features">
+    <section class="features" id="features">
         <div class="container">
-            <div class="section-title fade-in">
-                <h3>Powerful Features for Your Business</h3>
-                <p>Everything you need to manage your inventory efficiently and grow your business</p>
+            <div class="section-header fade-in">
+                <h2 class="section-title">Powerful Features for Your Business</h2>
+                <p class="section-subtitle">StockMaster UG comes packed with everything you need to manage your inventory efficiently and grow your business.</p>
             </div>
             
             <div class="features-grid">
@@ -550,253 +1092,486 @@
                     <div class="feature-icon">
                         <i class="fas fa-boxes"></i>
                     </div>
-                    <h4>Inventory Tracking</h4>
-                    <p>Real-time tracking of all your products with low stock alerts and automatic reordering.</p>
+                    <h3 class="feature-title">Inventory Tracking</h3>
+                    <p class="feature-description">Real-time tracking of all your products with low stock alerts and automated reordering.</p>
+                    <a href="#" class="feature-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 
                 <div class="feature-card fade-in delay-2">
                     <div class="feature-icon">
                         <i class="fas fa-shopping-cart"></i>
                     </div>
-                    <h4>Sales Management</h4>
-                    <p>Process sales quickly, generate receipts, and track customer purchases with ease.</p>
+                    <h3 class="feature-title">Sales Management</h3>
+                    <p class="feature-description">Process sales quickly, generate invoices, and accept multiple payment methods including mobile money.</p>
+                    <a href="#" class="feature-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 
                 <div class="feature-card fade-in delay-3">
                     <div class="feature-icon">
                         <i class="fas fa-truck"></i>
                     </div>
-                    <h4>Supplier Management</h4>
-                    <p>Keep track of your suppliers, purchase orders, and delivery schedules in one place.</p>
+                    <h3 class="feature-title">Purchase Orders</h3>
+                    <p class="feature-description">Create and manage purchase orders, track deliveries, and manage supplier relationships.</p>
+                    <a href="#" class="feature-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 
                 <div class="feature-card fade-in delay-1">
                     <div class="feature-icon">
                         <i class="fas fa-chart-bar"></i>
                     </div>
-                    <h4>Reporting & Analytics</h4>
-                    <p>Get insights into your sales, inventory levels, and business performance.</p>
+                    <h3 class="feature-title">Reporting & Analytics</h3>
+                    <p class="feature-description">Comprehensive reports on sales, profits, inventory levels, and more to make data-driven decisions.</p>
+                    <a href="#" class="feature-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 
                 <div class="feature-card fade-in delay-2">
                     <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
+                        <i class="fas fa-barcode"></i>
                     </div>
-                    <h4>Mobile Friendly</h4>
-                    <p>Access your inventory data from anywhere, on any device, even offline.</p>
+                    <h3 class="feature-title">Barcode Scanning</h3>
+                    <p class="feature-description">Use your smartphone or barcode scanner to quickly add and track products in your inventory.</p>
+                    <a href="#" class="feature-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 
                 <div class="feature-card fade-in delay-3">
                     <div class="feature-icon">
-                        <i class="fas fa-sync-alt"></i>
+                        <i class="fas fa-cloud"></i>
                     </div>
-                    <h4>Multi-Device Sync</h4>
-                    <p>Seamlessly sync data across all your devices in real-time.</p>
+                    <h3 class="feature-title">Cloud-Based</h3>
+                    <p class="feature-description">Access your inventory from anywhere, on any device. Works online and offline with automatic sync.</p>
+                    <a href="#" class="feature-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Testimonials -->
-    <section class="section testimonials" id="testimonials">
+    
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
         <div class="container">
-            <div class="section-title fade-in">
-                <h3>Trusted by Ugandan Businesses</h3>
-                <p>Here's what our customers say about StockMaster UG</p>
+            <div class="section-header fade-in">
+                <h2 class="section-title">Simple Setup, Immediate Results</h2>
+                <p class="section-subtitle">Get started with StockMaster UG in just a few minutes and start seeing the benefits right away.</p>
             </div>
             
-            <div class="testimonial-card fade-in delay-1">
-                <div class="testimonial-content">
-                    "StockMaster UG has transformed how we manage our inventory. We've reduced stockouts by 80% and improved our ordering process. The system is so easy to use, even for our staff with limited tech experience."
+            <div class="steps-container">
+                <div class="step fade-in delay-1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Sign Up for an Account</h3>
+                        <p class="step-description">Create your free account in minutes. No credit card required for the trial period.</p>
+                    </div>
                 </div>
-                <div class="testimonial-author">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah K.">
-                    <div class="author-info">
-                        <h5>Sarah K.</h5>
-                        <p>Owner, Kampala Fashion House</p>
+                
+                <div class="step fade-in delay-2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Add Your Products</h3>
+                        <p class="step-description">Import your existing inventory or add products manually with our simple interface.</p>
+                    </div>
+                </div>
+                
+                <div class="step fade-in delay-3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Start Managing Your Business</h3>
+                        <p class="step-description">Process sales, track inventory, generate reports, and watch your business grow.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Pricing -->
-    <section class="section" id="pricing">
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
         <div class="container">
-            <div class="section-title fade-in">
-                <h3>Simple, Transparent Pricing</h3>
-                <p>Choose the plan that fits your business needs</p>
+            <div class="section-header fade-in">
+                <h2 class="section-title">Trusted by Ugandan Businesses</h2>
+                <p class="section-subtitle">Don't just take our word for it. Here's what our customers have to say.</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in delay-1">
+                    <div class="testimonial-content">
+                        StockMaster UG has transformed how we manage our inventory. We've reduced stockouts by 80% and can now make data-driven purchasing decisions.
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah K." class="author-avatar">
+                        <div class="author-info">
+                            <div class="author-name">Sarah K.</div>
+                            <div class="author-role">Owner, Kampala Fashion House</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card fade-in delay-2">
+                    <div class="testimonial-content">
+                        As a small hardware store, we needed a simple but powerful solution. StockMaster UG was perfect - affordable, easy to use, and has all the features we need.
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="James M." class="author-avatar">
+                        <div class="author-info">
+                            <div class="author-name">James M.</div>
+                            <div class="author-role">Manager, Mbarara Hardware</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card fade-in delay-3">
+                    <div class="testimonial-content">
+                        The mobile money integration has been a game-changer for our pharmacy. We can now process payments faster and reconcile our accounts with ease.
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Grace N." class="author-avatar">
+                        <div class="author-info">
+                            <div class="author-name">Grace N.</div>
+                            <div class="author-role">Pharmacist, Jinja Meds</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <p class="section-subtitle">Choose the plan that fits your business needs. No hidden fees, cancel anytime.</p>
             </div>
             
             <div class="pricing-grid">
                 <div class="pricing-card fade-in delay-1">
-                    <h4>Starter</h4>
-                    <div class="price">UGX 50,000<span>/month</span></div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Up to 100 products</li>
-                        <li><i class="fas fa-check"></i> Basic inventory tracking</li>
-                        <li><i class="fas fa-check"></i> Sales recording</li>
-                        <li><i class="fas fa-check"></i> Email support</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline">Get Started</a>
+                    <div class="pricing-header">
+                        <h3 class="pricing-title">Starter</h3>
+                        <div class="pricing-price">UGX 50,000<span>/month</span></div>
+                        <p class="pricing-description">Perfect for small businesses just getting started</p>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Up to 100 products</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Basic inventory tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Sales management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Email support</span>
+                        </div>
+                    </div>
+                    <a href="#" class="cta-button secondary pricing-button">Get Started</a>
                 </div>
                 
                 <div class="pricing-card popular fade-in delay-2">
                     <div class="popular-badge">Most Popular</div>
-                    <h4>Business</h4>
-                    <div class="price">UGX 100,000<span>/month</span></div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Up to 500 products</li>
-                        <li><i class="fas fa-check"></i> Advanced inventory</li>
-                        <li><i class="fas fa-check"></i> Supplier management</li>
-                        <li><i class="fas fa-check"></i> Basic reporting</li>
-                        <li><i class="fas fa-check"></i> Priority support</li>
-                    </ul>
-                    <a href="#" class="btn btn-primary">Get Started</a>
+                    <div class="pricing-header">
+                        <h3 class="pricing-title">Professional</h3>
+                        <div class="pricing-price">UGX 100,000<span>/month</span></div>
+                        <p class="pricing-description">For growing businesses with more complex needs</p>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Up to 500 products</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Advanced inventory features</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Purchase orders</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Basic reporting</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Priority support</span>
+                        </div>
+                    </div>
+                    <a href="#" class="cta-button primary pricing-button">Get Started</a>
                 </div>
                 
                 <div class="pricing-card fade-in delay-3">
-                    <h4>Enterprise</h4>
-                    <div class="price">UGX 200,000<span>/month</span></div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Unlimited products</li>
-                        <li><i class="fas fa-check"></i> Full feature access</li>
-                        <li><i class="fas fa-check"></i> Advanced analytics</li>
-                        <li><i class="fas fa-check"></i> Multi-user access</li>
-                        <li><i class="fas fa-check"></i> 24/7 support</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline">Get Started</a>
+                    <div class="pricing-header">
+                        <h3 class="pricing-title">Enterprise</h3>
+                        <div class="pricing-price">UGX 200,000<span>/month</span></div>
+                        <p class="pricing-description">For large businesses with multiple locations</p>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Unlimited products</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multi-location inventory</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Advanced analytics</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Barcode scanning</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Dedicated account manager</span>
+                        </div>
+                    </div>
+                    <a href="#" class="cta-button secondary pricing-button">Get Started</a>
                 </div>
             </div>
+            
+            <div class="section-header fade-in" style="margin-top: 4rem;">
+                <h2 class="section-title">Not sure which plan is right for you?</h2>
+                <p class="section-subtitle">Try our 14-day free trial with all features included. No credit card required.</p>
+                <a href="#" class="cta-button primary" style="margin-top: 1.5rem;">Start Free Trial</a>
+            </div>
         </div>
     </section>
-
+    
     <!-- CTA Section -->
-    <section class="section">
-        <div class="container">
-            <div class="cta fade-in">
-                <h3>Ready to Transform Your Inventory Management?</h3>
-                <p>Join hundreds of Ugandan businesses using StockMaster UG to streamline their operations and grow their sales.</p>
-                <a href="#pricing" class="btn">Start Your Free 14-Day Trial</a>
+    <section class="cta">
+        <div class="container cta-container">
+            <h2 class="cta-title fade-in">Ready to transform your business?</h2>
+            <p class="cta-subtitle fade-in delay-1">Join thousands of Ugandan SMEs who trust StockMaster UG for their inventory management needs.</p>
+            <div class="cta-buttons fade-in delay-2">
+                <a href="#pricing" class="cta-button primary">Get Started Now</a>
+                <button class="cta-button secondary" id="bottomDemoButton">
+                    <i class="fas fa-play-circle"></i> Watch Demo
+                </button>
             </div>
         </div>
     </section>
-
-    <!-- FAQ -->
-    <section class="section" id="faq">
-        <div class="container">
-            <div class="section-title fade-in">
-                <h3>Frequently Asked Questions</h3>
-                <p>Find answers to common questions about StockMaster UG</p>
-            </div>
-            
-            <div class="feature-card fade-in delay-1">
-                <h4>Is there a free trial available?</h4>
-                <p>Yes, we offer a 14-day free trial for all our plans. No credit card required.</p>
-            </div>
-            
-            <div class="feature-card fade-in delay-2">
-                <h4>Can I use StockMaster UG offline?</h4>
-                <p>Absolutely! StockMaster UG works offline and syncs your data when you're back online.</p>
-            </div>
-            
-            <div class="feature-card fade-in delay-3">
-                <h4>Do you offer training for my staff?</h4>
-                <p>Yes, we provide comprehensive training materials and can arrange live training sessions for your team.</p>
-            </div>
-        </div>
-    </section>
-
+    
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-grid">
+            <div class="footer-container">
                 <div class="footer-col">
-                    <div class="logo">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDNoMmExIDEgMCAwIDEgMSAxdjE2YTEgMSAwIDAgMS0xIDFIM2ExIDEgMCAwIDEtMS0xVjQgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNCAxIDEgMCAwIDEgMS0xem03IDBoMmExIDEgMCAwIDEgMSAxdjE2YTEgMSAwIDAgMS0xIDFIMTdhMSAxIDAgMCAxLTEtMVY0YTEgMSAwIDAgMSAxLTF6Ii8+PC9zdmc+" alt="StockMaster Logo">
-                        <h1>StockMaster UG</h1>
+                    <div class="footer-logo">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDNoMmExIDEgMCAwIDEgMSAxdjE2YTEgMSAwIDAgMS0xIDFIM2ExIDEgMCAwIDEtMS0xVjRhMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDE3YTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXoiLz48L3N2Zz4=" alt="StockMaster UG Logo">
+                        <span class="footer-logo-text">StockMaster</span>
                     </div>
-                    <p style="color: rgba(255, 255, 255, 0.7); margin-top: 15px;">Empowering Ugandan SMEs with simple, powerful inventory management.</p>
+                    <p class="footer-description">Modern inventory management solutions designed for Ugandan SMEs to streamline operations and drive growth.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
                 
                 <div class="footer-col">
-                    <h4>Product</h4>
-                    <ul class="footer-links">
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#">Updates</a></li>
-                        <li><a href="#">Roadmap</a></li>
-                    </ul>
+                    <h3 class="footer-title">Product</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Features</a>
+                        <a href="#" class="footer-link">Pricing</a>
+                        <a href="#" class="footer-link">Demo</a>
+                        <a href="#" class="footer-link">Updates</a>
+                        <a href="#" class="footer-link">Roadmap</a>
+                    </div>
                 </div>
                 
                 <div class="footer-col">
-                    <h4>Company</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
+                    <h3 class="footer-title">Company</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">About Us</a>
+                        <a href="#" class="footer-link">Careers</a>
+                        <a href="#" class="footer-link">Blog</a>
+                        <a href="#" class="footer-link">Press</a>
+                        <a href="#" class="footer-link">Contact</a>
+                    </div>
                 </div>
                 
                 <div class="footer-col">
-                    <h4>Support</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Status</a></li>
-                    </ul>
+                    <h3 class="footer-title">Resources</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Help Center</a>
+                        <a href="#" class="footer-link">Documentation</a>
+                        <a href="#" class="footer-link">Community</a>
+                        <a href="#" class="footer-link">Webinars</a>
+                        <a href="#" class="footer-link">API</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3 class="footer-title">Legal</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Privacy Policy</a>
+                        <a href="#" class="footer-link">Terms of Service</a>
+                        <a href="#" class="footer-link">Security</a>
+                        <a href="#" class="footer-link">GDPR</a>
+                    </div>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2023 StockMaster UG. All rights reserved. | Designed by Mumbere Darius</p>
+                <p>&copy; 2023 StockMaster UG. All rights reserved. Made with ❤️ in Uganda</p>
             </div>
         </div>
     </footer>
-
+    
+    <!-- Demo Modal -->
+    <div class="demo-modal" id="demoModal">
+        <div class="demo-modal-content">
+            <div class="demo-modal-header">
+                <h3 class="demo-modal-title">StockMaster UG Live Demo</h3>
+                <button class="demo-modal-close" id="demoModalClose">&times;</button>
+            </div>
+            <div class="demo-modal-body">
+                <iframe class="demo-iframe" src="about:blank" allow="fullscreen"></iframe>
+            </div>
+            <div class="demo-modal-footer">
+                <button class="cta-button secondary" id="demoModalCloseBtn">Close</button>
+                <a href="#pricing" class="cta-button primary">Get Started</a>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('show');
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
         });
-
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+        });
+        
+        // Demo Modal
+        const demoButtons = [
+            document.getElementById('demoButton'),
+            document.getElementById('mobileDemoButton'),
+            document.getElementById('heroDemoButton'),
+            document.getElementById('bottomDemoButton')
+        ];
+        
+        const demoModal = document.getElementById('demoModal');
+        const demoModalClose = document.getElementById('demoModalClose');
+        const demoModalCloseBtn = document.getElementById('demoModalCloseBtn');
+        const demoIframe = document.querySelector('.demo-iframe');
+        
+        demoButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Set iframe source when opening modal
+                demoIframe.src = 'https://inventry-mn6a.onrender.com';
+                demoModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        demoModalClose.addEventListener('click', () => {
+            demoModal.classList.remove('active');
+            document.body.style.overflow = '';
+            // Unload iframe when closing modal
+            demoIframe.src = 'about:blank';
+        });
+        
+        demoModalCloseBtn.addEventListener('click', () => {
+            demoModal.classList.remove('active');
+            document.body.style.overflow = '';
+            // Unload iframe when closing modal
+            demoIframe.src = 'about:blank';
+        });
+        
+        // Close modal when clicking outside
+        demoModal.addEventListener('click', (e) => {
+            if (e.target === demoModal) {
+                demoModal.classList.remove('active');
+                document.body.style.overflow = '';
+                // Unload iframe when closing modal
+                demoIframe.src = 'about:blank';
+            }
+        });
+        
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
                 
-                // Close mobile menu if open
-                document.querySelector('.nav-links').classList.remove('show');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
-
+        
+        // Add active class to nav links based on scroll position
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
         // Animation on scroll
         const fadeElements = document.querySelectorAll('.fade-in');
         
-        const observer = new IntersectionObserver((entries) => {
+        const fadeObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
-        }, {
-            threshold: 0.1
-        });
+        }, { threshold: 0.1 });
         
         fadeElements.forEach(element => {
-            observer.observe(element);
+            element.style.opacity = 0;
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            fadeObserver.observe(element);
         });
     </script>
 </body>
