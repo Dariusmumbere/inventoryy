@@ -805,6 +805,39 @@
 .overlay.active {
     display: block;
 }
+/* Add to your CSS */
+.sync-status {
+    margin-right: 1rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.sync-status .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.sync-status .online {
+    background-color: var(--success);
+}
+
+.sync-status .offline {
+    background-color: var(--danger);
+}
+
+.sync-status .syncing {
+    background-color: var(--secondary);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
     </style>
 </head>
 <body>
@@ -871,6 +904,14 @@
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge" id="notificationBadge">0</span>
                     </div>
+                    <!-- Add to your topbar -->
+                    <div class="sync-status" id="syncStatus">
+                        <span class="indicator offline"></span>
+                        <span class="text">Offline</span>
+                    </div>
+                    <button class="btn btn-secondary" id="syncButton" style="margin-right: 10px;">
+                        <i class="fas fa-sync-alt"></i> Sync
+                    </button>
                     <img src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff" alt="User">
                     <div class="user-info">
                         <h4>John Doe</h4>
@@ -3960,7 +4001,10 @@ window.addEventListener('offline', () => {
 
 // Sync data with server
 async function syncData() {
-    if (!isOnline) return;
+    if (!isOnline) {
+        showToast('Cannot sync - offline', 'warning');
+        return;
+    }
     
     try {
         showToast('Syncing data with server...');
@@ -3978,111 +4022,54 @@ async function syncData() {
             settings: JSON.parse(localStorage.getItem('settings')) || null
         };
         
+        console.log('Sending sync data:', syncData);  // Debug log
+        
         // Call sync API
         const response = await fetch('https://inventry-mn6a.onrender.com/sync', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify(syncData)
         });
         
-        const result = await response.json();
-        
         if (!response.ok) {
-            throw new Error(result.message || 'Sync failed');
+            const errorData = await response.json();
+            console.error('Sync error response:', errorData);
+            throw new Error(errorData.detail || 'Sync failed');
         }
+        
+        const result = await response.json();
+        console.log('Sync successful:', result);
         
         // Update local data with server changes
-        if (result.products && result.products.length > 0) {
-            const localProducts = JSON.parse(localStorage.getItem('products')) || [];
-            result.products.forEach(serverProduct => {
-                const index = localProducts.findIndex(p => p.id === serverProduct.id);
-                if (index >= 0) {
-                    localProducts[index] = serverProduct;
-                } else {
-                    localProducts.push(serverProduct);
-                }
-            });
-            localStorage.setItem('products', JSON.stringify(localProducts));
+        if (result.products) {
+            localStorage.setItem('products', JSON.stringify(result.products));
         }
         
-        if (result.categories && result.categories.length > 0) {
-            const localCategories = JSON.parse(localStorage.getItem('categories')) || [];
-            result.categories.forEach(serverCategory => {
-                const index = localCategories.findIndex(c => c.id === serverCategory.id);
-                if (index >= 0) {
-                    localCategories[index] = serverCategory;
-                } else {
-                    localCategories.push(serverCategory);
-                }
-            });
-            localStorage.setItem('categories', JSON.stringify(localCategories));
+        if (result.categories) {
+            localStorage.setItem('categories', JSON.stringify(result.categories));
         }
         
-        if (result.suppliers && result.suppliers.length > 0) {
-            const localSuppliers = JSON.parse(localStorage.getItem('suppliers')) || [];
-            result.suppliers.forEach(serverSupplier => {
-                const index = localSuppliers.findIndex(s => s.id === serverSupplier.id);
-                if (index >= 0) {
-                    localSuppliers[index] = serverSupplier;
-                } else {
-                    localSuppliers.push(serverSupplier);
-                }
-            });
-            localStorage.setItem('suppliers', JSON.stringify(localSuppliers));
+        if (result.suppliers) {
+            localStorage.setItem('suppliers', JSON.stringify(result.suppliers));
         }
         
-        if (result.sales && result.sales.length > 0) {
-            const localSales = JSON.parse(localStorage.getItem('sales')) || [];
-            result.sales.forEach(serverSale => {
-                const index = localSales.findIndex(s => s.id === serverSale.id);
-                if (index >= 0) {
-                    localSales[index] = serverSale;
-                } else {
-                    localSales.push(serverSale);
-                }
-            });
-            localStorage.setItem('sales', JSON.stringify(localSales));
+        if (result.sales) {
+            localStorage.setItem('sales', JSON.stringify(result.sales));
         }
         
-        if (result.purchases && result.purchases.length > 0) {
-            const localPurchases = JSON.parse(localStorage.getItem('purchases')) || [];
-            result.purchases.forEach(serverPurchase => {
-                const index = localPurchases.findIndex(p => p.id === serverPurchase.id);
-                if (index >= 0) {
-                    localPurchases[index] = serverPurchase;
-                } else {
-                    localPurchases.push(serverPurchase);
-                }
-            });
-            localStorage.setItem('purchases', JSON.stringify(localPurchases));
+        if (result.purchases) {
+            localStorage.setItem('purchases', JSON.stringify(result.purchases));
         }
         
-        if (result.adjustments && result.adjustments.length > 0) {
-            const localAdjustments = JSON.parse(localStorage.getItem('adjustments')) || [];
-            result.adjustments.forEach(serverAdjustment => {
-                const index = localAdjustments.findIndex(a => a.id === serverAdjustment.id);
-                if (index >= 0) {
-                    localAdjustments[index] = serverAdjustment;
-                } else {
-                    localAdjustments.push(serverAdjustment);
-                }
-            });
-            localStorage.setItem('adjustments', JSON.stringify(localAdjustments));
+        if (result.adjustments) {
+            localStorage.setItem('adjustments', JSON.stringify(result.adjustments));
         }
         
-        if (result.activities && result.activities.length > 0) {
-            const localActivities = JSON.parse(localStorage.getItem('activities')) || [];
-            result.activities.forEach(serverActivity => {
-                const index = localActivities.findIndex(a => a.id === serverActivity.id);
-                if (index >= 0) {
-                    localActivities[index] = serverActivity;
-                } else {
-                    localActivities.push(serverActivity);
-                }
-            });
-            localStorage.setItem('activities', JSON.stringify(localActivities));
+        if (result.activities) {
+            localStorage.setItem('activities', JSON.stringify(result.activities));
         }
         
         if (result.settings) {
@@ -4090,7 +4077,7 @@ async function syncData() {
         }
         
         // Update last sync time
-        lastSyncTime = result.server_time;
+        lastSyncTime = result.last_sync_time || new Date().toISOString();
         localStorage.setItem('lastSyncTime', lastSyncTime);
         
         showToast('Data synchronized successfully');
@@ -4113,6 +4100,32 @@ setInterval(syncData, 5 * 60 * 1000);
 
 // Initial sync
 syncData();
+// Update sync status UI
+function updateSyncStatus() {
+    const syncStatus = document.getElementById('syncStatus');
+    if (!isOnline) {
+        syncStatus.innerHTML = '<span class="indicator offline"></span><span class="text">Offline</span>';
+        return;
+    }
+    
+    syncStatus.innerHTML = '<span class="indicator online"></span><span class="text">Online</span>';
+}
+
+// Call this whenever network status changes
+window.addEventListener('online', () => {
+    isOnline = true;
+    updateSyncStatus();
+    syncData();
+});
+
+window.addEventListener('offline', () => {
+    isOnline = false;
+    updateSyncStatus();
+    showToast('Connection lost. Working in offline mode.', 'warning');
+});
+
+// Initial status
+updateSyncStatus();
     </script>
     <footer class="footer">
     <div class="footer-content">
