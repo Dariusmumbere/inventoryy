@@ -3987,6 +3987,7 @@
         // Sync functionality
 let lastSyncTime = localStorage.getItem('lastSyncTime') || null;
 let isOnline = navigator.onLine;
+let isSyncing = false;
 
 // Check online status
 window.addEventListener('online', () => {
