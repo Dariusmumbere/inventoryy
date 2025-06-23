@@ -10,37 +10,38 @@
             --primary: #2563eb;
             --primary-light: #3b82f6;
             --primary-dark: #1d4ed8;
-            --dark: #1e293b;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
             --light: #f8fafc;
+            --dark: #1e293b;
             --gray: #64748b;
             --gray-light: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
-            background-color: #f1f5f9;
+            background-color: white;
             color: var(--dark);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 20px;
         }
 
         /* Header */
         header {
-            background: white;
+            background-color: white;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             position: fixed;
             width: 100%;
@@ -48,17 +49,17 @@
             z-index: 100;
         }
 
-        .header-container {
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            padding: 20px 0;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 10px;
         }
 
         .logo img {
@@ -67,14 +68,14 @@
         }
 
         .logo h1 {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary);
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 30px;
         }
 
         .nav-links a {
@@ -88,108 +89,108 @@
             color: var(--primary);
         }
 
-        .cta-button {
-            padding: 0.5rem 1.25rem;
-            border-radius: 0.375rem;
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            border: none;
-            background-color: var(--primary);
-            color: white;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
         }
 
-        .cta-button:hover {
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
             background-color: var(--primary-dark);
-            transform: translateY(-1px);
         }
 
-        .mobile-menu-button {
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .mobile-menu-btn {
             display: none;
             background: none;
             border: none;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             color: var(--dark);
             cursor: pointer;
         }
 
         /* Hero Section */
         .hero {
-            padding: 8rem 0 4rem;
+            padding: 180px 0 100px;
             text-align: center;
         }
 
         .hero h2 {
             font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
             line-height: 1.2;
-            background: linear-gradient(to right, var(--primary), var(--primary-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero p {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto 2rem;
+            max-width: 600px;
+            margin: 0 auto 40px;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 1rem;
+            gap: 15px;
             justify-content: center;
-            margin-bottom: 3rem;
-        }
-
-        .secondary-button {
-            background-color: white;
-            color: var(--primary);
-            border: 1px solid var(--gray-light);
-        }
-
-        .secondary-button:hover {
-            background-color: var(--gray-light);
-            transform: translateY(-1px);
+            margin-bottom: 50px;
         }
 
         .hero-image {
+            width: 100%;
             max-width: 900px;
             margin: 0 auto;
-            border-radius: 0.5rem;
+            border-radius: 12px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-            border: 1px solid var(--gray-light);
-        }
-
-        .hero-image img {
-            width: 100%;
-            height: auto;
-            display: block;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         /* Features Section */
-        .features {
-            padding: 5rem 0;
+        .section {
+            padding: 100px 0;
         }
 
-        .section-header {
+        .section-title {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 60px;
         }
 
-        .section-header h3 {
+        .section-title h3 {
             font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--dark);
+            margin-bottom: 15px;
         }
 
-        .section-header p {
+        .section-title p {
             color: var(--gray);
             max-width: 600px;
             margin: 0 auto;
@@ -198,15 +199,15 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 30px;
         }
 
         .feature-card {
             background: white;
-            border-radius: 0.5rem;
-            padding: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .feature-card:hover {
@@ -215,23 +216,22 @@
         }
 
         .feature-icon {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             background-color: rgba(37, 99, 235, 0.1);
-            border-radius: 0.5rem;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
             color: var(--primary);
-            font-size: 1.25rem;
+            font-size: 1.2rem;
         }
 
         .feature-card h4 {
-            font-size: 1.125rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--dark);
+            margin-bottom: 15px;
         }
 
         .feature-card p {
@@ -240,163 +240,149 @@
 
         /* Testimonials */
         .testimonials {
-            padding: 5rem 0;
-            background-color: white;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .testimonial-card {
-            background: var(--light);
-            border-radius: 0.5rem;
-            padding: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .testimonial-content {
-            font-style: italic;
-            color: var(--dark);
-            margin-bottom: 1.5rem;
+            background-color: #f8fafc;
             position: relative;
         }
 
-        .testimonial-content::before {
-            content: '"';
-            font-size: 3rem;
-            color: var(--gray-light);
+        .testimonials::before {
+            content: '';
             position: absolute;
-            top: -1rem;
-            left: -1rem;
-            line-height: 1;
-            z-index: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background-color: white;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin: 0 15px;
+        }
+
+        .testimonial-content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: var(--dark);
         }
 
         .testimonial-author {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 15px;
         }
 
         .testimonial-author img {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
         }
 
         .author-info h5 {
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 5px;
         }
 
         .author-info p {
             color: var(--gray);
-            font-size: 0.875rem;
+            font-size: 0.9rem;
         }
 
         /* Pricing */
-        .pricing {
-            padding: 5rem 0;
-        }
-
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 30px;
         }
 
         .pricing-card {
             background: white;
-            border-radius: 0.5rem;
-            padding: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--gray-light);
-            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
         }
 
-        .pricing-card.featured {
-            border: 1px solid var(--primary);
+        .pricing-card.popular {
+            border: 2px solid var(--primary);
             position: relative;
         }
 
-        .featured-badge {
+        .popular-badge {
             position: absolute;
-            top: -0.75rem;
-            right: 2rem;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: var(--primary);
             color: white;
-            padding: 0.25rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: 600;
         }
 
         .pricing-card h4 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--dark);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
         }
 
         .price {
             font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
             color: var(--dark);
         }
 
         .price span {
             font-size: 1rem;
-            font-weight: 400;
             color: var(--gray);
+            font-weight: 400;
         }
 
         .pricing-features {
-            margin-bottom: 2rem;
+            margin-bottom: 30px;
         }
 
         .pricing-features li {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
+            list-style: none;
+            padding: 8px 0;
             color: var(--gray);
         }
 
-        .pricing-features li i {
-            color: var(--success);
-        }
-
-        /* CTA Section */
+        /* CTA */
         .cta {
-            padding: 5rem 0;
-            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            background-color: var(--primary);
             color: white;
             text-align: center;
+            padding: 80px 0;
+            border-radius: 12px;
         }
 
         .cta h3 {
             font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
         }
 
         .cta p {
             max-width: 600px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 30px;
             opacity: 0.9;
         }
 
-        .cta-button.white {
+        .cta .btn {
             background-color: white;
             color: var(--primary);
+            font-weight: 600;
         }
 
-        .cta-button.white:hover {
+        .cta .btn:hover {
             background-color: rgba(255, 255, 255, 0.9);
         }
 
@@ -404,71 +390,59 @@
         footer {
             background-color: var(--dark);
             color: white;
-            padding: 3rem 0;
+            padding: 60px 0 30px;
         }
 
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
-        .footer-column h4 {
-            font-size: 1rem;
+        .footer-col h4 {
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 1.25rem;
-            color: white;
+            margin-bottom: 20px;
         }
 
-        .footer-column ul {
+        .footer-links li {
             list-style: none;
+            margin-bottom: 12px;
         }
 
-        .footer-column ul li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-column ul li a {
-            color: var(--gray-light);
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             transition: color 0.2s;
         }
 
-        .footer-column ul li a:hover {
+        .footer-links a:hover {
             color: white;
         }
 
         .social-links {
             display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .social-links a {
-            color: white;
-            background-color: rgba(255, 255, 255, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.2s;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            transition: color 0.2s;
         }
 
         .social-links a:hover {
-            background-color: var(--primary);
+            color: white;
         }
 
         .footer-bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--gray-light);
-            font-size: 0.875rem;
+            padding-top: 30px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
         }
 
         /* Responsive */
@@ -477,175 +451,169 @@
                 display: none;
             }
 
-            .mobile-menu-button {
+            .mobile-menu-btn {
                 display: block;
             }
 
             .hero h2 {
-                font-size: 2.25rem;
+                font-size: 2.2rem;
             }
 
             .hero p {
-                font-size: 1.125rem;
+                font-size: 1rem;
             }
 
             .hero-buttons {
                 flex-direction: column;
                 align-items: center;
             }
+
+            .section {
+                padding: 70px 0;
+            }
         }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="container header-container">
-            <div class="logo">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzI1NjNlYiI+PHBhdGggZD0iTTMgM2gyYTEgMSAwIDAgMSAxIDF2MTZhMSAxIDAgMCAxLTEgMUgzYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDE3YTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXoiLz48L3N2Zz4=" alt="Logo">
-                <h1>StockMaster UG</h1>
-            </div>
-            
-            <nav class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#testimonials">Testimonials</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#contact">Contact</a>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzI1NjNlYiI+PHBhdGggZD0iTTMgM2gyYTEgMSAwIDAgMSAxIDF2MTZhMSAxIDAgMCAxLTEgMUgzYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDE3YTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXoiLz48L3N2Zz4=" alt="StockMaster Logo">
+                    <h1>StockMaster UG</h1>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#testimonials">Testimonials</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+                
+                <div class="nav-buttons">
+                    <a href="#" class="btn btn-outline">Login</a>
+                    <a href="#pricing" class="btn btn-primary">Get Started</a>
+                </div>
+                
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
             </nav>
-            
-            <a href="#pricing" class="cta-button">Get Started</a>
-            
-            <button class="mobile-menu-button">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h2>Streamline Your Inventory Management</h2>
-            <p>StockMaster UG helps Ugandan SMEs take control of their inventory with an intuitive, affordable solution designed for growing businesses.</p>
+            <h2 class="fade-in">Simplify Your Inventory Management</h2>
+            <p class="fade-in delay-1">StockMaster UG helps Ugandan SMEs streamline inventory, track sales, and grow their business with our easy-to-use inventory system.</p>
             
-            <div class="hero-buttons">
-                <a href="#pricing" class="cta-button">
-                    <i class="fas fa-rocket"></i> Get Started
+            <div class="hero-buttons fade-in delay-2">
+                <a href="#pricing" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i> Start Free Trial
                 </a>
-                <a href="#features" class="cta-button secondary-button">
-                    <i class="fas fa-book-open"></i> Learn More
+                <a href="#features" class="btn btn-outline">
+                    <i class="fas fa-play-circle"></i> Watch Demo
                 </a>
             </div>
             
-            <div class="hero-image">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Inventory Management Dashboard">
-            </div>
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="StockMaster Dashboard" class="hero-image fade-in delay-3">
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="features" id="features">
+    <section class="section" id="features">
         <div class="container">
-            <div class="section-header">
+            <div class="section-title fade-in">
                 <h3>Powerful Features for Your Business</h3>
-                <p>StockMaster UG provides all the tools you need to manage your inventory efficiently and grow your business.</p>
+                <p>Everything you need to manage your inventory efficiently and grow your business</p>
             </div>
             
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card fade-in delay-1">
                     <div class="feature-icon">
                         <i class="fas fa-boxes"></i>
                     </div>
-                    <h4>Real-time Inventory Tracking</h4>
-                    <p>Monitor stock levels in real-time across multiple locations with automatic low-stock alerts.</p>
+                    <h4>Inventory Tracking</h4>
+                    <p>Real-time tracking of all your products with low stock alerts and automatic reordering.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card fade-in delay-2">
                     <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-shopping-cart"></i>
                     </div>
-                    <h4>Sales Analytics</h4>
-                    <p>Track sales trends, best-selling products, and revenue with comprehensive reports.</p>
+                    <h4>Sales Management</h4>
+                    <p>Process sales quickly, generate receipts, and track customer purchases with ease.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card fade-in delay-3">
                     <div class="feature-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
+                        <i class="fas fa-truck"></i>
                     </div>
-                    <h4>Purchase Management</h4>
-                    <p>Create purchase orders, track supplier information, and manage procurement efficiently.</p>
+                    <h4>Supplier Management</h4>
+                    <p>Keep track of your suppliers, purchase orders, and delivery schedules in one place.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card fade-in delay-1">
                     <div class="feature-icon">
-                        <i class="fas fa-barcode"></i>
+                        <i class="fas fa-chart-bar"></i>
                     </div>
-                    <h4>Barcode Scanning</h4>
-                    <p>Use your smartphone or barcode scanner to quickly check stock and update inventory.</p>
+                    <h4>Reporting & Analytics</h4>
+                    <p>Get insights into your sales, inventory levels, and business performance.</p>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <h4>Offline Capabilities</h4>
-                    <p>Continue working even without internet connection - data syncs automatically when back online.</p>
-                </div>
-                
-                <div class="feature-card">
+                <div class="feature-card fade-in delay-2">
                     <div class="feature-icon">
                         <i class="fas fa-mobile-alt"></i>
                     </div>
                     <h4>Mobile Friendly</h4>
-                    <p>Access your inventory data from any device, anywhere with our responsive interface.</p>
+                    <p>Access your inventory data from anywhere, on any device, even offline.</p>
+                </div>
+                
+                <div class="feature-card fade-in delay-3">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h4>Multi-Device Sync</h4>
+                    <p>Seamlessly sync data across all your devices in real-time.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Testimonials -->
-    <section class="testimonials" id="testimonials">
+    <section class="section testimonials" id="testimonials">
         <div class="container">
-            <div class="section-header">
+            <div class="section-title fade-in">
                 <h3>Trusted by Ugandan Businesses</h3>
-                <p>Hear what our customers say about StockMaster UG.</p>
+                <p>Here's what our customers say about StockMaster UG</p>
             </div>
             
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        StockMaster UG has transformed how we manage our hardware store inventory. We've reduced stockouts by 80% and improved our ordering process.
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John M.">
-                        <div class="author-info">
-                            <h5>John M.</h5>
-                            <p>Kampala Hardware</p>
-                        </div>
-                    </div>
+            <div class="testimonial-card fade-in delay-1">
+                <div class="testimonial-content">
+                    "StockMaster UG has transformed how we manage our inventory. We've reduced stockouts by 80% and improved our ordering process. The system is so easy to use, even for our staff with limited tech experience."
                 </div>
-                
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        As a small pharmacy, we needed an affordable solution. StockMaster UG gave us enterprise-level features at a fraction of the cost.
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah K.">
-                        <div class="author-info">
-                            <h5>Sarah K.</h5>
-                            <p>Mbarara Pharmacy</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        The offline capabilities are a game-changer for our rural supermarket. We can now track inventory reliably despite intermittent internet.
-                    </div>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="David T.">
-                        <div class="author-info">
-                            <h5>David T.</h5>
-                            <p>Gulu Supermarket</p>
-                        </div>
+                <div class="testimonial-author">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah K.">
+                    <div class="author-info">
+                        <h5>Sarah K.</h5>
+                        <p>Owner, Kampala Fashion House</p>
                     </div>
                 </div>
             </div>
@@ -653,64 +621,89 @@
     </section>
 
     <!-- Pricing -->
-    <section class="pricing" id="pricing">
+    <section class="section" id="pricing">
         <div class="container">
-            <div class="section-header">
+            <div class="section-title fade-in">
                 <h3>Simple, Transparent Pricing</h3>
-                <p>Choose the plan that fits your business needs. No hidden fees, cancel anytime.</p>
+                <p>Choose the plan that fits your business needs</p>
             </div>
             
             <div class="pricing-grid">
-                <div class="pricing-card">
+                <div class="pricing-card fade-in delay-1">
                     <h4>Starter</h4>
                     <div class="price">UGX 50,000<span>/month</span></div>
                     <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Up to 500 products</li>
+                        <li><i class="fas fa-check"></i> Up to 100 products</li>
                         <li><i class="fas fa-check"></i> Basic inventory tracking</li>
-                        <li><i class="fas fa-check"></i> Sales reporting</li>
+                        <li><i class="fas fa-check"></i> Sales recording</li>
                         <li><i class="fas fa-check"></i> Email support</li>
                     </ul>
-                    <a href="https://dariusmumbere.github.io/inventoryy/main.html" class="cta-button secondary-button">Get Started</a>
+                    <a href="#" class="btn btn-outline">Get Started</a>
                 </div>
                 
-                <div class="pricing-card featured">
-                    <div class="featured-badge">Most Popular</div>
-                    <h4>Professional</h4>
+                <div class="pricing-card popular fade-in delay-2">
+                    <div class="popular-badge">Most Popular</div>
+                    <h4>Business</h4>
                     <div class="price">UGX 100,000<span>/month</span></div>
                     <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Up to 2,000 products</li>
-                        <li><i class="fas fa-check"></i> Advanced inventory features</li>
-                        <li><i class="fas fa-check"></i> Purchase management</li>
-                        <li><i class="fas fa-check"></i> Barcode scanning</li>
+                        <li><i class="fas fa-check"></i> Up to 500 products</li>
+                        <li><i class="fas fa-check"></i> Advanced inventory</li>
+                        <li><i class="fas fa-check"></i> Supplier management</li>
+                        <li><i class="fas fa-check"></i> Basic reporting</li>
                         <li><i class="fas fa-check"></i> Priority support</li>
                     </ul>
-                    <a href="#" class="cta-button">Get Started</a>
+                    <a href="#" class="btn btn-primary">Get Started</a>
                 </div>
                 
-                <div class="pricing-card">
+                <div class="pricing-card fade-in delay-3">
                     <h4>Enterprise</h4>
                     <div class="price">UGX 200,000<span>/month</span></div>
                     <ul class="pricing-features">
                         <li><i class="fas fa-check"></i> Unlimited products</li>
-                        <li><i class="fas fa-check"></i> Multi-location inventory</li>
+                        <li><i class="fas fa-check"></i> Full feature access</li>
                         <li><i class="fas fa-check"></i> Advanced analytics</li>
-                        <li><i class="fas fa-check"></i> API access</li>
-                        <li><i class="fas fa-check"></i> Dedicated account manager</li>
+                        <li><i class="fas fa-check"></i> Multi-user access</li>
+                        <li><i class="fas fa-check"></i> 24/7 support</li>
                     </ul>
-                    <a href="#" class="cta-button secondary-button">Get Started</a>
+                    <a href="#" class="btn btn-outline">Get Started</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="cta" id="contact">
+    <section class="section">
         <div class="container">
-            <h3>Ready to Transform Your Inventory Management?</h3>
-            <p>Join hundreds of Ugandan businesses using StockMaster UG to streamline their operations and grow their profits.</p>
-            <a href="https://dariusmumbere.github.io/inventoryy/main.html" class="cta-button white">
-                <i class="fas fa-rocket"></i> Start Your Free Trial
-            </a>
+            <div class="cta fade-in">
+                <h3>Ready to Transform Your Inventory Management?</h3>
+                <p>Join hundreds of Ugandan businesses using StockMaster UG to streamline their operations and grow their sales.</p>
+                <a href="#pricing" class="btn">Start Your Free 14-Day Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h3>Frequently Asked Questions</h3>
+                <p>Find answers to common questions about StockMaster UG</p>
+            </div>
+            
+            <div class="feature-card fade-in delay-1">
+                <h4>Is there a free trial available?</h4>
+                <p>Yes, we offer a 14-day free trial for all our plans. No credit card required.</p>
+            </div>
+            
+            <div class="feature-card fade-in delay-2">
+                <h4>Can I use StockMaster UG offline?</h4>
+                <p>Absolutely! StockMaster UG works offline and syncs your data when you're back online.</p>
+            </div>
+            
+            <div class="feature-card fade-in delay-3">
+                <h4>Do you offer training for my staff?</h4>
+                <p>Yes, we provide comprehensive training materials and can arrange live training sessions for your team.</p>
+            </div>
         </div>
     </section>
 
@@ -718,32 +711,33 @@
     <footer>
         <div class="container">
             <div class="footer-grid">
-                <div class="footer-column">
+                <div class="footer-col">
                     <div class="logo">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDNoMmExIDEgMCAwIDEgMSAxdjE2YTEgMSAwIDAgMS0xIDFIM2ExIDEgMCAwIDEtMS0xVjRhMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDE3YTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXoiLz48L3N2Zz4=" alt="Logo">
-                        <h4>StockMaster UG</h4>
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDNoMmExIDEgMCAwIDEgMSAxdjE2YTEgMSAwIDAgMS0xIDFIM2ExIDEgMCAwIDEtMS0xVjQgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNCAxIDEgMCAwIDEgMS0xem03IDBoMmExIDEgMCAwIDEgMSAxdjE2YTEgMSAwIDAgMS0xIDFIMTdhMSAxIDAgMCAxLTEtMVY0YTEgMSAwIDAgMSAxLTF6Ii8+PC9zdmc+" alt="StockMaster Logo">
+                        <h1>StockMaster UG</h1>
                     </div>
-                    <p style="color: var(--gray-light); margin-top: 1rem;">Inventory management solution for Ugandan SMEs.</p>
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-top: 15px;">Empowering Ugandan SMEs with simple, powerful inventory management.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
                 
-                <div class="footer-column">
+                <div class="footer-col">
                     <h4>Product</h4>
-                    <ul>
+                    <ul class="footer-links">
                         <li><a href="#features">Features</a></li>
                         <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#">Demo</a></li>
                         <li><a href="#">Updates</a></li>
+                        <li><a href="#">Roadmap</a></li>
                     </ul>
                 </div>
                 
-                <div class="footer-column">
+                <div class="footer-col">
                     <h4>Company</h4>
-                    <ul>
+                    <ul class="footer-links">
                         <li><a href="#">About Us</a></li>
                         <li><a href="#">Careers</a></li>
                         <li><a href="#">Blog</a></li>
@@ -751,9 +745,9 @@
                     </ul>
                 </div>
                 
-                <div class="footer-column">
+                <div class="footer-col">
                     <h4>Support</h4>
-                    <ul>
+                    <ul class="footer-links">
                         <li><a href="#">Help Center</a></li>
                         <li><a href="#">Documentation</a></li>
                         <li><a href="#">Community</a></li>
@@ -763,49 +757,46 @@
             </div>
             
             <div class="footer-bottom">
-                <div>&copy; 2023 StockMaster UG. All rights reserved.</div>
-                <div>
-                    <a href="#" style="color: var(--gray-light); margin-left: 1rem;">Privacy Policy</a>
-                    <a href="#" style="color: var(--gray-light); margin-left: 1rem;">Terms of Service</a>
-                </div>
+                <p>&copy; 2023 StockMaster UG. All rights reserved. | Designed by Mumbere Darius</p>
             </div>
         </div>
     </footer>
 
     <script>
         // Mobile menu toggle
-        const mobileMenuButton = document.querySelector('.mobile-menu-button');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuButton.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('show');
         });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    navLinks.style.display = 'none';
-                }
-            });
-        });
-        
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
                 
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+                // Close mobile menu if open
+                document.querySelector('.nav-links').classList.remove('show');
+            });
+        });
+
+        // Animation on scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
                 }
             });
+        }, {
+            threshold: 0.1
+        });
+        
+        fadeElements.forEach(element => {
+            observer.observe(element);
         });
     </script>
 </body>
