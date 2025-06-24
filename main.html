@@ -141,25 +141,25 @@
             margin-right: 0.5rem;
         }
 
-        .user-profile {
+        .username-profile {
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
 
-        .user-profile img {
+        .username-profile img {
             width: 36px;
             height: 36px;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        .user-info h4 {
+        .username-info h4 {
             font-size: 0.875rem;
             font-weight: 600;
         }
 
-        .user-info p {
+        .username-info p {
             font-size: 0.75rem;
             color: var(--gray);
         }
@@ -899,7 +899,7 @@
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search...">
                 </div>
-                <div class="user-profile">
+                <div class="username-profile">
                     <div class="notification-bell" id="notificationBell">
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge" id="notificationBadge">0</span>
@@ -912,8 +912,8 @@
                     <button class="btn btn-secondary" id="syncButton" style="margin-right: 10px;">
                         <i class="fas fa-sync-alt"></i> Sync
                     </button>
-                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff" alt="User">
-                    <div class="user-info">
+                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff" alt="Username">
+                    <div class="username-info">
                         <h4>John Doe</h4>
                         <p>Admin</p>
                     </div>
@@ -980,7 +980,7 @@
                                     <tr>
                                         <th>Date</th>
                                         <th>Activity</th>
-                                        <th>User</th>
+                                        <th>Username</th>
                                         <th>Details</th>
                                     </tr>
                                 </thead>
@@ -2184,7 +2184,7 @@
                 <tr>
                     <td>${new Date(activity.date).toLocaleDateString()}</td>
                     <td>${activity.activity}</td>
-                    <td>${activity.user}</td>
+                    <td>${activity.username}</td>
                     <td>${activity.details}</td>
                 </tr>
             `).join('');
@@ -2522,7 +2522,7 @@
                         <td>${product ? product.name : 'N/A'}</td>
                         <td>${adj.type === 'add' ? '+' : '-'}${adj.quantity}</td>
                         <td>${adj.reason}</td>
-                        <td>${adj.user || 'System'}</td>
+                        <td>${adj.username || 'System'}</td>
                     </tr>
                 `;
             }).join('');
@@ -2743,7 +2743,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Product added',
-                user: 'John Doe',
+                username: 'John Doe',
                 details: `Added new product: ${newProduct.name}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -2793,7 +2793,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Category added',
-                user: 'John Doe',
+                username: 'John Doe',
                 details: `Added new category: ${newCategory.name}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -2849,7 +2849,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Supplier added',
-                user: 'John Doe',
+                username: 'John Doe',
                 details: `Added new supplier: ${newSupplier.name}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3056,7 +3056,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Sale recorded',
-                user: 'John Doe',
+                username: 'John Doe',
                 details: `Recorded sale ${invoiceNumber} for UGX ${totalAmount.toLocaleString()}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3247,7 +3247,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Purchase recorded',
-                user: 'John Doe',
+                username: 'John Doe',
                 details: `Recorded purchase ${referenceNumber} for UGX ${totalAmount.toLocaleString()}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3322,7 +3322,7 @@
                 type,
                 quantity,
                 reason,
-                user: 'John Doe'
+                username: 'John Doe'
             };
             
             adjustments.push(newAdjustment);
@@ -3334,7 +3334,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Stock adjusted',
-                user: 'John Doe',
+                username: 'John Doe',
                 details: `Adjusted stock for ${product.name}: ${type === 'add' ? '+' : '-'}${quantity} units`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3379,7 +3379,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Settings updated',
-                user: 'John Doe',
+                username: 'John Doe',
                 details: 'System settings were updated'
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3553,7 +3553,7 @@
                     product ? product.name : 'N/A',
                     `${adj.type === 'add' ? '+' : '-'}${adj.quantity}`,
                     adj.reason,
-                    adj.user || 'System'
+                    adj.username || 'System'
                 ];
             });
             
@@ -4124,7 +4124,7 @@ function cleanSyncData(data) {
         type: adj.type || 'add',
         quantity: adj.quantity || 0,
         reason: adj.reason || 'No reason provided',
-        user: adj.user || 'System'
+        username: adj.username || 'System'
     }));
     
     // Ensure settings has all required fields
