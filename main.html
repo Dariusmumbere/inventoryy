@@ -141,25 +141,25 @@
             margin-right: 0.5rem;
         }
 
-        .username-profile {
+        .user-profile {
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
 
-        .username-profile img {
+        .user-profile img {
             width: 36px;
             height: 36px;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        .username-info h4 {
+        .user-info h4 {
             font-size: 0.875rem;
             font-weight: 600;
         }
 
-        .username-info p {
+        .user-info p {
             font-size: 0.75rem;
             color: var(--gray);
         }
@@ -657,217 +657,187 @@
         .empty-state p {
             margin-bottom: 1.5rem;
         }
-        
         /* Footer Styles */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: white;
-            padding: 0.5rem 1rem;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--gray);
-            border-top: 1px solid var(--gray-light);
-            z-index: 40;
-            margin-left: 250px; /* Match sidebar width */
-            transition: margin-left 0.3s ease;
-        }
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--gray);
+    border-top: 1px solid var(--gray-light);
+    z-index: 40;
+    margin-left: 250px; /* Match sidebar width */
+    transition: margin-left 0.3s ease;
+}
 
-        @media (max-width: 768px) {
-            .footer {
-                margin-left: 0;
-            }
-        }
+@media (max-width: 768px) {
+    .footer {
+        margin-left: 0;
+    }
+}
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        /* Notification Bell Styles */
-        .notification-bell {
-            position: relative;
-            cursor: pointer;
-            margin-right: 1rem;
-        }
+/* Notification Bell Styles */
+.notification-bell {
+    position: relative;
+    cursor: pointer;
+    margin-right: 1rem;
+}
 
-        .notification-bell i {
-            font-size: 1.25rem;
-            color: var(--gray);
-        }
+.notification-bell i {
+    font-size: 1.25rem;
+    color: var(--gray);
+}
 
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: var(--danger);
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            font-weight: bold;
-        }
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--danger);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: bold;
+}
 
-        /* Alert Modal Styles */
-        .alert-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            z-index: 1100;
-            width: 90%;
-            max-width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
-            display: none;
-        }
+/* Alert Modal Styles */
+.alert-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    display: none;
+}
 
-        .alert-modal.active {
-            display: block;
-        }
+.alert-modal.active {
+    display: block;
+}
 
-        .alert-header {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--gray-light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.alert-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .alert-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
+.alert-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
 
-        .alert-close {
-            background: transparent;
-            border: none;
-            font-size: 1.25rem;
-            cursor: pointer;
-            color: var(--gray);
-        }
+.alert-close {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: var(--gray);
+}
 
-        .alert-body {
-            padding: 1.5rem;
-        }
+.alert-body {
+    padding: 1.5rem;
+}
 
-        .alert-item {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--gray-light);
-        }
+.alert-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-light);
+}
 
-        .alert-item:last-child {
-            border-bottom: none;
-        }
+.alert-item:last-child {
+    border-bottom: none;
+}
 
-        .alert-item-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
+.alert-item-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
 
-        .alert-item-message {
-            font-size: 0.875rem;
-            color: var(--gray);
-        }
+.alert-item-message {
+    font-size: 0.875rem;
+    color: var(--gray);
+}
 
-        .alert-item-time {
-            font-size: 0.75rem;
-            color: var(--gray);
-            margin-top: 0.25rem;
-        }
+.alert-item-time {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 0.25rem;
+}
 
-        .alert-footer {
-            padding: 1rem;
-            border-top: 1px solid var(--gray-light);
-            text-align: right;
-        }
+.alert-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--gray-light);
+    text-align: right;
+}
 
-        /* Overlay for modal and alert */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: none;
-        }
+/* Overlay for modal and alert */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+}
 
-        .overlay.active {
-            display: block;
-        }
-        
-        /* Add to your CSS */
-        .sync-status {
-            margin-right: 1rem;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-        }
+.overlay.active {
+    display: block;
+}
+/* Add to your CSS */
+.sync-status {
+    margin-right: 1rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+}
 
-        .sync-status .indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
+.sync-status .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
 
-        .sync-status .online {
-            background-color: var(--success);
-        }
+.sync-status .online {
+    background-color: var(--success);
+}
 
-        .sync-status .offline {
-            background-color: var(--danger);
-        }
+.sync-status .offline {
+    background-color: var(--danger);
+}
 
-        .sync-status .syncing {
-            background-color: var(--secondary);
-            animation: pulse 1.5s infinite;
-        }
+.sync-status .syncing {
+    background-color: var(--secondary);
+    animation: pulse 1.5s infinite;
+}
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        
-        /* Fix for modal click issue */
-        .modal {
-            pointer-events: none;
-        }
-        
-        .modal.active {
-            pointer-events: auto;
-        }
-        
-        .modal.active .modal-content {
-            pointer-events: auto;
-        }
-        
-        /* Fix for table display issues */
-        table {
-            table-layout: auto;
-        }
-        
-        /* Fix for button hover states */
-        .btn:hover, .action-btn:hover {
-            transform: translateY(-1px);
-        }
-        
-        /* Fix for form inputs */
-        input, select, textarea {
-            pointer-events: auto;
-        }
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
     </style>
 </head>
 <body>
@@ -929,11 +899,12 @@
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search...">
                 </div>
-                <div class="username-profile">
+                <div class="user-profile">
                     <div class="notification-bell" id="notificationBell">
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge" id="notificationBadge">0</span>
                     </div>
+                    <!-- Add to your topbar -->
                     <div class="sync-status" id="syncStatus">
                         <span class="indicator offline"></span>
                         <span class="text">Offline</span>
@@ -941,8 +912,8 @@
                     <button class="btn btn-secondary" id="syncButton" style="margin-right: 10px;">
                         <i class="fas fa-sync-alt"></i> Sync
                     </button>
-                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff" alt="Username">
-                    <div class="username-info">
+                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff" alt="User">
+                    <div class="user-info">
                         <h4>John Doe</h4>
                         <p>Admin</p>
                     </div>
@@ -1009,7 +980,7 @@
                                     <tr>
                                         <th>Date</th>
                                         <th>Activity</th>
-                                        <th>Username</th>
+                                        <th>User</th>
                                         <th>Details</th>
                                     </tr>
                                 </thead>
@@ -2017,7 +1988,6 @@
                 saleModal.classList.remove('active');
                 purchaseModal.classList.remove('active');
                 inventoryModal.classList.remove('active');
-                alertModal.classList.remove('active');
                 overlay.classList.remove('active');
             });
         });
@@ -2041,12 +2011,6 @@
         });
 
         overlay.addEventListener('click', () => {
-            productModal.classList.remove('active');
-            categoryModal.classList.remove('active');
-            supplierModal.classList.remove('active');
-            saleModal.classList.remove('active');
-            purchaseModal.classList.remove('active');
-            inventoryModal.classList.remove('active');
             alertModal.classList.remove('active');
             overlay.classList.remove('active');
         });
@@ -2118,7 +2082,7 @@
                     <div class="alert-item-time">${new Date(alert.date).toLocaleString()}</div>
                 </div>
             `).join('');
-            
+
             // Add click handlers to mark alerts as read
             document.querySelectorAll('.alert-item').forEach((item, index) => {
                 item.addEventListener('click', () => {
@@ -2200,7 +2164,7 @@
             const totalProducts = products.length;
             const lowStockItems = products.filter(p => p.stock > 0 && p.stock <= p.reorderLevel).length;
             const outOfStockItems = products.filter(p => p.stock === 0).length;
-            const inventoryValue = products.reduce((sum, p) => sum + (p.stock * (p.purchasePrice || 0)), 0);
+            const inventoryValue = products.reduce((sum, p) => sum + (p.stock * p.purchasePrice), 0);
             
             // Update DOM
             document.getElementById('totalProducts').textContent = totalProducts;
@@ -2220,21 +2184,10 @@
                 <tr>
                     <td>${new Date(activity.date).toLocaleDateString()}</td>
                     <td>${activity.activity}</td>
-                    <td>${activity.username}</td>
+                    <td>${activity.user}</td>
                     <td>${activity.details}</td>
                 </tr>
             `).join('');
-            
-            if (activities.length === 0) {
-                activitiesTable.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="empty-state">
-                            <i class="fas fa-history"></i>
-                            <p>No recent activities found</p>
-                        </td>
-                    </tr>
-                `;
-            }
             
             // Load low stock items
             const lowStockTable = document.getElementById('lowStockTable');
@@ -2254,17 +2207,6 @@
                     </tr>
                 `;
             }).join('');
-            
-            if (lowStockProducts.length === 0) {
-                lowStockTable.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="empty-state">
-                            <i class="fas fa-box-open"></i>
-                            <p>No low stock items found</p>
-                        </td>
-                    </tr>
-                `;
-            }
             
             // Load recent sales
             const recentSalesTable = document.getElementById('recentSalesTable');
@@ -2307,7 +2249,7 @@
                         <td>${product.id}</td>
                         <td>${product.name}</td>
                         <td>${category ? category.name : 'N/A'}</td>
-                        <td>${(product.sellingPrice || 0).toLocaleString()}</td>
+                        <td>${product.sellingPrice.toLocaleString()}</td>
                         <td>${product.stock} ${product.unit}</td>
                         <td><span class="badge ${statusClass}">${status}</span></td>
                         <td>
@@ -2335,7 +2277,7 @@
                     </tr>
                 `;
                 
-                document.getElementById('addProductBtnEmpty')?.addEventListener('click', () => {
+                document.getElementById('addProductBtnEmpty').addEventListener('click', () => {
                     document.getElementById('addProductBtn').click();
                 });
             }
@@ -2378,7 +2320,7 @@
                     </tr>
                 `;
                 
-                document.getElementById('addCategoryBtnEmpty')?.addEventListener('click', () => {
+                document.getElementById('addCategoryBtnEmpty').addEventListener('click', () => {
                     document.getElementById('addCategoryBtn').click();
                 });
             }
@@ -2388,10 +2330,10 @@
         function loadSuppliers() {
             const suppliersTable = document.getElementById('suppliersTable');
             suppliersTable.innerHTML = suppliers.map(supplier => {
-                const productsSupplied = supplier.products?.map(id => {
+                const productsSupplied = supplier.products.map(id => {
                     const product = products.find(p => p.id === id);
                     return product ? product.name : 'Unknown';
-                }).join(', ') || 'N/A';
+                }).join(', ');
                 
                 return `
                     <tr>
@@ -2399,7 +2341,7 @@
                         <td>${supplier.name}</td>
                         <td>${supplier.phone}</td>
                         <td>${supplier.email || 'N/A'}</td>
-                        <td>${productsSupplied}</td>
+                        <td>${productsSupplied || 'N/A'}</td>
                         <td>
                             <button class="action-btn edit" data-id="${supplier.id}">
                                 <i class="fas fa-edit"></i>
@@ -2425,7 +2367,7 @@
                     </tr>
                 `;
                 
-                document.getElementById('addSupplierBtnEmpty')?.addEventListener('click', () => {
+                document.getElementById('addSupplierBtnEmpty').addEventListener('click', () => {
                     document.getElementById('addSupplierBtn').click();
                 });
             }
@@ -2472,7 +2414,7 @@
                     </tr>
                 `;
                 
-                document.getElementById('addSaleBtnEmpty')?.addEventListener('click', () => {
+                document.getElementById('addSaleBtnEmpty').addEventListener('click', () => {
                     document.getElementById('addSaleBtn').click();
                 });
             }
@@ -2520,7 +2462,7 @@
                     </tr>
                 `;
                 
-                document.getElementById('addPurchaseBtnEmpty')?.addEventListener('click', () => {
+                document.getElementById('addPurchaseBtnEmpty').addEventListener('click', () => {
                     document.getElementById('addPurchaseBtn').click();
                 });
             }
@@ -2580,7 +2522,7 @@
                         <td>${product ? product.name : 'N/A'}</td>
                         <td>${adj.type === 'add' ? '+' : '-'}${adj.quantity}</td>
                         <td>${adj.reason}</td>
-                        <td>${adj.username || 'System'}</td>
+                        <td>${adj.user || 'System'}</td>
                     </tr>
                 `;
             }).join('');
@@ -2606,20 +2548,22 @@
             const inventoryReportTable = document.getElementById('inventoryReportTable');
             inventoryReportTable.innerHTML = products.map(product => {
                 const category = categories.find(c => c.id === product.categoryId);
-                const totalValue = product.stock * (product.purchasePrice || 0);
+                const totalValue = product.stock * product.purchasePrice;
                 const status = product.stock === 0 ? 'Out of Stock' : 
                                product.stock <= product.reorderLevel ? 'Low Stock' : 'In Stock';
                 const statusClass = product.stock === 0 ? 'badge-danger' : 
                                   product.stock <= product.reorderLevel ? 'badge-warning' : 'badge-success';
                 
-                return [
-                    product.name,
-                    category ? category.name : 'N/A',
-                    `${product.stock} ${product.unit}`,
-                    (product.purchasePrice || 0).toLocaleString(),
-                    totalValue.toLocaleString(),
-                    `<span class="badge ${statusClass}">${status}</span>`
-                ].join('');
+                return `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${category ? category.name : 'N/A'}</td>
+                        <td>${product.stock} ${product.unit}</td>
+                        <td>${product.purchasePrice.toLocaleString()}</td>
+                        <td>${totalValue.toLocaleString()}</td>
+                        <td><span class="badge ${statusClass}">${status}</span></td>
+                    </tr>
+                `;
             }).join('');
             
             if (products.length === 0) {
@@ -2782,12 +2726,12 @@
                 name: document.getElementById('productName').value,
                 categoryId: parseInt(document.getElementById('productCategory').value),
                 description: document.getElementById('productDescription').value,
-                purchasePrice: parseFloat(document.getElementById('productPurchasePrice').value) || 0,
-                sellingPrice: parseFloat(document.getElementById('productSellingPrice').value) || 0,
-                stock: parseInt(document.getElementById('productStock').value) || 0,
-                reorderLevel: parseInt(document.getElementById('productReorderLevel').value) || 0,
-                unit: document.getElementById('productUnit').value || 'pcs',
-                barcode: document.getElementById('productBarcode').value || '',
+                purchasePrice: parseFloat(document.getElementById('productPurchasePrice').value),
+                sellingPrice: parseFloat(document.getElementById('productSellingPrice').value),
+                stock: parseInt(document.getElementById('productStock').value),
+                reorderLevel: parseInt(document.getElementById('productReorderLevel').value),
+                unit: document.getElementById('productUnit').value,
+                barcode: document.getElementById('productBarcode').value,
                 createdAt: new Date().toISOString()
             };
             
@@ -2799,7 +2743,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Product added',
-                username: 'John Doe',
+                user: 'John Doe',
                 details: `Added new product: ${newProduct.name}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -2849,7 +2793,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Category added',
-                username: 'John Doe',
+                user: 'John Doe',
                 details: `Added new category: ${newCategory.name}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -2905,7 +2849,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Supplier added',
-                username: 'John Doe',
+                user: 'John Doe',
                 details: `Added new supplier: ${newSupplier.name}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3112,7 +3056,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Sale recorded',
-                username: 'John Doe',
+                user: 'John Doe',
                 details: `Recorded sale ${invoiceNumber} for UGX ${totalAmount.toLocaleString()}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3303,7 +3247,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Purchase recorded',
-                username: 'John Doe',
+                user: 'John Doe',
                 details: `Recorded purchase ${referenceNumber} for UGX ${totalAmount.toLocaleString()}`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3378,7 +3322,7 @@
                 type,
                 quantity,
                 reason,
-                username: 'John Doe'
+                user: 'John Doe'
             };
             
             adjustments.push(newAdjustment);
@@ -3390,7 +3334,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Stock adjusted',
-                username: 'John Doe',
+                user: 'John Doe',
                 details: `Adjusted stock for ${product.name}: ${type === 'add' ? '+' : '-'}${quantity} units`
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3435,7 +3379,7 @@
                 id: activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1,
                 date: new Date().toISOString(),
                 activity: 'Settings updated',
-                username: 'John Doe',
+                user: 'John Doe',
                 details: 'System settings were updated'
             });
             localStorage.setItem('activities', JSON.stringify(activities));
@@ -3497,7 +3441,7 @@
             const totalProducts = products.length;
             const lowStockItems = products.filter(p => p.stock > 0 && p.stock <= p.reorderLevel).length;
             const outOfStockItems = products.filter(p => p.stock === 0).length;
-            const inventoryValue = products.reduce((sum, p) => sum + (p.stock * (p.purchasePrice || 0)), 0);
+            const inventoryValue = products.reduce((sum, p) => sum + (p.stock * p.purchasePrice), 0);
             
             const data = [
                 ['Total Products', totalProducts, '0%'],
@@ -3523,7 +3467,7 @@
                     product.id,
                     product.name,
                     category ? category.name : 'N/A',
-                    (product.sellingPrice || 0).toLocaleString(),
+                    product.sellingPrice.toLocaleString(),
                     `${product.stock} ${product.unit}`,
                     status
                 ];
@@ -3556,17 +3500,17 @@
             const headers = ['ID', 'Name', 'Contact', 'Email', 'Products Supplied'];
             
             const data = suppliers.map(supplier => {
-                const productsSupplied = supplier.products?.map(id => {
+                const productsSupplied = supplier.products.map(id => {
                     const product = products.find(p => p.id === id);
                     return product ? product.name : 'Unknown';
-                }).join(', ') || 'N/A';
+                }).join(', ');
                 
                 return [
                     supplier.id,
                     supplier.name,
                     supplier.phone,
                     supplier.email || 'N/A',
-                    productsSupplied
+                    productsSupplied || 'N/A'
                 ];
             });
             
@@ -3609,7 +3553,7 @@
                     product ? product.name : 'N/A',
                     `${adj.type === 'add' ? '+' : '-'}${adj.quantity}`,
                     adj.reason,
-                    adj.username || 'System'
+                    adj.user || 'System'
                 ];
             });
             
@@ -3693,7 +3637,7 @@
             
             const data = products.map(product => {
                 const category = categories.find(c => c.id === product.categoryId);
-                const totalValue = product.stock * (product.purchasePrice || 0);
+                const totalValue = product.stock * product.purchasePrice;
                 const status = product.stock === 0 ? 'Out of Stock' : 
                                product.stock <= product.reorderLevel ? 'Low Stock' : 'In Stock';
                 
@@ -3701,7 +3645,7 @@
                     product.name,
                     category ? category.name : 'N/A',
                     `${product.stock} ${product.unit}`,
-                    (product.purchasePrice || 0).toLocaleString(),
+                    product.purchasePrice.toLocaleString(),
                     totalValue.toLocaleString(),
                     status
                 ];
@@ -4001,7 +3945,7 @@
                         const productsSelect = document.getElementById('supplierProducts');
                         productsSelect.innerHTML = '';
                         products.forEach(product => {
-                            const isSelected = supplier.products?.includes(product.id);
+                            const isSelected = supplier.products.includes(product.id);
                             productsSelect.innerHTML += `<option value="${product.id}" ${isSelected ? 'selected' : ''}>${product.name}</option>`;
                         });
                         
@@ -4040,209 +3984,212 @@
                 }
             });
         });
-        
         // Sync functionality
-        let lastSyncTime = localStorage.getItem('lastSyncTime') || null;
-        let isOnline = navigator.onLine;
+let lastSyncTime = localStorage.getItem('lastSyncTime') || null;
+let isOnline = navigator.onLine;
 
-        // Check online status
-        window.addEventListener('online', () => {
-            isOnline = true;
-            updateSyncStatus();
-            syncData();
+// Check online status
+window.addEventListener('online', () => {
+    isOnline = true;
+    syncData();
+});
+
+window.addEventListener('offline', () => {
+    isOnline = false;
+    showToast('Connection lost. Working in offline mode.', 'warning');
+});
+
+async function syncData() {
+    if (!isOnline) {
+        showToast('Cannot sync - offline', 'warning');
+        return;
+    }
+    
+    try {
+        showToast('Syncing data with server...');
+        
+        // Prepare data to send with all required fields
+        const syncData = {
+            last_sync_time: lastSyncTime,
+            products: JSON.parse(localStorage.getItem('products')) || [],
+            categories: JSON.parse(localStorage.getItem('categories')) || [],
+            suppliers: JSON.parse(localStorage.getItem('suppliers')) || [],
+            sales: JSON.parse(localStorage.getItem('sales')) || [],
+            purchases: JSON.parse(localStorage.getItem('purchases')) || [],
+            adjustments: JSON.parse(localStorage.getItem('adjustments')) || [],
+            activities: JSON.parse(localStorage.getItem('activities')) || [],
+            settings: JSON.parse(localStorage.getItem('settings')) || {
+                business_name: 'StockMaster UG',
+                currency: 'UGX',
+                tax_rate: 18,
+                low_stock_threshold: 5,
+                invoice_prefix: 'INV',
+                purchase_prefix: 'PUR'
+            }
+        };
+        
+        // Validate and clean the data before sending
+        const cleanedData = cleanSyncData(syncData);
+        
+        // Call sync API
+        const response = await fetch('https://inventry-mn6a.onrender.com/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(cleanedData)
         });
-
-        window.addEventListener('offline', () => {
-            isOnline = false;
-            updateSyncStatus();
-            showToast('Connection lost. Working in offline mode.', 'warning');
-        });
-
-        // Update sync status UI
-        function updateSyncStatus() {
-            const syncStatus = document.getElementById('syncStatus');
-            if (!isOnline) {
-                syncStatus.innerHTML = '<span class="indicator offline"></span><span class="text">Offline</span>';
-                return;
-            }
-            
-            syncStatus.innerHTML = '<span class="indicator online"></span><span class="text">Online</span>';
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Sync error response:', errorData);
+            throw new Error(errorData.detail || 'Sync failed');
         }
-
-        async function syncData() {
-            if (!isOnline) {
-                showToast('Cannot sync - offline', 'warning');
-                return;
-            }
-            
-            try {
-                showToast('Syncing data with server...');
-                
-                // Prepare data to send with all required fields
-                const syncData = {
-                    last_sync_time: lastSyncTime,
-                    products: JSON.parse(localStorage.getItem('products')) || [],
-                    categories: JSON.parse(localStorage.getItem('categories')) || [],
-                    suppliers: JSON.parse(localStorage.getItem('suppliers')) || [],
-                    sales: JSON.parse(localStorage.getItem('sales')) || [],
-                    purchases: JSON.parse(localStorage.getItem('purchases')) || [],
-                    adjustments: JSON.parse(localStorage.getItem('adjustments')) || [],
-                    activities: JSON.parse(localStorage.getItem('activities')) || [],
-                    settings: JSON.parse(localStorage.getItem('settings')) || {
-                        businessName: 'StockMaster UG',
-                        currency: 'UGX',
-                        taxRate: 18,
-                        lowStockThreshold: 5,
-                        invoicePrefix: 'INV',
-                        purchasePrefix: 'PUR'
-                    }
-                };
-                
-                // Validate and clean the data before sending
-                const cleanedData = cleanSyncData(syncData);
-                
-                // Call sync API
-                const response = await fetch('https://inventry-mn6a.onrender.com/sync', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(cleanedData)
-                });
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('Sync error response:', errorData);
-                    throw new Error(errorData.detail || 'Sync failed');
-                }
-                
-                const result = await response.json();
-                console.log('Sync successful:', result);
-                
-                // Update local data with server changes
-                if (result.products) {
-                    localStorage.setItem('products', JSON.stringify(result.products));
-                    products = result.products;
-                }
-                
-                if (result.categories) {
-                    localStorage.setItem('categories', JSON.stringify(result.categories));
-                    categories = result.categories;
-                }
-                
-                if (result.suppliers) {
-                    localStorage.setItem('suppliers', JSON.stringify(result.suppliers));
-                    suppliers = result.suppliers;
-                }
-                
-                if (result.sales) {
-                    localStorage.setItem('sales', JSON.stringify(result.sales));
-                    sales = result.sales;
-                }
-                
-                if (result.purchases) {
-                    localStorage.setItem('purchases', JSON.stringify(result.purchases));
-                    purchases = result.purchases;
-                }
-                
-                if (result.adjustments) {
-                    localStorage.setItem('adjustments', JSON.stringify(result.adjustments));
-                    adjustments = result.adjustments;
-                }
-                
-                if (result.activities) {
-                    localStorage.setItem('activities', JSON.stringify(result.activities));
-                    activities = result.activities;
-                }
-                
-                if (result.settings) {
-                    localStorage.setItem('settings', JSON.stringify(result.settings));
-                    settings = result.settings;
-                }
-                
-                // Update last sync time
-                lastSyncTime = result.last_sync_time || new Date().toISOString();
-                localStorage.setItem('lastSyncTime', lastSyncTime);
-                
-                showToast('Data synchronized successfully');
-                
-                // Refresh UI
-                const activeTab = document.querySelector('.tab-content.active').id;
-                loadTabData(activeTab);
-                
-            } catch (error) {
-                console.error('Sync error:', error);
-                showToast('Sync failed: ' + error.message, 'error');
-            }
+        
+        const result = await response.json();
+        console.log('Sync successful:', result);
+        
+        // Update local data with server changes
+        if (result.products) {
+            localStorage.setItem('products', JSON.stringify(result.products));
         }
-
-        // Add this helper function to clean the data before sending
-        function cleanSyncData(data) {
-            // Ensure all products have required fields
-            const cleanedProducts = data.products.map(product => ({
-                id: product.id,
-                name: product.name,
-                category_id: product.categoryId || null,
-                description: product.description || null,
-                purchase_price: product.purchasePrice || 0,
-                selling_price: product.sellingPrice || 0,
-                stock: product.stock || 0,
-                reorder_level: product.reorderLevel || 0,
-                unit: product.unit || 'pcs',
-                barcode: product.barcode || null,
-                created_at: product.createdAt || new Date().toISOString()
-            }));
-            
-            // Ensure all adjustments have required fields
-            const cleanedAdjustments = data.adjustments.map(adj => ({
-                id: adj.id,
-                date: adj.date || new Date().toISOString(),
-                product_id: adj.productId || 0,
-                type: adj.type || 'add',
-                quantity: adj.quantity || 0,
-                reason: adj.reason || 'No reason provided',
-                username: adj.username || 'System'
-            }));
-            
-            // Ensure settings has all required fields
-            const cleanedSettings = {
-                business_name: data.settings?.businessName || 'StockMaster UG',
-                currency: data.settings?.currency || 'UGX',
-                tax_rate: data.settings?.taxRate || 18,
-                low_stock_threshold: data.settings?.lowStockThreshold || 5,
-                invoice_prefix: data.settings?.invoicePrefix || 'INV',
-                purchase_prefix: data.settings?.purchasePrefix || 'PUR'
-            };
-            
-            return {
-                last_sync_time: data.last_sync_time,
-                products: cleanedProducts,
-                categories: data.categories,
-                suppliers: data.suppliers,
-                sales: data.sales,
-                purchases: data.purchases,
-                adjustments: cleanedAdjustments,
-                activities: data.activities,
-                settings: cleanedSettings
-            };
+        
+        if (result.categories) {
+            localStorage.setItem('categories', JSON.stringify(result.categories));
         }
+        
+        if (result.suppliers) {
+            localStorage.setItem('suppliers', JSON.stringify(result.suppliers));
+        }
+        
+        if (result.sales) {
+            localStorage.setItem('sales', JSON.stringify(result.sales));
+        }
+        
+        if (result.purchases) {
+            localStorage.setItem('purchases', JSON.stringify(result.purchases));
+        }
+        
+        if (result.adjustments) {
+            localStorage.setItem('adjustments', JSON.stringify(result.adjustments));
+        }
+        
+        if (result.activities) {
+            localStorage.setItem('activities', JSON.stringify(result.activities));
+        }
+        
+        if (result.settings) {
+            localStorage.setItem('settings', JSON.stringify(result.settings));
+        }
+        
+        // Update last sync time
+        lastSyncTime = result.last_sync_time || new Date().toISOString();
+        localStorage.setItem('lastSyncTime', lastSyncTime);
+        
+        showToast('Data synchronized successfully');
+        
+        // Refresh UI
+        const activeTab = document.querySelector('.tab-content.active').id;
+        loadTabData(activeTab);
+        
+    } catch (error) {
+        console.error('Sync error:', error);
+        showToast('Sync failed: ' + error.message, 'error');
+    }
+}
 
-        // Add sync button to your UI and call syncData() when clicked
-        document.getElementById('syncButton').addEventListener('click', syncData);
+// Add this helper function to clean the data before sending
+function cleanSyncData(data) {
+    // Ensure all products have required fields
+    const cleanedProducts = data.products.map(product => ({
+        id: product.id,
+        name: product.name,
+        category_id: product.categoryId || null,
+        description: product.description || null,
+        purchase_price: product.purchasePrice || 0,
+        selling_price: product.sellingPrice || 0,
+        stock: product.stock || 0,
+        reorder_level: product.reorderLevel || 0,
+        unit: product.unit || 'pcs',
+        barcode: product.barcode || null,
+        created_at: product.createdAt || new Date().toISOString()
+    }));
+    
+    // Ensure all adjustments have required fields
+    const cleanedAdjustments = data.adjustments.map(adj => ({
+        id: adj.id,
+        date: adj.date || new Date().toISOString(),
+        product_id: adj.productId || 0,
+        type: adj.type || 'add',
+        quantity: adj.quantity || 0,
+        reason: adj.reason || 'No reason provided',
+        user: adj.user || 'System'
+    }));
+    
+    // Ensure settings has all required fields
+    const cleanedSettings = {
+        business_name: data.settings?.businessName || 'StockMaster UG',
+        currency: data.settings?.currency || 'UGX',
+        tax_rate: data.settings?.taxRate || 18,
+        low_stock_threshold: data.settings?.lowStockThreshold || 5,
+        invoice_prefix: data.settings?.invoicePrefix || 'INV',
+        purchase_prefix: data.settings?.purchasePrefix || 'PUR'
+    };
+    
+    return {
+        last_sync_time: data.last_sync_time,
+        products: cleanedProducts,
+        categories: data.categories,
+        suppliers: data.suppliers,
+        sales: data.sales,
+        purchases: data.purchases,
+        adjustments: cleanedAdjustments,
+        activities: data.activities,
+        settings: cleanedSettings
+    };
+}
 
-        // Periodically sync data (every 5 minutes)
-        setInterval(syncData, 5 * 60 * 1000);
+// Add sync button to your UI and call syncData() when clicked
+document.getElementById('syncButton').addEventListener('click', syncData);
 
-        // Initial sync
-        syncData();
-        // Initial status
-        updateSyncStatus();
+// Periodically sync data (every 5 minutes)
+setInterval(syncData, 5 * 60 * 1000);
+
+// Initial sync
+syncData();
+// Update sync status UI
+function updateSyncStatus() {
+    const syncStatus = document.getElementById('syncStatus');
+    if (!isOnline) {
+        syncStatus.innerHTML = '<span class="indicator offline"></span><span class="text">Offline</span>';
+        return;
+    }
+    
+    syncStatus.innerHTML = '<span class="indicator online"></span><span class="text">Online</span>';
+}
+
+// Call this whenever network status changes
+window.addEventListener('online', () => {
+    isOnline = true;
+    updateSyncStatus();
+    syncData();
+});
+
+window.addEventListener('offline', () => {
+    isOnline = false;
+    updateSyncStatus();
+    showToast('Connection lost. Working in offline mode.', 'warning');
+});
+
+// Initial status
+updateSyncStatus();
     </script>
     <footer class="footer">
-        <div class="footer-content">
-            Powered by Mumbere Darius
-        </div>
-    </footer>
+    <div class="footer-content">
+        Powered by Mumbere Darius
+    </div>
+</footer>
+    
 </body>
 </html>
