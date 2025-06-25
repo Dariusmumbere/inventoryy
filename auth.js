@@ -10,6 +10,36 @@ class Auth {
         }
     }
     
+    async signup(email, password, fullName) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    full_name: fullName
+                }),
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ detail: 'Signup failed' }));
+                throw new Error(errorData.detail || 'Signup failed');
+            }
+            
+            const data = await response.json();
+            
+            // Automatically log in the user after signup
+            return await this.login(email, password);
+        } catch (error) {
+            console.error('Signup error:', error);
+            throw error;
+        }
+    }
+    
     async login(email, password) {
         try {
             const response = await fetch(`${this.apiBaseUrl}/token`, {
@@ -149,11 +179,34 @@ const auth = new Auth();
 // Login form handling
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('togglePassword');
     const emailError = document.getElementById('emailError');
     const passwordError = document.getElementById('passwordError');
+    const signupEmailError = document.getElementById('signupEmailError');
+    const signupPasswordError = document.getElementById('signupPasswordError');
+    const signupNameError = document.getElementById('signupNameError');
+    const loginLink = document.getElementById('loginLink');
+    const signupLink = document.getElementById('signupLink');
+    const loginContainer = document.getElementById('loginContainer');
+    const signupContainer = document.getElementById('signupContainer');
+    
+    // Toggle between login and signup forms
+    if (signupLink && loginLink) {
+        signupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginContainer.style.display = 'none';
+            signupContainer.style.display = 'block';
+        });
+        
+        loginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+        });
+    }
     
     // Redirect if already logged in
     if (window.location.pathname.includes('/login.html')) {
@@ -231,6 +284,80 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // Handle signup form submission
+    if (signupForm) {
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Reset errors
+            if (signupEmailError) signupEmailError.style.display = 'none';
+            if (signupPasswordError) signupPasswordError.style.display = 'none';
+            if (signupNameError) signupNameError.style.display = 'none';
+            
+            const email = signupForm.querySelector('#signupEmail').value.trim();
+            const password = signupForm.querySelector('#signupPassword').value.trim();
+            const fullName = signupForm.querySelector('#fullName').value.trim();
+            
+            // Validation
+            let isValid = true;
+            
+            if (!email || !email.includes('@')) {
+                if (signupEmailError) {
+                    signupEmailError.textContent = 'Please enter a valid email address';
+                    signupEmailError.style.display = 'block';
+                }
+                isValid = false;
+            }
+            
+            if (!password || password.length < 6) {
+                if (signupPasswordError) {
+                    signupPasswordError.textContent = 'Password must be at least 6 characters';
+                    signupPasswordError.style.display = 'block';
+                }
+                isValid = false;
+            }
+            
+            if (!fullName) {
+                if (signupNameError) {
+                    signupNameError.textContent = 'Please enter your full name';
+                    signupNameError.style.display = 'block';
+                }
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            try {
+                const signupBtn = signupForm.querySelector('#signupBtn');
+                if (signupBtn) {
+                    signupBtn.disabled = true;
+                    signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+                }
+                
+                await auth.signup(email, password, fullName);
+                
+                // Show success message (login will happen automatically)
+                showToast('Account created successfully! Redirecting...');
+                
+                // Redirect will happen automatically from the login call in signup
+            } catch (error) {
+                // Show error message
+                const errorMessage = error.message || 'Signup failed. Please try again.';
+                if (signupPasswordError) {
+                    signupPasswordError.textContent = errorMessage;
+                    signupPasswordError.style.display = 'block';
+                }
+                
+                // Reset button
+                const signupBtn = signupForm.querySelector('#signupBtn');
+                if (signupBtn) {
+                    signupBtn.disabled = false;
+                    signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Sign Up';
+                }
+            }
+        });
+    }
+    
     // Add logout functionality to all pages
     const logoutButtons = document.querySelectorAll('[data-logout]');
     logoutButtons.forEach(button => {
@@ -277,6 +404,23 @@ window.fetch = async function(url, options = {}) {
         throw error;
     }
 };
+
+// Show toast notification
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    if (!toast || !toastMessage) return;
+    
+    toastMessage.textContent = message;
+    toast.className = 'toast';
+    toast.classList.add(type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'success');
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
 
 // Export auth instance for use in other scripts
 window.auth = auth;
