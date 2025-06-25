@@ -59,12 +59,12 @@ class Auth {
         document.cookie = 'access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; Domain=.dariusmumbere.github.io';
         
         // Redirect to login page
-        window.location.href = 'login.html';
+        window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
     } catch (error) {
         console.error('Logout error:', error);
         // Still clear local storage even if network request fails
         this.clearAuth();
-        window.location.href = 'https://dariusmumbere.github.io/login.html';
+        window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
     }
 }
     
@@ -131,7 +131,7 @@ class Auth {
     // Redirect to home if authenticated
     redirectIfAuthenticated() {
         if (this.isAuthenticated()) {
-            window.location.href = 'https://dariusmumbere.github.io/index.html';
+            window.location.href = 'https://dariusmumbere.github.io/inventoryy/index.html';
         }
     }
 }
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Check authentication on protected pages
-    if (!window.location.pathname.includes('https://dariusmumbere.github.io/login.html')) {
+    if (!window.location.pathname.includes('https://dariusmumbere.github.io/inventoryy/login.html')) {
         auth.ensureAuthenticated();
     }
 });
@@ -240,7 +240,7 @@ window.fetch = async function(url, options = {}) {
     // If unauthorized, logout and redirect to login
     if (response.status === 401) {
         auth.clearAuth();
-        window.location.href = 'login.html';
+        window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
     }
     
     return response;
