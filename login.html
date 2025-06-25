@@ -154,6 +154,51 @@
             color: var(--gray);
             cursor: pointer;
         }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background-color: var(--success);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background-color: var(--danger);
+        }
+
+        .toast.warning {
+            background-color: var(--secondary);
+        }
+
+        .toast i {
+            font-size: 1.25rem;
+        }
+
+        /* Toggle between forms */
+        .form-toggle {
+            display: none;
+        }
+
+        .form-toggle.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -161,40 +206,102 @@
         <div class="login-header">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzI1NjNlYiI+PHBhdGggZD0iTTMgM2gyYTEgMSAwIDAgMSAxIDF2MTZhMSAxIDAgMCAxLTEgMUgzYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDEwYTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXptNyAwaDJhMSAxIDAgMCAxIDEgMXYxNmExIDEgMCAwIDEtMSAxSDE3YTEgMSAwIDAgMS0xLTFWNGEgMSAxIDAgMCAxIDEtMXoiLz48L3N2Zz4=" alt="Logo">
             <h1>StockMaster UG</h1>
-            <p>Sign in to your inventory account</p>
+            <p>Manage your inventory efficiently</p>
         </div>
 
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
-                <div id="emailError" class="error-message">Please enter a valid email address</div>
-            </div>
+        <!-- Login Form -->
+        <div id="loginContainer" class="form-toggle active">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                    <div id="emailError" class="error-message">Please enter a valid email address</div>
+                </div>
 
-            <div class="form-group">
-                <label for="password" class="form-label">Password</label>
-                <div class="password-input">
-                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
-                    <button type="button" class="password-toggle" id="togglePassword">
-                        <i class="fas fa-eye"></i>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-input">
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div id="passwordError" class="error-message">Password must be at least 6 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
                     </button>
                 </div>
-                <div id="passwordError" class="error-message">Password must be at least 6 characters</div>
-            </div>
+            </form>
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" id="loginBtn">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
-                </button>
+            <div class="login-footer">
+                <p>Don't have an account? <a href="#" id="signupLink">Sign up</a></p>
+                <p><a href="#" id="forgotPassword">Forgot password?</a></p>
             </div>
-        </form>
+        </div>
 
-        <div class="login-footer">
-            <p>Don't have an account? <a href="#" id="registerLink">Contact admin</a></p>
-            <p><a href="#" id="forgotPassword">Forgot password?</a></p>
+        <!-- Signup Form -->
+        <div id="signupContainer" class="form-toggle">
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+                    <div id="signupNameError" class="error-message">Please enter your full name</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail" class="form-label">Email Address</label>
+                    <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" required>
+                    <div id="signupEmailError" class="error-message">Please enter a valid email address</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword" class="form-label">Password</label>
+                    <div class="password-input">
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Create a password (min 6 characters)" required>
+                        <button type="button" class="password-toggle" id="toggleSignupPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div id="signupPasswordError" class="error-message">Password must be at least 6 characters</div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="signupBtn">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </button>
+                </div>
+            </form>
+
+            <div class="login-footer">
+                <p>Already have an account? <a href="#" id="loginLink">Sign in</a></p>
+            </div>
         </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation completed successfully</span>
+    </div>
+
     <script src="auth.js"></script>
+    <script>
+        // Toggle password visibility for signup form
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleSignupPassword = document.getElementById('toggleSignupPassword');
+            const signupPasswordInput = document.getElementById('signupPassword');
+            
+            if (toggleSignupPassword && signupPasswordInput) {
+                toggleSignupPassword.addEventListener('click', () => {
+                    const type = signupPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    signupPasswordInput.setAttribute('type', type);
+                    toggleSignupPassword.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
