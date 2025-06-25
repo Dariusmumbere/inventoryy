@@ -900,24 +900,15 @@
                     <input type="text" placeholder="Search...">
                 </div>
                 <div class="user-profile">
-                    <div class="notification-bell" id="notificationBell">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge" id="notificationBadge">0</span>
-                    </div>
-                    <!-- Add to your topbar -->
-                    <div class="sync-status" id="syncStatus">
-                        <span class="indicator offline"></span>
-                        <span class="text">Offline</span>
-                    </div>
-                    <button class="btn btn-secondary" id="syncButton" style="margin-right: 10px;">
-                        <i class="fas fa-sync-alt"></i> Sync
-                    </button>
-                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff" alt="User">
-                    <div class="user-info">
-                        <h4>John Doe</h4>
-                        <p>Admin</p>
-                    </div>
-                </div>
+    <img src="https://ui-avatars.com/api/?name=John+Doe&background=2563eb&color=fff" alt="User">
+    <div class="user-info">
+        <h4 id="userFullName">John Doe</h4>
+        <p id="userRole">Admin</p>
+    </div>
+    <button class="btn btn-danger" data-logout>
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+</div>
             </div>
 
             <!-- Content -->
@@ -4190,6 +4181,16 @@ updateSyncStatus();
         Powered by Mumbere Darius
     </div>
 </footer>
+<script src="auth.js"></script>
+<script>
+    // Update user info in the topbar
+    document.addEventListener('DOMContentLoaded', () => {
+        if (auth.isAuthenticated()) {
+            document.getElementById('userFullName').textContent = auth.user.full_name;
+            document.getElementById('userRole').textContent = auth.user.role;
+        }
+    });
+</script>
     
 </body>
 </html>
