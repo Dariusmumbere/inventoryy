@@ -18,7 +18,7 @@ class Auth {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
-            credentials: 'include'  // Important for cookies
+            credentials: 'include'  // Ensure cookies are sent/received
         });
         
         if (!response.ok) {
@@ -28,10 +28,9 @@ class Auth {
         
         const data = await response.json();
         
-        // Store token and user data in localStorage as fallback
+        // Store token in localStorage as fallback
         this.token = data.access_token;
         this.user = data.user;
-        
         localStorage.setItem('token', this.token);
         localStorage.setItem('user', JSON.stringify(this.user));
         
