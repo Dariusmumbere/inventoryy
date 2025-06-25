@@ -131,7 +131,7 @@ class Auth {
     // Redirect to home if authenticated
     redirectIfAuthenticated() {
         if (this.isAuthenticated()) {
-            window.location.href = 'index.html';
+            window.location.href = 'https://dariusmumbere.github.io/index.html';
         }
     }
 }
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Check authentication on protected pages
-    if (!window.location.pathname.includes('login.html')) {
+    if (!window.location.pathname.includes('https://dariusmumbere.github.io/login.html')) {
         auth.ensureAuthenticated();
     }
 });
