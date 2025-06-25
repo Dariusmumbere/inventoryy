@@ -1,3 +1,4 @@
+// auth.js
 class Auth {
     constructor() {
         this.token = localStorage.getItem('token');
@@ -31,9 +32,7 @@ class Auth {
             }
             
             const data = await response.json();
-            
-            // Automatically log in the user after signup
-            return await this.login(email, password);
+            return data;
         } catch (error) {
             console.error('Signup error:', error);
             throw error;
@@ -42,12 +41,17 @@ class Auth {
     
     async login(email, password) {
         try {
+            // Using URLSearchParams for proper form-urlencoded format
+            const formData = new URLSearchParams();
+            formData.append('username', email);
+            formData.append('password', password);
+            
             const response = await fetch(`${this.apiBaseUrl}/token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+                body: formData.toString(),
                 credentials: 'include'
             });
             
@@ -62,7 +66,7 @@ class Auth {
                 throw new Error('No access token received');
             }
             
-            // Store token in localStorage as fallback
+            // Store token and user data
             this.token = data.access_token;
             this.user = data.user || { email }; // Fallback user data if not provided
             localStorage.setItem('token', this.token);
@@ -77,7 +81,7 @@ class Auth {
     
     async logout() {
         try {
-            // Attempt server logout if possible
+            // Attempt server logout
             await fetch(`${this.apiBaseUrl}/logout`, {
                 method: 'POST',
                 credentials: 'include',
@@ -109,10 +113,7 @@ class Auth {
         try {
             const response = await fetch(`${this.apiBaseUrl}/users/me`, {
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(this.token && { 'Authorization': `Bearer ${this.token}` })
-                }
+                headers: this.getAuthHeaders()
             });
             
             if (!response.ok) {
@@ -336,10 +337,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 await auth.signup(email, password, fullName);
                 
-                // Show success message (login will happen automatically)
-                showToast('Account created successfully! Redirecting...');
+                // Show success message and redirect to login
+                showToast('Account created successfully! Please login.');
+                signupContainer.style.display = 'none';
+                loginContainer.style.display = 'block';
                 
-                // Redirect will happen automatically from the login call in signup
+                // Reset form
+                signupForm.reset();
             } catch (error) {
                 // Show error message
                 const errorMessage = error.message || 'Signup failed. Please try again.';
@@ -368,7 +372,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Check authentication on protected pages
-    if (!window.location.pathname.includes('/login.html')) {
+    if (!window.location.pathname.includes('/login.html') && 
+        !window.location.pathname.includes('/signup.html')) {
         auth.ensureAuthenticated();
     }
 });
