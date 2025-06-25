@@ -11,79 +11,90 @@ class Auth {
     }
     
     async login(email, password) {
-        try {
-            const response = await fetch(`${this.apiBaseUrl}/token`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'Login failed');
-            }
-            
-            const data = await response.json();
-            
-            // Store token and user data
-            this.token = data.access_token;
-            this.user = data.user;
-            
-            localStorage.setItem('token', this.token);
-            localStorage.setItem('user', JSON.stringify(this.user));
-            
-            return data;
-        } catch (error) {
-            console.error('Login error:', error);
-            throw error;
+    try {
+        const response = await fetch(`${this.apiBaseUrl}/token`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+            credentials: 'include'  // Important for cookies
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Login failed');
         }
+        
+        const data = await response.json();
+        
+        // Store token and user data in localStorage as fallback
+        this.token = data.access_token;
+        this.user = data.user;
+        
+        localStorage.setItem('token', this.token);
+        localStorage.setItem('user', JSON.stringify(this.user));
+        
+        return data;
+    } catch (error) {
+        console.error('Login error:', error);
+        throw error;
     }
+}
     
     async logout() {
-        try {
-            await fetch(`${this.apiBaseUrl}/logout`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: this.getAuthHeaders()
-            });
-            
-            // Clear local storage
-            this.token = null;
-            this.user = null;
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            
-            // Redirect to login page
-            window.location.href = 'login.html';
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
+    try {
+        await fetch(`${this.apiBaseUrl}/logout`, {
+            method: 'POST',
+            credentials: 'include',  // Important for cookie cleanup
+            headers: this.getAuthHeaders()
+        });
+        
+        // Clear all auth storage
+        this.token = null;
+        this.user = null;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        
+        // Clear cookies by expiring them
+        document.cookie = 'access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; Domain=.dariusmumbere.github.io';
+        
+        // Redirect to login page
+        window.location.href = 'login.html';
+    } catch (error) {
+        console.error('Logout error:', error);
+        // Still clear local storage even if network request fails
+        this.clearAuth();
+        window.location.href = 'https://dariusmumbere.github.io/login.html';
     }
+}
     
     async validateToken() {
-        try {
-            const response = await fetch(`${this.apiBaseUrl}/users/me`, {
-                headers: this.getAuthHeaders()
-            });
-            
-            if (!response.ok) {
-                this.clearAuth();
-                return false;
+    try {
+        const response = await fetch(`${this.apiBaseUrl}/users/me`, {
+            credentials: 'include',  // Send cookies
+            headers: {
+                'Content-Type': 'application/json',
+                // Include localStorage token as fallback
+                ...(this.token && { 'Authorization': `Bearer ${this.token}` })
             }
-            
-            const userData = await response.json();
-            this.user = userData;
-            localStorage.setItem('user', JSON.stringify(userData));
-            return true;
-        } catch (error) {
-            console.error('Token validation error:', error);
+        });
+        
+        if (!response.ok) {
             this.clearAuth();
             return false;
         }
+        
+        const userData = await response.json();
+        this.user = userData;
+        localStorage.setItem('user', JSON.stringify(userData));
+        return true;
+    } catch (error) {
+        console.error('Token validation error:', error);
+        this.clearAuth();
+        return false;
     }
-    
+}
     getAuthHeaders() {
         const headers = {
             'Content-Type': 'application/json'
