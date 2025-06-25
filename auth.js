@@ -11,89 +11,96 @@ class Auth {
     }
     
     async login(email, password) {
-    try {
-        const response = await fetch(`${this.apiBaseUrl}/token`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
-            credentials: 'include'  // Ensure cookies are sent/received
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.detail || 'Login failed');
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/token`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ detail: 'Login failed' }));
+                throw new Error(errorData.detail || 'Login failed');
+            }
+            
+            const data = await response.json();
+            
+            if (!data.access_token) {
+                throw new Error('No access token received');
+            }
+            
+            // Store token in localStorage as fallback
+            this.token = data.access_token;
+            this.user = data.user || { email }; // Fallback user data if not provided
+            localStorage.setItem('token', this.token);
+            localStorage.setItem('user', JSON.stringify(this.user));
+            
+            return data;
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
         }
-        
-        const data = await response.json();
-        
-        // Store token in localStorage as fallback
-        this.token = data.access_token;
-        this.user = data.user;
-        localStorage.setItem('token', this.token);
-        localStorage.setItem('user', JSON.stringify(this.user));
-        
-        return data;
-    } catch (error) {
-        console.error('Login error:', error);
-        throw error;
     }
-}
     
     async logout() {
-    try {
-        await fetch(`${this.apiBaseUrl}/logout`, {
-            method: 'POST',
-            credentials: 'include',  // Important for cookie cleanup
-            headers: this.getAuthHeaders()
-        });
-        
-        // Clear all auth storage
-        this.token = null;
-        this.user = null;
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        
-        // Clear cookies by expiring them
-        document.cookie = 'access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; Domain=.dariusmumbere.github.io';
-        
-        // Redirect to login page
-        window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
-    } catch (error) {
-        console.error('Logout error:', error);
-        // Still clear local storage even if network request fails
-        this.clearAuth();
-        window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
+        try {
+            // Attempt server logout if possible
+            await fetch(`${this.apiBaseUrl}/logout`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: this.getAuthHeaders()
+            }).catch(() => {}); // Ignore errors if server is unreachable
+            
+            // Clear all auth storage
+            this.clearAuth();
+            
+            // Clear cookies by expiring them
+            document.cookie = 'access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = 'access_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; Domain=.dariusmumbere.github.io';
+            
+            // Redirect to login page
+            window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+            this.clearAuth();
+            window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
+        }
     }
-}
     
     async validateToken() {
-    try {
-        const response = await fetch(`${this.apiBaseUrl}/users/me`, {
-            credentials: 'include',  // Send cookies
-            headers: {
-                'Content-Type': 'application/json',
-                // Include localStorage token as fallback
-                ...(this.token && { 'Authorization': `Bearer ${this.token}` })
-            }
-        });
-        
-        if (!response.ok) {
+        if (!this.token) {
             this.clearAuth();
             return false;
         }
         
-        const userData = await response.json();
-        this.user = userData;
-        localStorage.setItem('user', JSON.stringify(userData));
-        return true;
-    } catch (error) {
-        console.error('Token validation error:', error);
-        this.clearAuth();
-        return false;
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/users/me`, {
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(this.token && { 'Authorization': `Bearer ${this.token}` })
+                }
+            });
+            
+            if (!response.ok) {
+                this.clearAuth();
+                return false;
+            }
+            
+            const userData = await response.json();
+            this.user = userData;
+            localStorage.setItem('user', JSON.stringify(userData));
+            return true;
+        } catch (error) {
+            console.error('Token validation error:', error);
+            this.clearAuth();
+            return false;
+        }
     }
-}
+    
     getAuthHeaders() {
         const headers = {
             'Content-Type': 'application/json'
@@ -149,10 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordError = document.getElementById('passwordError');
     
     // Redirect if already logged in
-    auth.redirectIfAuthenticated();
+    if (window.location.pathname.includes('/login.html')) {
+        auth.redirectIfAuthenticated();
+    }
     
     // Toggle password visibility
-    if (togglePassword) {
+    if (togglePassword && passwordInput) {
         togglePassword.addEventListener('click', () => {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
@@ -161,13 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Handle login form submission
-    if (loginForm) {
+    if (loginForm && emailInput && passwordInput) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             // Reset errors
-            emailError.style.display = 'none';
-            passwordError.style.display = 'none';
+            if (emailError) emailError.style.display = 'none';
+            if (passwordError) passwordError.style.display = 'none';
             
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
@@ -176,12 +185,18 @@ document.addEventListener('DOMContentLoaded', () => {
             let isValid = true;
             
             if (!email || !email.includes('@')) {
-                emailError.style.display = 'block';
+                if (emailError) {
+                    emailError.textContent = 'Please enter a valid email address';
+                    emailError.style.display = 'block';
+                }
                 isValid = false;
             }
             
             if (!password || password.length < 6) {
-                passwordError.style.display = 'block';
+                if (passwordError) {
+                    passwordError.textContent = 'Password must be at least 6 characters';
+                    passwordError.style.display = 'block';
+                }
                 isValid = false;
             }
             
@@ -189,8 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             try {
                 const loginBtn = document.getElementById('loginBtn');
-                loginBtn.disabled = true;
-                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+                if (loginBtn) {
+                    loginBtn.disabled = true;
+                    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+                }
                 
                 await auth.login(email, password);
                 
@@ -199,13 +216,17 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 // Show error message
                 const errorMessage = error.message || 'Login failed. Please try again.';
-                passwordError.textContent = errorMessage;
-                passwordError.style.display = 'block';
+                if (passwordError) {
+                    passwordError.textContent = errorMessage;
+                    passwordError.style.display = 'block';
+                }
                 
                 // Reset button
                 const loginBtn = document.getElementById('loginBtn');
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+                if (loginBtn) {
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+                }
             }
         });
     }
@@ -220,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Check authentication on protected pages
-    if (!window.location.pathname.includes('https://dariusmumbere.github.io/inventoryy/login.html')) {
+    if (!window.location.pathname.includes('/login.html')) {
         auth.ensureAuthenticated();
     }
 });
@@ -228,6 +249,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // Add auth headers to all fetch requests
 const originalFetch = window.fetch;
 window.fetch = async function(url, options = {}) {
+    // Skip auth for login requests and external URLs
+    if (!url.includes(auth.apiBaseUrl) && !url.startsWith('/')) {
+        return originalFetch(url, options);
+    }
+    
     if (auth.isAuthenticated()) {
         options.headers = {
             ...options.headers,
@@ -235,15 +261,21 @@ window.fetch = async function(url, options = {}) {
         };
     }
     
-    const response = await originalFetch(url, options);
-    
-    // If unauthorized, logout and redirect to login
-    if (response.status === 401) {
-        auth.clearAuth();
-        window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
+    try {
+        const response = await originalFetch(url, options);
+        
+        // If unauthorized, logout and redirect to login
+        if (response.status === 401) {
+            auth.clearAuth();
+            window.location.href = 'https://dariusmumbere.github.io/inventoryy/login.html';
+            return response;
+        }
+        
+        return response;
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
     }
-    
-    return response;
 };
 
 // Export auth instance for use in other scripts
