@@ -4032,7 +4032,7 @@ async function syncData() {
         // Prepare data to send with all required fields
         const syncData = {
             last_sync_time: lastSyncTime,
-            products: JSON.parse(localStorage.getItem('products')) || [],
+            products: (JSON.parse(localStorage.getItem('products')) || [],
             categories: JSON.parse(localStorage.getItem('categories')) || [],
             suppliers: JSON.parse(localStorage.getItem('suppliers')) || [],
             sales: JSON.parse(localStorage.getItem('sales')) || [],
@@ -4049,8 +4049,18 @@ async function syncData() {
             }
         };
         
-        // Validate and clean the data before sending
-        const cleanedData = cleanSyncData(syncData, userId);
+        // Add user_id to all data before sending
+        const cleanedData = {
+            ...syncData,
+            products: syncData.products.map(p => ({ ...p, user_id: userId })),
+            categories: syncData.categories.map(c => ({ ...c, user_id: userId })),
+            suppliers: syncData.suppliers.map(s => ({ ...s, user_id: userId })),
+            sales: syncData.sales.map(s => ({ ...s, user_id: userId })),
+            purchases: syncData.purchases.map(p => ({ ...p, user_id: userId })),
+            adjustments: syncData.adjustments.map(a => ({ ...a, user_id: userId })),
+            activities: syncData.activities.map(a => ({ ...a, user_id: userId })),
+            settings: syncData.settings ? { ...syncData.settings, user_id: userId } : null
+        };
         
         // Call sync API
         const response = await fetch(`${auth.apiBaseUrl}/sync`, {
