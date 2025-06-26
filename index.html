@@ -3989,18 +3989,21 @@
                 }
             });
         });
-        // Sync functionality
+        // Updated sync functionality in inventory.html
 let lastSyncTime = localStorage.getItem('lastSyncTime') || null;
 let isOnline = navigator.onLine;
+let isSyncing = false;
 
 // Check online status
 window.addEventListener('online', () => {
     isOnline = true;
+    updateSyncStatus();
     syncData();
 });
 
 window.addEventListener('offline', () => {
     isOnline = false;
+    updateSyncStatus();
     showToast('Connection lost. Working in offline mode.', 'warning');
 });
 
@@ -4010,8 +4013,21 @@ async function syncData() {
         return;
     }
     
+    if (isSyncing) {
+        showToast('Sync already in progress', 'info');
+        return;
+    }
+    
     try {
+        isSyncing = true;
+        updateSyncStatus();
         showToast('Syncing data with server...');
+        
+        // Get current user ID from auth
+        const userId = auth.user?.id;
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
         
         // Prepare data to send with all required fields
         const syncData = {
@@ -4034,14 +4050,15 @@ async function syncData() {
         };
         
         // Validate and clean the data before sending
-        const cleanedData = cleanSyncData(syncData);
+        const cleanedData = cleanSyncData(syncData, userId);
         
         // Call sync API
-        const response = await fetch('https://inventry-mn6a.onrender.com/sync', {
+        const response = await fetch(`${auth.apiBaseUrl}/sync`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                ...auth.getAuthHeaders()
             },
             body: JSON.stringify(cleanedData)
         });
@@ -4101,7 +4118,64 @@ async function syncData() {
     } catch (error) {
         console.error('Sync error:', error);
         showToast('Sync failed: ' + error.message, 'error');
+    } finally {
+        isSyncing = false;
+        updateSyncStatus();
     }
+}
+// Add this helper function to clean the data before sending
+function cleanSyncData(data, userId) {
+    // Ensure all products have required fields and user_id
+    const cleanedProducts = data.products
+        .filter(product => product.user_id === userId) // Only sync user's own products
+        .map(product => ({
+            id: product.id,
+            name: product.name,
+            category_id: product.categoryId || null,
+            description: product.description || null,
+            purchase_price: product.purchasePrice || 0,
+            selling_price: product.sellingPrice || 0,
+            stock: product.stock || 0,
+            reorder_level: product.reorderLevel || 0,
+            unit: product.unit || 'pcs',
+            barcode: product.barcode || null,
+            created_at: product.createdAt || new Date().toISOString()
+        }));
+    
+    // Ensure all adjustments have required fields and user_id
+    const cleanedAdjustments = data.adjustments
+        .filter(adj => adj.user_id === userId)
+        .map(adj => ({
+            id: adj.id,
+            date: adj.date || new Date().toISOString(),
+            product_id: adj.productId || 0,
+            type: adj.type || 'add',
+            quantity: adj.quantity || 0,
+            reason: adj.reason || 'No reason provided',
+            user: adj.user || 'System'
+        }));
+    
+    // Ensure settings has all required fields
+    const cleanedSettings = {
+        business_name: data.settings?.businessName || 'StockMaster UG',
+        currency: data.settings?.currency || 'UGX',
+        tax_rate: data.settings?.taxRate || 18,
+        low_stock_threshold: data.settings?.lowStockThreshold || 5,
+        invoice_prefix: data.settings?.invoicePrefix || 'INV',
+        purchase_prefix: data.settings?.purchasePrefix || 'PUR'
+    };
+    
+    return {
+        last_sync_time: data.last_sync_time,
+        products: cleanedProducts,
+        categories: data.categories.filter(cat => cat.user_id === userId),
+        suppliers: data.suppliers.filter(sup => sup.user_id === userId),
+        sales: data.sales.filter(sale => sale.user_id === userId),
+        purchases: data.purchases.filter(purchase => purchase.user_id === userId),
+        adjustments: cleanedAdjustments,
+        activities: data.activities.filter(act => act.user_id === userId),
+        settings: cleanedSettings
+    };
 }
 
 // Add this helper function to clean the data before sending
@@ -4161,8 +4235,14 @@ document.getElementById('syncButton').addEventListener('click', syncData);
 // Periodically sync data (every 5 minutes)
 setInterval(syncData, 5 * 60 * 1000);
 
-// Initial sync
-syncData();
+// Initial sync on page load if authenticated
+document.addEventListener('DOMContentLoaded', () => {
+    if (auth.isAuthenticated()) {
+        updateSyncStatus();
+        syncData();
+    }
+});
+
 // Update sync status UI
 function updateSyncStatus() {
     const syncStatus = document.getElementById('syncStatus');
@@ -4171,9 +4251,12 @@ function updateSyncStatus() {
         return;
     }
     
-    syncStatus.innerHTML = '<span class="indicator online"></span><span class="text">Online</span>';
+    if (isSyncing) {
+        syncStatus.innerHTML = '<span class="indicator syncing"></span><span class="text">Syncing...</span>';
+    } else {
+        syncStatus.innerHTML = '<span class="indicator online"></span><span class="text">Online</span>';
+    }
 }
-
 // Call this whenever network status changes
 window.addEventListener('online', () => {
     isOnline = true;
