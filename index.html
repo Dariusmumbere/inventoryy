@@ -4252,36 +4252,6 @@ document.addEventListener('DOMContentLoaded', () => {
         syncData();
     }
 });
-
-// Update sync status UI
-function updateSyncStatus() {
-    const syncStatus = document.getElementById('syncStatus');
-    if (!isOnline) {
-        syncStatus.innerHTML = '<span class="indicator offline"></span><span class="text">Offline</span>';
-        return;
-    }
-    
-    if (isSyncing) {
-        syncStatus.innerHTML = '<span class="indicator syncing"></span><span class="text">Syncing...</span>';
-    } else {
-        syncStatus.innerHTML = '<span class="indicator online"></span><span class="text">Online</span>';
-    }
-}
-// Call this whenever network status changes
-window.addEventListener('online', () => {
-    isOnline = true;
-    updateSyncStatus();
-    syncData();
-});
-
-window.addEventListener('offline', () => {
-    isOnline = false;
-    updateSyncStatus();
-    showToast('Connection lost. Working in offline mode.', 'warning');
-});
-
-// Initial status
-updateSyncStatus();
     </script>
     <footer class="footer">
     <div class="footer-content">
