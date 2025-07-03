@@ -158,3 +158,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+// In your sync manager
+async function resolveConflicts(localData, serverData) {
+    // For each entity type, merge changes favoring the most recent
+    const mergedData = {};
+    
+    ['products', 'categories', 'suppliers', 'sales', 'purchases', 'adjustments'].forEach(entityType => {
+        const localEntities = localData[entityType] || [];
+        const serverEntities = serverData[entityType] || [];
+        
+        const merged = [...serverEntities];
+        const serverIds = new Set(serverEntities.map(e => e.id));
+        
+        // Add local entities that don't exist on server
+        localEntities.forEach(localEntity => {
+            if (!serverIds.has(localEntity.id)) {
+                merged.push(localEntity);
+            }
+        });
+        
+        mergedData[entityType] = merged;
+    });
+    
+    return mergedData;
+}
