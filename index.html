@@ -3831,10 +3831,19 @@
 
         // Initialize the dashboard on load
         document.addEventListener('DOMContentLoaded', () => {
-            loadDashboardData();
-            loadSettings();
-            updateNotificationBadge();
-            loadAlerts();
+            if (auth.isAuthenticated()) {
+        // Load data from localStorage or sync if empty
+                const hasLocalData = localStorage.getItem('products') !== null;
+        
+                if (!hasLocalData) {
+            // First load - sync with server
+                    syncManager.syncAllData();
+                } else {
+                    loadDashboardData();
+                    loadSettings();
+                    updateNotificationBadge();
+                    loadAlerts();
+                }
             
             // Set up event delegation for dynamically added elements
             document.addEventListener('click', (e) => {
