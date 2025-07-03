@@ -3830,174 +3830,177 @@
         });
 
         // Initialize the dashboard on load
-        document.addEventListener('DOMContentLoaded', () => {
-            if (auth.isAuthenticated()) {
+        // Initialize the dashboard on load
+document.addEventListener('DOMContentLoaded', () => {
+    if (auth.isAuthenticated()) {
         // Load data from localStorage or sync if empty
-                const hasLocalData = localStorage.getItem('products') !== null;
+        const hasLocalData = localStorage.getItem('products') !== null;
         
-                if (!hasLocalData) {
+        if (!hasLocalData) {
             // First load - sync with server
-                    syncManager.syncAllData();
-                } else {
-                    loadDashboardData();
-                    loadSettings();
-                    updateNotificationBadge();
-                    loadAlerts();
-                }
+            syncManager.syncAllData();
+        } else {
+            loadDashboardData();
+            loadSettings();
+            updateNotificationBadge();
+            loadAlerts();
+        }
+        
+        // Set up event delegation for dynamically added elements
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.adjust-stock')) {
+                const productId = parseInt(e.target.closest('.adjust-stock').getAttribute('data-id'));
+                
+                // Populate product dropdown
+                const productSelect = document.getElementById('adjustmentProduct');
+                productSelect.innerHTML = '<option value="">Select Product</option>';
+                products.forEach(product => {
+                    productSelect.innerHTML += `<option value="${product.id}" ${product.id === productId ? 'selected' : ''}>${product.name} (Current: ${product.stock} ${product.unit})</option>`;
+                });
+                
+                // Reset form
+                document.getElementById('inventoryForm').reset();
+                inventoryModal.classList.add('active');
+                overlay.classList.add('active');
+            }
             
-            // Set up event delegation for dynamically added elements
-            document.addEventListener('click', (e) => {
-                if (e.target.closest('.adjust-stock')) {
-                    const productId = parseInt(e.target.closest('.adjust-stock').getAttribute('data-id'));
-                    
-                    // Populate product dropdown
-                    const productSelect = document.getElementById('adjustmentProduct');
-                    productSelect.innerHTML = '<option value="">Select Product</option>';
-                    products.forEach(product => {
-                        productSelect.innerHTML += `<option value="${product.id}" ${product.id === productId ? 'selected' : ''}>${product.name} (Current: ${product.stock} ${product.unit})</option>`;
-                    });
-                    
-                    // Reset form
-                    document.getElementById('inventoryForm').reset();
-                    inventoryModal.classList.add('active');
-                    overlay.classList.add('active');
-                }
-                
-                if (e.target.closest('.action-btn.delete')) {
-                    if (confirm('Are you sure you want to delete this item?')) {
-                        const id = parseInt(e.target.closest('.action-btn').getAttribute('data-id'));
-                        
-                        // Determine which table the delete button is in
-                        if (e.target.closest('#productsTable')) {
-                            products = products.filter(p => p.id !== id);
-                            localStorage.setItem('products', JSON.stringify(products));
-                            showToast('Product deleted successfully');
-                            loadProducts();
-                            loadDashboardData();
-                        } else if (e.target.closest('#categoriesTable')) {
-                            // Check if category is in use
-                            const productsUsingCategory = products.filter(p => p.categoryId === id);
-                            if (productsUsingCategory.length > 0) {
-                                showToast('Cannot delete category - it is being used by products', 'error');
-                                return;
-                            }
-                            
-                            categories = categories.filter(c => c.id !== id);
-                            localStorage.setItem('categories', JSON.stringify(categories));
-                            showToast('Category deleted successfully');
-                            loadCategories();
-                        } else if (e.target.closest('#suppliersTable')) {
-                            // Check if supplier is in use
-                            const purchasesUsingSupplier = purchases.filter(p => p.supplierId === id);
-                            if (purchasesUsingSupplier.length > 0) {
-                                showToast('Cannot delete supplier - they have purchase records', 'error');
-                                return;
-                            }
-                            
-                            suppliers = suppliers.filter(s => s.id !== id);
-                            localStorage.setItem('suppliers', JSON.stringify(suppliers));
-                            showToast('Supplier deleted successfully');
-                            loadSuppliers();
-                        } else if (e.target.closest('#salesTable')) {
-                            sales = sales.filter(s => s.id !== id);
-                            localStorage.setItem('sales', JSON.stringify(sales));
-                            showToast('Sale record deleted successfully');
-                            loadSales();
-                        } else if (e.target.closest('#purchasesTable')) {
-                            purchases = purchases.filter(p => p.id !== id);
-                            localStorage.setItem('purchases', JSON.stringify(purchases));
-                            showToast('Purchase record deleted successfully');
-                            loadPurchases();
-                        }
-                    }
-                }
-                
-                if (e.target.closest('.action-btn.edit')) {
+            if (e.target.closest('.action-btn.delete')) {
+                if (confirm('Are you sure you want to delete this item?')) {
                     const id = parseInt(e.target.closest('.action-btn').getAttribute('data-id'));
                     
-                    // Determine which table the edit button is in
+                    // Determine which table the delete button is in
                     if (e.target.closest('#productsTable')) {
-                        const product = products.find(p => p.id === id);
-                        if (!product) return;
-                        
-                        // Populate category dropdown
-                        const categorySelect = document.getElementById('productCategory');
-                        categorySelect.innerHTML = '<option value="">Select Category</option>';
-                        categories.forEach(category => {
-                            categorySelect.innerHTML += `<option value="${category.id}" ${category.id === product.categoryId ? 'selected' : ''}>${category.name}</option>`;
-                        });
-                        
-                        // Fill form
-                        document.getElementById('productName').value = product.name;
-                        document.getElementById('productDescription').value = product.description || '';
-                        document.getElementById('productPurchasePrice').value = product.purchasePrice;
-                        document.getElementById('productSellingPrice').value = product.sellingPrice;
-                        document.getElementById('productStock').value = product.stock;
-                        document.getElementById('productReorderLevel').value = product.reorderLevel;
-                        document.getElementById('productUnit').value = product.unit;
-                        document.getElementById('productBarcode').value = product.barcode || '';
-                        
-                        // TODO: Implement update functionality
-                        productModal.classList.add('active');
-                        overlay.classList.add('active');
+                        products = products.filter(p => p.id !== id);
+                        localStorage.setItem('products', JSON.stringify(products));
+                        showToast('Product deleted successfully');
+                        loadProducts();
+                        loadDashboardData();
                     } else if (e.target.closest('#categoriesTable')) {
-                        const category = categories.find(c => c.id === id);
-                        if (!category) return;
+                        // Check if category is in use
+                        const productsUsingCategory = products.filter(p => p.categoryId === id);
+                        if (productsUsingCategory.length > 0) {
+                            showToast('Cannot delete category - it is being used by products', 'error');
+                            return;
+                        }
                         
-                        // Fill form
-                        document.getElementById('categoryName').value = category.name;
-                        document.getElementById('categoryDescription').value = category.description || '';
-                        
-                        // TODO: Implement update functionality
-                        categoryModal.classList.add('active');
-                        overlay.classList.add('active');
+                        categories = categories.filter(c => c.id !== id);
+                        localStorage.setItem('categories', JSON.stringify(categories));
+                        showToast('Category deleted successfully');
+                        loadCategories();
                     } else if (e.target.closest('#suppliersTable')) {
-                        const supplier = suppliers.find(s => s.id === id);
-                        if (!supplier) return;
+                        // Check if supplier is in use
+                        const purchasesUsingSupplier = purchases.filter(p => p.supplierId === id);
+                        if (purchasesUsingSupplier.length > 0) {
+                            showToast('Cannot delete supplier - they have purchase records', 'error');
+                            return;
+                        }
                         
-                        // Populate products dropdown
-                        const productsSelect = document.getElementById('supplierProducts');
-                        productsSelect.innerHTML = '';
-                        products.forEach(product => {
-                            const isSelected = supplier.products.includes(product.id);
-                            productsSelect.innerHTML += `<option value="${product.id}" ${isSelected ? 'selected' : ''}>${product.name}</option>`;
-                        });
-                        
-                        // Fill form
-                        document.getElementById('supplierName').value = supplier.name;
-                        document.getElementById('supplierContactPerson').value = supplier.contactPerson || '';
-                        document.getElementById('supplierPhone').value = supplier.phone;
-                        document.getElementById('supplierEmail').value = supplier.email || '';
-                        document.getElementById('supplierAddress').value = supplier.address || '';
-                        document.getElementById('supplierPaymentTerms').value = supplier.paymentTerms || '';
-                        
-                        // TODO: Implement update functionality
-                        supplierModal.classList.add('active');
-                        overlay.classList.add('active');
+                        suppliers = suppliers.filter(s => s.id !== id);
+                        localStorage.setItem('suppliers', JSON.stringify(suppliers));
+                        showToast('Supplier deleted successfully');
+                        loadSuppliers();
+                    } else if (e.target.closest('#salesTable')) {
+                        sales = sales.filter(s => s.id !== id);
+                        localStorage.setItem('sales', JSON.stringify(sales));
+                        showToast('Sale record deleted successfully');
+                        loadSales();
+                    } else if (e.target.closest('#purchasesTable')) {
+                        purchases = purchases.filter(p => p.id !== id);
+                        localStorage.setItem('purchases', JSON.stringify(purchases));
+                        showToast('Purchase record deleted successfully');
+                        loadPurchases();
                     }
                 }
+            }
+            
+            if (e.target.closest('.action-btn.edit')) {
+                const id = parseInt(e.target.closest('.action-btn').getAttribute('data-id'));
                 
-                if (e.target.closest('#viewAllLowStock')) {
-                    // Navigate to inventory tab and show low stock items
-                    document.querySelector('.menu-item[data-target="inventory"]').click();
-                    document.querySelector('.tab[data-tab="current"]').click();
+                // Determine which table the edit button is in
+                if (e.target.closest('#productsTable')) {
+                    const product = products.find(p => p.id === id);
+                    if (!product) return;
                     
-                    // Filter to show only low stock items
-                    document.getElementById('inventorySearch').value = 'low stock';
-                    document.getElementById('inventorySearch').dispatchEvent(new Event('input'));
+                    // Populate category dropdown
+                    const categorySelect = document.getElementById('productCategory');
+                    categorySelect.innerHTML = '<option value="">Select Category</option>';
+                    categories.forEach(category => {
+                        categorySelect.innerHTML += `<option value="${category.id}" ${category.id === product.categoryId ? 'selected' : ''}>${category.name}</option>`;
+                    });
+                    
+                    // Fill form
+                    document.getElementById('productName').value = product.name;
+                    document.getElementById('productDescription').value = product.description || '';
+                    document.getElementById('productPurchasePrice').value = product.purchasePrice;
+                    document.getElementById('productSellingPrice').value = product.sellingPrice;
+                    document.getElementById('productStock').value = product.stock;
+                    document.getElementById('productReorderLevel').value = product.reorderLevel;
+                    document.getElementById('productUnit').value = product.unit;
+                    document.getElementById('productBarcode').value = product.barcode || '';
+                    
+                    // TODO: Implement update functionality
+                    productModal.classList.add('active');
+                    overlay.classList.add('active');
+                } else if (e.target.closest('#categoriesTable')) {
+                    const category = categories.find(c => c.id === id);
+                    if (!category) return;
+                    
+                    // Fill form
+                    document.getElementById('categoryName').value = category.name;
+                    document.getElementById('categoryDescription').value = category.description || '';
+                    
+                    // TODO: Implement update functionality
+                    categoryModal.classList.add('active');
+                    overlay.classList.add('active');
+                } else if (e.target.closest('#suppliersTable')) {
+                    const supplier = suppliers.find(s => s.id === id);
+                    if (!supplier) return;
+                    
+                    // Populate products dropdown
+                    const productsSelect = document.getElementById('supplierProducts');
+                    productsSelect.innerHTML = '';
+                    products.forEach(product => {
+                        const isSelected = supplier.products.includes(product.id);
+                        productsSelect.innerHTML += `<option value="${product.id}" ${isSelected ? 'selected' : ''}>${product.name}</option>`;
+                    });
+                    
+                    // Fill form
+                    document.getElementById('supplierName').value = supplier.name;
+                    document.getElementById('supplierContactPerson').value = supplier.contactPerson || '';
+                    document.getElementById('supplierPhone').value = supplier.phone;
+                    document.getElementById('supplierEmail').value = supplier.email || '';
+                    document.getElementById('supplierAddress').value = supplier.address || '';
+                    document.getElementById('supplierPaymentTerms').value = supplier.paymentTerms || '';
+                    
+                    // TODO: Implement update functionality
+                    supplierModal.classList.add('active');
+                    overlay.classList.add('active');
                 }
+            }
+            
+            if (e.target.closest('#viewAllLowStock')) {
+                // Navigate to inventory tab and show low stock items
+                document.querySelector('.menu-item[data-target="inventory"]').click();
+                document.querySelector('.tab[data-tab="current"]').click();
                 
-                if (e.target.closest('#viewAllSales')) {
-                    // Navigate to sales tab
-                    document.querySelector('.menu-item[data-target="sales"]').click();
-                }
-                
-                if (e.target.closest('#refreshActivities')) {
-                    loadDashboardData();
-                    showToast('Activities refreshed');
-                }
-            });
+                // Filter to show only low stock items
+                document.getElementById('inventorySearch').value = 'low stock';
+                document.getElementById('inventorySearch').dispatchEvent(new Event('input'));
+            }
+            
+            if (e.target.closest('#viewAllSales')) {
+                // Navigate to sales tab
+                document.querySelector('.menu-item[data-target="sales"]').click();
+            }
+            
+            if (e.target.closest('#refreshActivities')) {
+                loadDashboardData();
+                showToast('Activities refreshed');
+            }
         });
+    }
+});
+        
     </script>
     <footer class="footer">
     <div class="footer-content">
