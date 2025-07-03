@@ -145,11 +145,21 @@ class Auth {
     }
     
     clearAuth() {
-        this.token = null;
-        this.user = null;
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-    }
+    this.token = null;
+    this.user = null;
+    // Clear all auth-related storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // Clear all inventory data
+    localStorage.removeItem('products');
+    localStorage.removeItem('categories');
+    localStorage.removeItem('suppliers');
+    localStorage.removeItem('sales');
+    localStorage.removeItem('purchases');
+    localStorage.removeItem('adjustments');
+    localStorage.removeItem('activities');
+    localStorage.removeItem('settings');
+}
     
     isAuthenticated() {
         return !!this.token;
