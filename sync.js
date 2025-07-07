@@ -3,11 +3,27 @@ class SyncManager {
         this.apiBaseUrl = 'https://inventry-mn6a.onrender.com';
         this.lastSyncTime = localStorage.getItem('lastSyncTime') || null;
         this.isSyncing = false;
+        this.syncListeners = [];
     }
 
-    async syncAllData() {
-        if (this.isSyncing) return;
+    // Add event listener for sync events
+    onSync(listener) {
+        this.syncListeners.push(listener);
+    }
+
+    // Notify listeners about sync events
+    notifySyncListeners(event, data = null) {
+        this.syncListeners.forEach(listener => listener(event, data));
+    }
+
+    async syncAllData(forceReload = false) {
+        if (this.isSyncing) {
+            console.log('Sync already in progress');
+            return false;
+        }
+        
         this.isSyncing = true;
+        this.notifySyncListeners('sync-start');
         
         try {
             // Update sync status UI
@@ -29,11 +45,20 @@ class SyncManager {
             // Validate and clean data before sending
             localData.products = localData.products.map(product => ({
                 ...product,
-                purchase_price: product.purchase_price || 0, // Ensure purchase_price is never null
+                purchase_price: product.purchase_price || 0,
                 selling_price: product.selling_price || 0,
                 stock: product.stock || 0,
-                reorder_level: product.reorder_level || 0
+                reorder_level: product.reorder_level || 0,
+                created_at: product.created_at || new Date().toISOString()
             }));
+
+            // Ensure dates are properly formatted
+            ['sales', 'purchases', 'adjustments', 'activities'].forEach(key => {
+                localData[key] = localData[key].map(item => ({
+                    ...item,
+                    date: item.date || new Date().toISOString()
+                }));
+            });
 
             // Send data to server and get updated data
             const response = await fetch(`${this.apiBaseUrl}/sync`, {
@@ -53,30 +78,22 @@ class SyncManager {
             const serverData = await response.json();
 
             // Store received data in local storage
-            if (serverData.products) {
-                localStorage.setItem('products', JSON.stringify(serverData.products));
-            }
-            if (serverData.categories) {
-                localStorage.setItem('categories', JSON.stringify(serverData.categories));
-            }
-            if (serverData.suppliers) {
-                localStorage.setItem('suppliers', JSON.stringify(serverData.suppliers));
-            }
-            if (serverData.sales) {
-                localStorage.setItem('sales', JSON.stringify(serverData.sales));
-            }
-            if (serverData.purchases) {
-                localStorage.setItem('purchases', JSON.stringify(serverData.purchases));
-            }
-            if (serverData.adjustments) {
-                localStorage.setItem('adjustments', JSON.stringify(serverData.adjustments));
-            }
-            if (serverData.activities) {
-                localStorage.setItem('activities', JSON.stringify(serverData.activities));
-            }
-            if (serverData.settings) {
-                localStorage.setItem('settings', JSON.stringify(serverData.settings));
-            }
+            const storageUpdates = {
+                products: serverData.products,
+                categories: serverData.categories,
+                suppliers: serverData.suppliers,
+                sales: serverData.sales,
+                purchases: serverData.purchases,
+                adjustments: serverData.adjustments,
+                activities: serverData.activities,
+                settings: serverData.settings
+            };
+
+            Object.entries(storageUpdates).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    localStorage.setItem(key, JSON.stringify(value));
+                }
+            });
 
             // Update last sync time
             this.lastSyncTime = new Date().toISOString();
@@ -87,20 +104,27 @@ class SyncManager {
             
             // Show success message
             showToast('Data synchronized successfully');
+            this.notifySyncListeners('sync-success', serverData);
             
-            // Reload the UI to reflect changes
-            window.location.reload();
+            // Only reload if explicitly requested
+            if (forceReload) {
+                window.location.reload();
+            }
             
             return true;
         } catch (error) {
             console.error('Sync error:', error);
             this.updateSyncStatus('offline');
+            this.notifySyncListeners('sync-error', error);
             
             // More specific error handling
             if (error.message.includes('Duplicate data')) {
                 showToast('Sync conflict: Some data already exists on server', 'warning');
             } else if (error.message.includes('Validation error')) {
                 showToast('Sync failed: Invalid data format', 'error');
+            } else if (error.message.includes('401')) {
+                showToast('Session expired. Please login again.', 'error');
+                auth.logout();
             } else {
                 showToast('Sync failed: ' + error.message, 'error');
             }
@@ -108,6 +132,7 @@ class SyncManager {
             return false;
         } finally {
             this.isSyncing = false;
+            this.notifySyncListeners('sync-complete');
         }
     }
 
@@ -123,14 +148,17 @@ class SyncManager {
         
         switch(status) {
             case 'online':
+                syncStatus.classList.add('online');
                 indicator.classList.add('online');
                 text.textContent = 'Online';
                 break;
             case 'offline':
+                syncStatus.classList.add('offline');
                 indicator.classList.add('offline');
                 text.textContent = 'Offline';
                 break;
             case 'syncing':
+                syncStatus.classList.add('syncing');
                 indicator.classList.add('syncing');
                 text.textContent = 'Syncing...';
                 break;
@@ -148,13 +176,15 @@ class SyncManager {
             if (response.ok) {
                 this.updateSyncStatus('online');
                 return true;
+            } else {
+                this.updateSyncStatus('offline');
+                return false;
             }
         } catch (error) {
             console.error('Connection check failed:', error);
+            this.updateSyncStatus('offline');
+            return false;
         }
-        
-        this.updateSyncStatus('offline');
-        return false;
     }
 
     // Initialize automatic sync checks
@@ -178,6 +208,13 @@ class SyncManager {
             this.checkConnection().then(online => {
                 if (online) this.syncAllData().catch(() => {});
             });
+        });
+
+        // Listen to auth changes
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.checkConnection();
+            }
         });
     }
 
@@ -205,6 +242,15 @@ class SyncManager {
         
         return mergedData;
     }
+
+    // Clear all local data
+    clearLocalData() {
+        [
+            'products', 'categories', 'suppliers', 'sales', 
+            'purchases', 'adjustments', 'activities', 'settings',
+            'lastSyncTime'
+        ].forEach(key => localStorage.removeItem(key));
+    }
 }
 
 // Initialize sync manager
@@ -219,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const syncButton = document.getElementById('syncButton');
         if (syncButton) {
             syncButton.addEventListener('click', () => {
-                syncManager.syncAllData().catch(() => {});
+                syncManager.syncAllData(true).catch(() => {});
             });
         }
     }
