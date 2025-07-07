@@ -16,7 +16,7 @@ class SyncManager {
             // Prepare data to send to server
             const localData = {
                 last_sync_time: this.lastSyncTime,
-                products: this.prepareProducts(JSON.parse(localStorage.getItem('products') || '[]'),
+                products: JSON.parse(localStorage.getItem('products') || '[]'),
                 categories: JSON.parse(localStorage.getItem('categories') || '[]'),
                 suppliers: JSON.parse(localStorage.getItem('suppliers') || '[]'),
                 sales: JSON.parse(localStorage.getItem('sales') || '[]'),
@@ -26,32 +26,54 @@ class SyncManager {
                 settings: JSON.parse(localStorage.getItem('settings') || 'null')
             };
 
-            // Validate data before sending
-            this.validateSyncData(localData);
+            // Validate and clean data before sending
+            localData.products = localData.products.map(product => ({
+                ...product,
+                purchase_price: product.purchase_price || 0, // Ensure purchase_price is never null
+                selling_price: product.selling_price || 0,
+                stock: product.stock || 0,
+                reorder_level: product.reorder_level || 0
+            }));
 
             // Send data to server and get updated data
             const response = await fetch(`${this.apiBaseUrl}/sync`, {
                 method: 'POST',
-                headers: auth.getAuthHeaders(),
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...auth.getAuthHeaders()
+                },
                 body: JSON.stringify(localData)
             });
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.detail || 'Sync failed');
+                throw new Error(errorData.detail || 'Sync failed with status ' + response.status);
             }
 
             const serverData = await response.json();
 
             // Store received data in local storage
-            localStorage.setItem('products', JSON.stringify(serverData.products || []));
-            localStorage.setItem('categories', JSON.stringify(serverData.categories || []));
-            localStorage.setItem('suppliers', JSON.stringify(serverData.suppliers || []));
-            localStorage.setItem('sales', JSON.stringify(serverData.sales || []));
-            localStorage.setItem('purchases', JSON.stringify(serverData.purchases || []));
-            localStorage.setItem('adjustments', JSON.stringify(serverData.adjustments || []));
-            localStorage.setItem('activities', JSON.stringify(serverData.activities || []));
-            
+            if (serverData.products) {
+                localStorage.setItem('products', JSON.stringify(serverData.products));
+            }
+            if (serverData.categories) {
+                localStorage.setItem('categories', JSON.stringify(serverData.categories));
+            }
+            if (serverData.suppliers) {
+                localStorage.setItem('suppliers', JSON.stringify(serverData.suppliers));
+            }
+            if (serverData.sales) {
+                localStorage.setItem('sales', JSON.stringify(serverData.sales));
+            }
+            if (serverData.purchases) {
+                localStorage.setItem('purchases', JSON.stringify(serverData.purchases));
+            }
+            if (serverData.adjustments) {
+                localStorage.setItem('adjustments', JSON.stringify(serverData.adjustments));
+            }
+            if (serverData.activities) {
+                localStorage.setItem('activities', JSON.stringify(serverData.activities));
+            }
             if (serverData.settings) {
                 localStorage.setItem('settings', JSON.stringify(serverData.settings));
             }
@@ -66,66 +88,26 @@ class SyncManager {
             // Show success message
             showToast('Data synchronized successfully');
             
-            // Reload the UI
+            // Reload the UI to reflect changes
             window.location.reload();
             
             return true;
         } catch (error) {
             console.error('Sync error:', error);
             this.updateSyncStatus('offline');
-            showToast('Sync failed: ' + error.message, 'error');
+            
+            // More specific error handling
+            if (error.message.includes('Duplicate data')) {
+                showToast('Sync conflict: Some data already exists on server', 'warning');
+            } else if (error.message.includes('Validation error')) {
+                showToast('Sync failed: Invalid data format', 'error');
+            } else {
+                showToast('Sync failed: ' + error.message, 'error');
+            }
+            
             return false;
         } finally {
             this.isSyncing = false;
-        }
-    }
-
-    // Prepare products data ensuring required fields are present
-    prepareProducts(products) {
-        return products.map(product => ({
-            id: product.id || Date.now(),
-            name: product.name || 'Unnamed Product',
-            category_id: product.categoryId || product.category_id || null,
-            description: product.description || '',
-            purchase_price: product.purchasePrice || product.purchase_price || 0,
-            selling_price: product.sellingPrice || product.selling_price || 0,
-            stock: product.stock || 0,
-            reorder_level: product.reorderLevel || product.reorder_level || 5,
-            unit: product.unit || 'pcs',
-            barcode: product.barcode || '',
-            created_at: product.createdAt || product.created_at || new Date().toISOString()
-        }));
-    }
-
-    // Validate data before sending to server
-    validateSyncData(data) {
-        if (!data.products) {
-            throw new Error('Products data is missing');
-        }
-
-        // Validate each product
-        data.products.forEach(product => {
-            if (!product.name) {
-                throw new Error('Product name is required');
-            }
-            if (product.purchase_price === undefined || product.purchase_price === null) {
-                throw new Error('Purchase price is required for product: ' + product.name);
-            }
-            if (product.selling_price === undefined || product.selling_price === null) {
-                throw new Error('Selling price is required for product: ' + product.name);
-            }
-            if (product.stock === undefined || product.stock === null) {
-                throw new Error('Stock quantity is required for product: ' + product.name);
-            }
-        });
-
-        // Validate other entities as needed
-        if (data.categories) {
-            data.categories.forEach(category => {
-                if (!category.name) {
-                    throw new Error('Category name is required');
-                }
-            });
         }
     }
 
@@ -156,25 +138,23 @@ class SyncManager {
     }
 
     async checkConnection() {
-        return new Promise((resolve) => {
-            fetch(`${this.apiBaseUrl}/health`, {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/health`, {
                 method: 'GET',
-                cache: 'no-store'
-            })
-            .then(response => {
-                if (response.ok) {
-                    this.updateSyncStatus('online');
-                    resolve(true);
-                } else {
-                    this.updateSyncStatus('offline');
-                    resolve(false);
-                }
-            })
-            .catch(() => {
-                this.updateSyncStatus('offline');
-                resolve(false);
+                cache: 'no-store',
+                headers: auth.getAuthHeaders()
             });
-        });
+            
+            if (response.ok) {
+                this.updateSyncStatus('online');
+                return true;
+            }
+        } catch (error) {
+            console.error('Connection check failed:', error);
+        }
+        
+        this.updateSyncStatus('offline');
+        return false;
     }
 
     // Initialize automatic sync checks
@@ -183,17 +163,25 @@ class SyncManager {
         setInterval(() => this.checkConnection(), 30000);
         
         // Initial check
-        this.checkConnection();
+        this.checkConnection().then(online => {
+            if (online) {
+                // If we're online and have local data, try to sync
+                const hasLocalData = localStorage.getItem('products') !== null;
+                if (hasLocalData) {
+                    this.syncAllData().catch(() => {});
+                }
+            }
+        });
         
         // Sync when coming back online
         window.addEventListener('online', () => {
             this.checkConnection().then(online => {
-                if (online) this.syncAllData();
+                if (online) this.syncAllData().catch(() => {});
             });
         });
     }
 
-    // Conflict resolution logic
+    // Conflict resolution strategy
     async resolveConflicts(localData, serverData) {
         // For each entity type, merge changes favoring the most recent
         const mergedData = {};
@@ -222,9 +210,6 @@ class SyncManager {
 // Initialize sync manager
 const syncManager = new SyncManager();
 
-// Make it available globally
-window.syncManager = syncManager;
-
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     if (auth.isAuthenticated()) {
@@ -234,14 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const syncButton = document.getElementById('syncButton');
         if (syncButton) {
             syncButton.addEventListener('click', () => {
-                // Validate form data before syncing
-                const productForm = document.getElementById('productForm');
-                if (productForm && productForm.checkValidity()) {
-                    syncManager.syncAllData();
-                } else {
-                    showToast('Please fill all required fields before syncing', 'error');
-                }
+                syncManager.syncAllData().catch(() => {});
             });
         }
     }
 });
+
+// Make it available globally
+window.syncManager = syncManager;
