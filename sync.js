@@ -45,7 +45,7 @@ class SyncManager {
             // Validate and clean data before sending
             localData.products = localData.products.map(product => ({
                 ...product,
-                purchase_price: product.purchase_price || 0,
+                purchase_price: product.purchasePrice || 0,
                 selling_price: product.selling_price || 0,
                 stock: product.stock || 0,
                 reorder_level: product.reorder_level || 0,
