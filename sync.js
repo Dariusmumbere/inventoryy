@@ -46,10 +46,10 @@ class SyncManager {
             localData.products = localData.products.map(product => ({
                 ...product,
                 purchase_price: product.purchasePrice || 0,
-                selling_price: product.selling_price || 0,
+                selling_price: product.sellingPrice || 0,
                 stock: product.stock || 0,
-                reorder_level: product.reorder_level || 0,
-                created_at: product.created_at || new Date().toISOString()
+                reorder_level: product.reorderLevel || 0,
+                created_at: product.createdAt || new Date().toISOString()
             }));
 
             // Ensure dates are properly formatted
