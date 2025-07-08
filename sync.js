@@ -6,14 +6,30 @@ class SyncManager {
         this.syncListeners = [];
     }
 
-    // Add event listener for sync events
     onSync(listener) {
         this.syncListeners.push(listener);
     }
 
-    // Notify listeners about sync events
     notifySyncListeners(event, data = null) {
         this.syncListeners.forEach(listener => listener(event, data));
+    }
+
+    async validateSyncData(data) {
+        const errors = [];
+        
+        // Check products
+        data.products.forEach((product, index) => {
+            if (!product.purchase_price && product.purchase_price !== 0) {
+                errors.push(`Product "${product.name}" (ID: ${product.id}) is missing purchase price`);
+            }
+            if (!product.unit) {
+                errors.push(`Product "${product.name}" (ID: ${product.id}) is missing unit`);
+            }
+        });
+        
+        if (errors.length > 0) {
+            throw new Error(`Sync validation failed:\n${errors.join('\n')}`);
+        }
     }
 
     async syncAllData(forceReload = false) {
@@ -26,7 +42,6 @@ class SyncManager {
         this.notifySyncListeners('sync-start');
         
         try {
-            // Update sync status UI
             this.updateSyncStatus('syncing');
             
             // Prepare data to send to server
@@ -42,13 +57,19 @@ class SyncManager {
                 settings: JSON.parse(localStorage.getItem('settings') || 'null')
             };
 
-            // Validate and clean data before sending
+            // Transform and validate data
             localData.products = localData.products.map(product => ({
-                ...product,
-                purchase_price: product.purchasePrice || 0,
-                selling_price: product.sellingPrice || 0,
-                stock: product.stock || 0,
-                reorder_level: product.reorderLevel || 0,
+                id: product.id,
+                user_id: product.userId || null,
+                name: product.name,
+                category_id: product.categoryId || null,
+                description: product.description || null,
+                purchase_price: parseFloat(product.purchasePrice) || 0,
+                selling_price: parseFloat(product.sellingPrice) || 0,
+                stock: parseInt(product.stock) || 0,
+                reorder_level: parseInt(product.reorderLevel) || 0,
+                unit: product.unit || 'pcs',
+                barcode: product.barcode || null,
                 created_at: product.createdAt || new Date().toISOString()
             }));
 
@@ -60,7 +81,10 @@ class SyncManager {
                 }));
             });
 
-            // Send data to server and get updated data
+            // Validate before sending
+            await this.validateSyncData(localData);
+
+            // Send data to server
             const response = await fetch(`${this.apiBaseUrl}/sync`, {
                 method: 'POST',
                 headers: {
@@ -77,7 +101,7 @@ class SyncManager {
 
             const serverData = await response.json();
 
-            // Store received data in local storage
+            // Store received data
             const storageUpdates = {
                 products: serverData.products,
                 categories: serverData.categories,
@@ -95,18 +119,13 @@ class SyncManager {
                 }
             });
 
-            // Update last sync time
             this.lastSyncTime = new Date().toISOString();
             localStorage.setItem('lastSyncTime', this.lastSyncTime);
             
-            // Update sync status UI
             this.updateSyncStatus('online');
-            
-            // Show success message
             showToast('Data synchronized successfully');
             this.notifySyncListeners('sync-success', serverData);
             
-            // Only reload if explicitly requested
             if (forceReload) {
                 window.location.reload();
             }
@@ -117,8 +136,9 @@ class SyncManager {
             this.updateSyncStatus('offline');
             this.notifySyncListeners('sync-error', error);
             
-            // More specific error handling
-            if (error.message.includes('Duplicate data')) {
+            if (error.message.includes('purchase_price') && error.message.includes('null value')) {
+                showToast('Sync failed: Product purchase price is required', 'error');
+            } else if (error.message.includes('Duplicate data')) {
                 showToast('Sync conflict: Some data already exists on server', 'warning');
             } else if (error.message.includes('Validation error')) {
                 showToast('Sync failed: Invalid data format', 'error');
@@ -187,15 +207,11 @@ class SyncManager {
         }
     }
 
-    // Initialize automatic sync checks
     initAutoSync() {
-        // Check connection status every 30 seconds
         setInterval(() => this.checkConnection(), 30000);
         
-        // Initial check
         this.checkConnection().then(online => {
             if (online) {
-                // If we're online and have local data, try to sync
                 const hasLocalData = localStorage.getItem('products') !== null;
                 if (hasLocalData) {
                     this.syncAllData().catch(() => {});
@@ -203,14 +219,12 @@ class SyncManager {
             }
         });
         
-        // Sync when coming back online
         window.addEventListener('online', () => {
             this.checkConnection().then(online => {
                 if (online) this.syncAllData().catch(() => {});
             });
         });
 
-        // Listen to auth changes
         auth.onAuthStateChanged((user) => {
             if (user) {
                 this.checkConnection();
@@ -218,32 +232,6 @@ class SyncManager {
         });
     }
 
-    // Conflict resolution strategy
-    async resolveConflicts(localData, serverData) {
-        // For each entity type, merge changes favoring the most recent
-        const mergedData = {};
-        
-        ['products', 'categories', 'suppliers', 'sales', 'purchases', 'adjustments'].forEach(entityType => {
-            const localEntities = localData[entityType] || [];
-            const serverEntities = serverData[entityType] || [];
-            
-            const merged = [...serverEntities];
-            const serverIds = new Set(serverEntities.map(e => e.id));
-            
-            // Add local entities that don't exist on server
-            localEntities.forEach(localEntity => {
-                if (!serverIds.has(localEntity.id)) {
-                    merged.push(localEntity);
-                }
-            });
-            
-            mergedData[entityType] = merged;
-        });
-        
-        return mergedData;
-    }
-
-    // Clear all local data
     clearLocalData() {
         [
             'products', 'categories', 'suppliers', 'sales', 
@@ -253,15 +241,12 @@ class SyncManager {
     }
 }
 
-// Initialize sync manager
 const syncManager = new SyncManager();
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     if (auth.isAuthenticated()) {
         syncManager.initAutoSync();
         
-        // Set up manual sync button
         const syncButton = document.getElementById('syncButton');
         if (syncButton) {
             syncButton.addEventListener('click', () => {
@@ -271,5 +256,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Make it available globally
 window.syncManager = syncManager;
